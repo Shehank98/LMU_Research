@@ -475,133 +475,189 @@ CNN-extracted features gave the best results for classical ML (SVM 66.6%, DT 80.
 
 ---
 
+## Notebook Flow Audit — Issues Found
+
+Read all 9 notebooks. Several inconsistencies found that must be fixed before
+the research can be considered reproducible. Severity: Critical / Medium / Minor.
+
+### CRITICAL — Results Cannot Be Reproduced
+
+| Issue | Notebook | Detail |
+|-------|----------|--------|
+| **Notebook is broken** | `CNN_WITH_SVM_RF_DT/CNN_WITH_SVM_RF_DT.ipynb` | Only 7.7 KB. Crashes with MemoryError before any model is trained. Results reported in the paper (RF 85.45%, DT 80.99%, SVM 66.60%) cannot be reproduced from this file. A complete rewrite is needed. |
+| **Filename mismatch** | `CNN/cnn_model.ipynb` saves `cnn_model.sav`; `Final_model_Research/Final_model.ipynb` loads `MRI_model.sav` | The final ensemble will fail to load the CNN model unless the file is manually renamed or the path is fixed. |
+| **Random Forest bug** | `SVM_RF_DT_model/SVM_RF_DT_Model.ipynb` | The "Random Forest" cell instantiates `DecisionTreeClassifier()` not `RandomForestClassifier()`. RF and DT results are identical because they are the same model. |
+| **Double normalisation** | `CNN_WITH_SVM_RF_DT/CNN_WITH_SVM_RF_DT.ipynb` | Images loaded with `/255.0` then divided by `/255.0` again — pixel values become effectively zero before the MemoryError hits. |
+
+### MEDIUM — Inconsistent Methodology Across Notebooks
+
+| Issue | Affected Notebooks | Detail |
+|-------|-------------------|--------|
+| **Colour vs greyscale** | SVM_RF_DT uses `cv2.IMREAD_GRAYSCALE`; all DL notebooks use RGB 3-channel | Classical ML trains on greyscale (1 channel flattened); deep models train on RGB. If CNN features are fed to SVM/RF/DT, the feature distribution is inconsistent with the raw-pixel baseline. |
+| **Normalisation formula** | SVM_RF_DT: `/255` · CNN/Xception/InceptionV3 standalone: `/255` via tf.keras · Ensemble sub-models: `/255 − 0.5` | The −0.5 shift means pixel range is [−0.5, 0.5] for ensemble models vs [0, 1] for standalone models. Final_model.ipynb mixes both without adjustment. |
+| **Loss function / label encoding** | CNN, Xception, InceptionV3 standalone: `SparseCategoricalCrossentropy` (integer labels) · Xception+Ensemble, InceptionV3+Ensemble: `categorical_crossentropy` (one-hot via `LabelBinarizer`) | Inconsistent label encoding. Integer-label models and one-hot-label models cannot be directly compared or combined without conversion. |
+| **Train/test split method** | SVM_RF_DT: explicit 80/20 `train_test_split` from Training folder only · All DL notebooks: 90/10 via `dataset.take/skip` + separate Testing folder | Two different evaluation protocols. SVM/RF/DT never uses the official Testing folder — it carves its own test set from Training. Results are not comparable to the DL models which use the official test split. |
+| **Batch size** | Standalone DL: 32 · Ensemble sub-models: 5 | 6× difference. Smaller batch in ensemble training means noisier gradients and slower convergence. Not documented in the report. |
+| **Epochs** | CNN: 20 · Xception/InceptionV3 standalone: 5 · Xception/InceptionV3 ensemble: 10 · AlexNet: 20 | No justification given for differences. Transfer learning models may be undertrained at 5 epochs (high validation loss observed in outputs confirms this). |
+
+### MINOR — Incomplete Notebooks
+
+| Issue | Notebook | Detail |
+|-------|----------|--------|
+| **No saved model** | `ALAEXNET/Alexnet.ipynb` | No `model.save()` call. AlexNet results cannot be loaded into the final ensemble. Test accuracy output cell is empty (model not evaluated). |
+| **No test accuracy printed** | `ALAEXNET/Alexnet.ipynb` | `scores` cell has no output. AlexNet result is unknown and unreported in the research paper. |
+| **Residual broken early cells** | `CNN/cnn_model.ipynb` | First 3 cells fail (`TypeError: pth treated as list`). Not a problem for reproduction since later cells use the correct `image_dataset_from_directory` approach, but confuses anyone reading the notebook. |
+
+### Recommended Fix Order (before Phase 2 XAI work)
+
+1. Fix `CNN_WITH_SVM_RF_DT.ipynb` — rewrite using the same pattern as Xception+Ensemble but with CNN backbone
+2. Fix Random Forest bug — change `DecisionTreeClassifier()` to `RandomForestClassifier(n_estimators=100)`
+3. Standardise normalisation — use `/255` (range 0–1) across all notebooks
+4. Fix filename — rename saved CNN model to `MRI_model.sav` or update Final_model.ipynb to load `cnn_model.sav`
+5. Standardise train/test — all notebooks should use the official `../MRI_DATASET/Testing/` folder for evaluation
+6. Complete AlexNet — add `model.evaluate(test_ds)` and `model.save("AlexNet.h5")`
+7. Delete broken early cells from CNN notebook
+
+---
+
 ## XAI Extension — Phase 2 (Planned)
 
 This section documents the planned Explainable AI upgrade to the existing research.
 It directly addresses the limitation stated in the original report:
 *"The study placed less emphasis on clinical usability and interpretability in favour of increasing accuracy metrics."*
 
-**New Research Question:**
-How can ensemble-level explainability be achieved for a 6-model brain tumor classification system, and does confidence-weighted voting improve upon simple majority voting?
+### Literature Review — Honest Novelty Assessment
 
-**New Hypothesis:**
-A consensus GRAD-CAM map derived from three architectures will highlight clinically relevant tumor regions more reliably than any single model's heatmap, and confidence-weighted voting will match or exceed the 98.20% majority-vote accuracy.
+Before building Phase 2, a full literature search was conducted (May 2026).
+The table below shows what has and has not been published.
+
+| Proposed method | Prior art found? | Verdict |
+|----------------|-----------------|---------|
+| GRAD-CAM on a single model in medical imaging | Yes — standard practice | Zero novelty alone |
+| Pixel-wise average of GRAD-CAM maps across models (chest X-ray) | Yes — Aasem & Iqbal (2024), Frontiers in Big Data | Incremental if applied to brain MRI |
+| Confidence-weighted ensemble voting | Yes — heavily published (TSO-Optimised Voting 2024, Informatica; arXiv 2603.28357; MDPI Diagnostics 2025) | Zero novelty alone |
+| IoU between model output and radiologist ground truth | Yes — Fusion-Based Brain Tumor arXiv 2508.06891 (IoU 0.78) | Zero novelty |
+| **IoU between models' own attention maps (inter-model agreement)** | **Not found** | **Genuine novelty** |
+| **Using inter-model IoU as a per-sample confidence/uncertainty signal** | **Not found** | **Genuine novelty** |
+| **Disagreement-triggered clinical escalation rule** | **Not found for hybrid ensemble** | **Genuine novelty** |
+| **Class-conditional analysis of attention disagreement** | **Not found** | **Genuine novelty** |
+
+Key papers that must be cited and positioned against:
+- Aasem & Iqbal (2024) "Ensemble-CAM for Thoracic Disease Localization" — PMC11096460
+- Explainable Deep Ensemble Meta-Learning (2025) — PMC12427295 (EfficientNetB7+InceptionV3+Xception)
+- Advanced Dynamic Ensemble with XAI (2025) — Nature Scientific Reports — PMC12334749
+- TSO-Optimised Weighted Soft Voting (2024) — Informatica (99.92% on same dataset)
+
+**Positioning statement for the paper:**
+"Unlike existing ensemble-CAM methods that compare model attention against
+radiologist-annotated bounding boxes, this work introduces Ensemble Attention
+Agreement (EAA-IoU) — a per-sample inter-model saliency consensus score computed
+from architecturally distinct deep models (CNN, Xception, InceptionV3). EAA-IoU
+is used not as an accuracy metric but as a clinical uncertainty signal: low
+inter-model agreement triggers escalation to radiologist review, independent of
+the ensemble's final class prediction."
 
 ---
 
-### XAI Idea 1 — Ensemble Consensus GRAD-CAM
+**New Research Question:**
+Does inter-model GRAD-CAM agreement (EAA-IoU) correlate with misclassification
+in a heterogeneous 6-model brain tumor ensemble, and can it serve as a
+per-sample clinical uncertainty trigger?
+
+**New Hypothesis:**
+Images where CNN, Xception, and InceptionV3 produce low pairwise GRAD-CAM IoU
+(models disagree on which region is the tumor) are significantly more likely to
+be misclassified by the ensemble, enabling a disagreement-triggered escalation
+rule that improves clinical safety without retraining any model.
+
+---
+
+### XAI Contribution 1 — Ensemble Attention Agreement (EAA-IoU) [NOVEL]
 
 **What it is:**
-Apply GRAD-CAM independently to CNN, Xception, and InceptionV3 on the same MRI image.
-Combine the three heatmaps pixel-by-pixel into a single consensus activation map.
-Regions where all three models agree get the strongest highlight.
+Apply GRAD-CAM independently to CNN, Xception, and InceptionV3 on the same MRI.
+Compute pairwise IoU between all three heatmaps (3 pairs).
+Average into a single Ensemble Attention Agreement (EAA-IoU) score per image.
+Use EAA-IoU as a clinical uncertainty signal — not as an accuracy metric.
 
-**Why it is novel:**
-Most published papers apply GRAD-CAM to one model only. Applying it across three
-architecturally different models and fusing the results into a consensus map for a
-multi-model ensemble has not been done at this level. The consensus map is more
-clinically trustworthy than any individual heatmap because it removes single-model bias.
+**Why it is novel (vs existing literature):**
+All existing ensemble-CAM / multi-model saliency papers (e.g. Aasem & Iqbal 2024)
+measure IoU between model attention and a radiologist-drawn ground-truth bounding box.
+This requires labelled segmentation data that most datasets (including this Kaggle set)
+do not have. EAA-IoU instead measures whether the models agree with *each other* —
+no ground truth annotations required. This framing as a self-supervised uncertainty
+signal is not found in any published brain tumor paper.
 
-**How it works:**
+**Pipeline:**
 
 ```
 Input MRI image (256×256)
         │
-        ├──► CNN          → GRAD-CAM heatmap A  (256×256 float)
-        ├──► Xception     → GRAD-CAM heatmap B  (256×256 float)
-        └──► InceptionV3  → GRAD-CAM heatmap C  (256×256 float)
+        ├──► CNN          → GRAD-CAM heatmap A  (256×256, normalised 0–1)
+        ├──► Xception     → GRAD-CAM heatmap B  (256×256, normalised 0–1)
+        └──► InceptionV3  → GRAD-CAM heatmap C  (256×256, normalised 0–1)
                                     │
-                    pixel-wise weighted average
-                    weight = model softmax confidence
+              Binarise each at threshold t=0.5
                                     │
-                          Consensus heatmap (256×256)
+         Pairwise IoU: IoU(A,B), IoU(A,C), IoU(B,C)
                                     │
-                    overlay on original MRI → output image
+         EAA-IoU = mean(IoU(A,B), IoU(A,C), IoU(B,C))
+                                    │
+         ┌─────────────────────────────────────────┐
+         │ EAA-IoU ≥ 0.65 → HIGH CONFIDENCE       │
+         │ EAA-IoU  0.40–0.65 → MODERATE           │
+         │ EAA-IoU < 0.40 → FLAG for radiologist   │
+         └─────────────────────────────────────────┘
+                                    │
+         Weighted-average pixel map → Consensus heatmap overlay
 ```
 
-**Agreement Score metric (new metric):**
-Measure how much the three heatmaps overlap using Intersection over Union (IoU).
-High IoU = models strongly agree = higher prediction trustworthiness.
-Low IoU = models disagree = flag case for radiologist review.
-
-```python
-# Pseudocode — full implementation in XAI_notebook/consensus_gradcam.ipynb
-from tf_keras_vis.gradcam import Gradcam
-
-def get_gradcam(model, image, class_idx):
-    # returns normalised 256x256 heatmap
-
-def consensus_map(heatmap_cnn, heatmap_xcp, heatmap_inc,
-                  conf_cnn, conf_xcp, conf_inc):
-    total = conf_cnn + conf_xcp + conf_inc
-    return (heatmap_cnn * conf_cnn +
-            heatmap_xcp * conf_xcp +
-            heatmap_inc * conf_inc) / total
-
-def iou_score(map_a, map_b, threshold=0.5):
-    # binarise at threshold then compute IoU
-```
+**Research questions this answers:**
+1. Does low EAA-IoU correlate with misclassification? (testable on 2,063 test images)
+2. Which tumor class has the lowest average EAA-IoU? (expected: glioma — matches confusion matrix)
+3. What precision/recall tradeoff does an EAA-IoU escalation threshold give?
+4. Can EAA-IoU flag the 1.8% of cases the ensemble misclassifies?
 
 **Expected outputs:**
-- Side-by-side panel: Original | CNN cam | Xception cam | InceptionV3 cam | Consensus cam
-- IoU score printed per image
-- Analysis: does IoU correlate with prediction correctness?
-- Cases where IoU < 0.4 flagged as "low confidence — recommend radiologist review"
-
-**Expected findings:**
-- Consensus map will highlight tumor region in 85–92% of correctly classified scans
-- Glioma and meningioma cases will show lower IoU (models more uncertain) matching the
-  confusion matrix which shows most errors between these two classes
-- No-tumor cases expected to show diffuse/low activation across all three maps
+- EAA-IoU score and consensus heatmap for every test image
+- Scatter plot: EAA-IoU vs prediction confidence — is there correlation?
+- Box plot: EAA-IoU distribution per class (glioma expected lowest)
+- ROC curve: EAA-IoU as a binary misclassification predictor
+- Escalation threshold analysis: at EAA-IoU < X, what % of misclassifications are caught?
 
 ---
 
-### XAI Idea 3 — Confidence-Weighted Ensemble Voting
+### XAI Contribution 2 — Confidence-Weighted Voting [KNOWN METHOD — implement honestly]
 
-**What it is:**
-Replace the current simple majority vote with a weighted vote where each model's
-contribution is scaled by its softmax prediction confidence.
-A model that says "99% glioma" counts more than one that says "52% glioma".
+**Honest status:** Softmax-probability-weighted voting has been published many
+times for brain tumor MRI (TSO-Optimised Voting, Informatica 2024; arXiv 2603.28357;
+MDPI Diagnostics 2025). It is NOT a novel contribution on its own. It should be
+implemented, evaluated, and cited properly as a known improvement to majority voting.
 
-**Current system (majority vote):**
+**Why include it anyway:**
+- It gives a real confidence score per prediction (useful for the webapp)
+- It is the baseline needed to test whether EAA-IoU adds value on top of it
+- The combination of confidence-weighted vote + EAA-IoU uncertainty flag is the novel system
 
-```python
-# Each of 6 predictors gets exactly 1 vote
-predictions = [pred_cnn, pred_inc, pred_xcp,
-               pred_cnn_ens, pred_inc_ens, pred_xcp_ens]
-final = max(set(predictions), key=predictions.count)
-```
-
-**Upgraded system (confidence-weighted vote):**
+**Implementation:**
 
 ```python
-# Deep models contribute softmax probability vectors
-# Classical ensemble models contribute predict_proba vectors
-# Sum all 6 probability vectors weighted by individual model confidence
+# Replace:
+final = max(set([pred_cnn, pred_inc, pred_xcp,
+                 pred_cnn_ens, pred_inc_ens, pred_xcp_ens]),
+            key=predictions.count)   # majority vote — 1 vote each
 
-def confidence_weighted_vote(prob_cnn, prob_inc, prob_xcp,
-                             prob_cnn_ens, prob_inc_ens, prob_xcp_ens):
-    # Each prob_* is a 4-element array [p_glioma, p_mening, p_notumor, p_pituit]
-    combined = (prob_cnn + prob_inc + prob_xcp +
-                prob_cnn_ens + prob_inc_ens + prob_xcp_ens)
-    final_class = np.argmax(combined)
-    ensemble_confidence = np.max(combined) / np.sum(combined)
-    return final_class, ensemble_confidence
+# With:
+combined_probs = prob_cnn + prob_inc + prob_xcp + \
+                 prob_cnn_ens + prob_inc_ens + prob_xcp_ens  # sum of 6 prob vectors
+final_class = np.argmax(combined_probs)
+vote_confidence = np.max(combined_probs) / combined_probs.sum()
 ```
 
-**What this adds:**
-- A real confidence score (0–100%) alongside every prediction
-- Expected accuracy improvement: +0.3–0.8% over majority vote
-- Disagreement detection: when `ensemble_confidence < 0.6` → flag as uncertain
-
-**New output per image:**
-```
-Predicted class    : Glioma
-Ensemble confidence: 94.3%
-Vote breakdown     : CNN 97% | Xception 91% | InceptionV3 88% |
-                     CNN-ens 96% | Inc-ens 90% | Xcp-ens 94%
-Status             : HIGH CONFIDENCE — all models agree
-```
+**What to report:**
+- Accuracy: majority vote (98.20%) vs confidence-weighted (expected 98.3–99.0%)
+- Per-class improvement — especially glioma (hardest class)
+- Accuracy is the baseline; EAA-IoU is the novel safety layer on top
 
 ---
 
