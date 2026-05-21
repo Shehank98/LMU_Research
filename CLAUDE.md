@@ -542,11 +542,32 @@ The table below shows what has and has not been published.
 | **Disagreement-triggered clinical escalation rule** | **Not found for hybrid ensemble** | **Genuine novelty** |
 | **Class-conditional analysis of attention disagreement** | **Not found** | **Genuine novelty** |
 
-Key papers that must be cited and positioned against:
-- Aasem & Iqbal (2024) "Ensemble-CAM for Thoracic Disease Localization" — PMC11096460
-- Explainable Deep Ensemble Meta-Learning (2025) — PMC12427295 (EfficientNetB7+InceptionV3+Xception)
-- Advanced Dynamic Ensemble with XAI (2025) — Nature Scientific Reports — PMC12334749
-- TSO-Optimised Weighted Soft Voting (2024) — Informatica (99.92% on same dataset)
+### Closest Existing Papers — Must Be Cited and Positioned Against
+
+**Paper that comes closest to your proposed system (all 5 elements checked):**
+
+| Paper | Architecture | Voting | Per-model Grad-CAM | Heatmap fusion | Inter-model IoU |
+|-------|-------------|--------|-------------------|---------------|----------------|
+| Kakon et al. *Cancers* 2025 (PMC12427295) | EfficientNetB7 + InceptionV3 + Xception | Soft vote + LightGBM meta | Grad-CAM++ on each | ✗ | ✗ |
+| ScienceDirect *Comput Biol Med* 2025 | MobileNetV2 + DenseNet121 | Soft vote | Grad-CAM++ on each | ✗ | Model vs annotation only |
+| Advanced Dynamic Ensemble *Sci Rep* 2025 (PMC12334749) | CNN + ResNet-50 + EfficientNet-B5 | Adaptive weights | Grad-CAM + SHAP + LIME + SmoothGrad | ✗ | ✗ |
+| Two-step majority voting, ResearchGate 2025 | InceptionV3+Xception+DenseNet201+EfficientNetB3+ResNet50 | Majority vote | Grad-CAM + LIME on each | ✗ | ✗ |
+| **Your proposed system** | CNN + Xception + InceptionV3 + classical ML sub-ensembles | Confidence-weighted | Grad-CAM on each | **✓ weighted avg** | **✓ inter-model EAA-IoU** |
+
+**Conclusion: No published paper does all five. Your columns 4 and 5 are unoccupied.**
+
+Papers to cite for confidence-weighted voting (acknowledge as known method):
+- TSO-Optimised Weighted Soft Voting (2024) *Informatica* — InceptionV3+Xception, 99.92%
+- Optimised Weighted Voting arXiv 2603.28357 (2025)
+- Majority Voting Ensemble *MDPI Diagnostics* 2025 (PMC12293199) — 14 models, 99.8%
+
+Papers to cite for standard Grad-CAM in brain tumor:
+- Grad-CAM + SHAP + LIME *Med Eng Phys* ScienceDirect 2025 — accuracy jump 97.2% → 99.4%
+- Grad-CAM ResNet50 *BMC Medical Imaging* 2024 (PMC11088067)
+
+Paper to cite as closest prior work for heatmap fusion (different domain):
+- Aasem & Iqbal "Ensemble-CAM" *Frontiers in Big Data* 2024 (PMC11096460) — chest X-ray, IoU vs annotation
+- Multi-Model Heatmap Fusion arXiv 2507.00234 (2025) — time-series, CNN+Transformer
 
 **Positioning statement for the paper:**
 "Unlike existing ensemble-CAM methods that compare model attention against
