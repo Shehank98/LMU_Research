@@ -473,6 +473,290 @@ CNN-extracted features gave the best results for classical ML (SVM 66.6%, DT 80.
 
 ---
 
+---
+
+## XAI Extension — Phase 2 (Planned)
+
+This section documents the planned Explainable AI upgrade to the existing research.
+It directly addresses the limitation stated in the original report:
+*"The study placed less emphasis on clinical usability and interpretability in favour of increasing accuracy metrics."*
+
+**New Research Question:**
+How can ensemble-level explainability be achieved for a 6-model brain tumor classification system, and does confidence-weighted voting improve upon simple majority voting?
+
+**New Hypothesis:**
+A consensus GRAD-CAM map derived from three architectures will highlight clinically relevant tumor regions more reliably than any single model's heatmap, and confidence-weighted voting will match or exceed the 98.20% majority-vote accuracy.
+
+---
+
+### XAI Idea 1 — Ensemble Consensus GRAD-CAM
+
+**What it is:**
+Apply GRAD-CAM independently to CNN, Xception, and InceptionV3 on the same MRI image.
+Combine the three heatmaps pixel-by-pixel into a single consensus activation map.
+Regions where all three models agree get the strongest highlight.
+
+**Why it is novel:**
+Most published papers apply GRAD-CAM to one model only. Applying it across three
+architecturally different models and fusing the results into a consensus map for a
+multi-model ensemble has not been done at this level. The consensus map is more
+clinically trustworthy than any individual heatmap because it removes single-model bias.
+
+**How it works:**
+
+```
+Input MRI image (256×256)
+        │
+        ├──► CNN          → GRAD-CAM heatmap A  (256×256 float)
+        ├──► Xception     → GRAD-CAM heatmap B  (256×256 float)
+        └──► InceptionV3  → GRAD-CAM heatmap C  (256×256 float)
+                                    │
+                    pixel-wise weighted average
+                    weight = model softmax confidence
+                                    │
+                          Consensus heatmap (256×256)
+                                    │
+                    overlay on original MRI → output image
+```
+
+**Agreement Score metric (new metric):**
+Measure how much the three heatmaps overlap using Intersection over Union (IoU).
+High IoU = models strongly agree = higher prediction trustworthiness.
+Low IoU = models disagree = flag case for radiologist review.
+
+```python
+# Pseudocode — full implementation in XAI_notebook/consensus_gradcam.ipynb
+from tf_keras_vis.gradcam import Gradcam
+
+def get_gradcam(model, image, class_idx):
+    # returns normalised 256x256 heatmap
+
+def consensus_map(heatmap_cnn, heatmap_xcp, heatmap_inc,
+                  conf_cnn, conf_xcp, conf_inc):
+    total = conf_cnn + conf_xcp + conf_inc
+    return (heatmap_cnn * conf_cnn +
+            heatmap_xcp * conf_xcp +
+            heatmap_inc * conf_inc) / total
+
+def iou_score(map_a, map_b, threshold=0.5):
+    # binarise at threshold then compute IoU
+```
+
+**Expected outputs:**
+- Side-by-side panel: Original | CNN cam | Xception cam | InceptionV3 cam | Consensus cam
+- IoU score printed per image
+- Analysis: does IoU correlate with prediction correctness?
+- Cases where IoU < 0.4 flagged as "low confidence — recommend radiologist review"
+
+**Expected findings:**
+- Consensus map will highlight tumor region in 85–92% of correctly classified scans
+- Glioma and meningioma cases will show lower IoU (models more uncertain) matching the
+  confusion matrix which shows most errors between these two classes
+- No-tumor cases expected to show diffuse/low activation across all three maps
+
+---
+
+### XAI Idea 3 — Confidence-Weighted Ensemble Voting
+
+**What it is:**
+Replace the current simple majority vote with a weighted vote where each model's
+contribution is scaled by its softmax prediction confidence.
+A model that says "99% glioma" counts more than one that says "52% glioma".
+
+**Current system (majority vote):**
+
+```python
+# Each of 6 predictors gets exactly 1 vote
+predictions = [pred_cnn, pred_inc, pred_xcp,
+               pred_cnn_ens, pred_inc_ens, pred_xcp_ens]
+final = max(set(predictions), key=predictions.count)
+```
+
+**Upgraded system (confidence-weighted vote):**
+
+```python
+# Deep models contribute softmax probability vectors
+# Classical ensemble models contribute predict_proba vectors
+# Sum all 6 probability vectors weighted by individual model confidence
+
+def confidence_weighted_vote(prob_cnn, prob_inc, prob_xcp,
+                             prob_cnn_ens, prob_inc_ens, prob_xcp_ens):
+    # Each prob_* is a 4-element array [p_glioma, p_mening, p_notumor, p_pituit]
+    combined = (prob_cnn + prob_inc + prob_xcp +
+                prob_cnn_ens + prob_inc_ens + prob_xcp_ens)
+    final_class = np.argmax(combined)
+    ensemble_confidence = np.max(combined) / np.sum(combined)
+    return final_class, ensemble_confidence
+```
+
+**What this adds:**
+- A real confidence score (0–100%) alongside every prediction
+- Expected accuracy improvement: +0.3–0.8% over majority vote
+- Disagreement detection: when `ensemble_confidence < 0.6` → flag as uncertain
+
+**New output per image:**
+```
+Predicted class    : Glioma
+Ensemble confidence: 94.3%
+Vote breakdown     : CNN 97% | Xception 91% | InceptionV3 88% |
+                     CNN-ens 96% | Inc-ens 90% | Xcp-ens 94%
+Status             : HIGH CONFIDENCE — all models agree
+```
+
+---
+
+### XAI New Files (to be created)
+
+```
+LMU_Research/
+├── XAI_notebook/
+│   ├── consensus_gradcam.ipynb     # GRAD-CAM on all 3 models + consensus map
+│   ├── confidence_voting.ipynb     # Weighted vote vs majority vote comparison
+│   └── xai_analysis.ipynb         # IoU scores, disagreement analysis, charts
+└── webapp/
+    ├── app.py                      # Streamlit web application
+    ├── xai_engine.py               # GRAD-CAM + weighted voting logic
+    ├── model_loader.py             # Loads all 6 models from MODELS/
+    └── requirements.txt            # pip dependencies for the app
+```
+
+---
+
+## Web Application — Clinical Demo System
+
+A Streamlit web app that lets a user upload an MRI image and instantly see:
+- The predicted tumor class and confidence score
+- GRAD-CAM heatmaps from all three deep models
+- The consensus activation map overlaid on the original MRI
+- A per-model vote breakdown
+- A clinical alert if ensemble confidence is low
+
+### What the user sees (page layout)
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  Brain Tumor MRI Classifier  —  XAI Ensemble System         │
+├─────────────────────────────────────────────────────────────┤
+│  [ Upload MRI Image ]                                       │
+│                                                             │
+│  ┌─────────────┐   ┌─────────────────────────────────────┐ │
+│  │ Original MRI│   │  PREDICTION                         │ │
+│  │   image     │   │  Class    : GLIOMA                  │ │
+│  │             │   │  Confidence: 94.3%  ████████████░░  │ │
+│  └─────────────┘   │  Status   : ✅ HIGH CONFIDENCE      │ │
+│                    └─────────────────────────────────────┘ │
+├─────────────────────────────────────────────────────────────┤
+│  GRAD-CAM HEATMAPS  — where each model looked              │
+│  ┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐  │
+│  │  CNN cam  │ │Xception   │ │InceptionV3│ │ CONSENSUS │  │
+│  │  heatmap  │ │  heatmap  │ │  heatmap  │ │    MAP    │  │
+│  └───────────┘ └───────────┘ └───────────┘ └───────────┘  │
+│  Agreement Score (IoU): 0.81  — Models strongly agree      │
+├─────────────────────────────────────────────────────────────┤
+│  PER-MODEL VOTE BREAKDOWN                                   │
+│  CNN              Glioma  97.1%  ████████████████████░     │
+│  Xception         Glioma  91.4%  ██████████████████░░░     │
+│  InceptionV3      Glioma  88.2%  █████████████████░░░░     │
+│  CNN + Ensemble   Glioma  96.3%  ███████████████████░░     │
+│  Inc + Ensemble   Glioma  90.1%  ██████████████████░░░     │
+│  Xcp + Ensemble   Glioma  94.0%  ██████████████████░░░     │
+├─────────────────────────────────────────────────────────────┤
+│  CLASS PROBABILITY DISTRIBUTION                             │
+│  Glioma      ████████████████████  94.3%                   │
+│  Meningioma  ██░░░░░░░░░░░░░░░░░░   3.8%                   │
+│  No Tumor    ░░░░░░░░░░░░░░░░░░░░   1.2%                   │
+│  Pituitary   ░░░░░░░░░░░░░░░░░░░░   0.7%                   │
+│                                                             │
+│  ⚠  This tool is for research purposes only.               │
+│     Always consult a qualified radiologist.                 │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Tech Stack
+
+| Component | Library | Purpose |
+|-----------|---------|---------|
+| Web UI | Streamlit | Page layout, file upload, charts |
+| GRAD-CAM | tf-keras-vis | Generate heatmaps from Keras models |
+| Heatmap overlay | OpenCV + Matplotlib | Colour map + overlay on original MRI |
+| Model loading | TensorFlow / joblib | Load .h5 and .pkl model files |
+| Confidence voting | NumPy | Weighted probability summation |
+| Bar charts | Plotly | Interactive probability bars |
+
+### Install dependencies
+
+```bash
+pip install streamlit tensorflow keras tf-keras-vis \
+            opencv-python matplotlib numpy joblib \
+            scikit-learn plotly pillow
+```
+
+### Run the app
+
+```bash
+cd LMU_Research/webapp
+streamlit run app.py
+```
+
+App opens at `http://localhost:8501`
+
+### Key functions in `xai_engine.py`
+
+| Function | What it does |
+|----------|-------------|
+| `load_all_models()` | Loads all 6 models from MODELS/ once at startup |
+| `preprocess_image(img, size)` | Resize + normalise to model input shape |
+| `get_gradcam(model, img, class_idx)` | Returns 256×256 normalised heatmap |
+| `build_consensus_map(maps, weights)` | Weighted pixel average of 3 heatmaps |
+| `iou_score(map_a, map_b)` | Measures overlap between two heatmaps |
+| `confidence_weighted_predict(img)` | Runs all 6 models, returns class + confidence |
+| `overlay_heatmap(original, heatmap)` | Returns BGR image with red-blue cam overlay |
+
+### Models required to run the webapp
+
+All 6 models must be in `MODELS/` before starting the app:
+
+```
+MODELS/
+├── MRI_model.sav          # CNN classifier
+├── InceptionV3.h5         # InceptionV3 standalone
+├── Xception.h5            # Xception standalone
+├── cnn_ensemble.h5        # CNN feature extractor  ✅ in repo
+├── inc_ensemble.h5        # InceptionV3 feature extractor
+├── xcp_ensemble.h5        # Xception feature extractor
+├── cnn_ensemble_model.pkl # CNN → classical ensemble  ✅ in repo
+├── inc_ensemble_model.pkl # InceptionV3 → classical ensemble
+├── xcp_ensemble_model.pkl # Xception → classical ensemble
+└── ensemble_model.pkl     # Final voting ensemble
+```
+
+### Low-confidence alert logic
+
+```python
+CONFIDENCE_THRESHOLD = 0.70  # below this → show warning
+
+if ensemble_confidence < CONFIDENCE_THRESHOLD:
+    st.warning(
+        "⚠ Low ensemble agreement detected. "
+        "Models are uncertain about this image. "
+        "Radiologist review strongly recommended."
+    )
+```
+
+---
+
+## Build Order for Phase 2
+
+1. `XAI_notebook/consensus_gradcam.ipynb` — validate GRAD-CAM works on all 3 models
+2. `XAI_notebook/confidence_voting.ipynb` — compare weighted vs majority vote on test set
+3. `XAI_notebook/xai_analysis.ipynb` — IoU scores, disagreement charts, report figures
+4. `webapp/model_loader.py` — model loading utility
+5. `webapp/xai_engine.py` — all XAI logic
+6. `webapp/app.py` — Streamlit UI
+7. Test on 10–20 MRI samples from the test set before full demo
+
+---
+
 ## References
 
 Abiwinanda, N. et al. (2018) 'Brain tumor classification using convolutional neural network', *World Congress on Medical Physics and Biomedical Engineering*. Singapore.
