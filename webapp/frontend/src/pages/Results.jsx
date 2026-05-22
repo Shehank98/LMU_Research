@@ -102,6 +102,40 @@ const NOTEBOOKS = [
       { file: 'final_ensemble_pr_curve.jpg',            title: 'Final Ensemble — PR Curve' },
     ],
   },
+  {
+    id: '09_ConsensusGradCAM',
+    label: '09 — Consensus GRAD-CAM (EAA-IoU)',
+    color: 'border-cyan-500',
+    accent: 'text-cyan-400',
+    charts: [
+      { file: 'sample_gradcam_grid.jpg',      title: 'GRAD-CAM Sample Grid' },
+      { file: 'eaa_iou_distribution.jpg',     title: 'EAA-IoU Distribution by Class' },
+      { file: 'eaa_iou_low_vs_high.jpg',      title: 'Low vs High EAA-IoU Examples' },
+    ],
+  },
+  {
+    id: '10_ConfidenceVoting',
+    label: '10 — Confidence-Weighted Voting',
+    color: 'border-lime-500',
+    accent: 'text-lime-400',
+    charts: [
+      { file: 'voting_comparison_confusion_matrix.jpg', title: 'Voting — Confusion Matrices' },
+      { file: 'voting_comparison_per_class_f1.jpg',     title: 'Per-Class F1 Improvement' },
+      { file: 'voting_confidence_distribution.jpg',     title: 'Confidence Distribution' },
+    ],
+  },
+  {
+    id: '11_XAIAnalysis',
+    label: '11 — XAI Analysis',
+    color: 'border-rose-500',
+    accent: 'text-rose-400',
+    charts: [
+      { file: 'eaa_iou_roc_pr_curve.jpg',           title: 'EAA-IoU ROC & PR Curves' },
+      { file: 'eaa_iou_by_class_boxplot.jpg',        title: 'EAA-IoU by Class (Box Plots)' },
+      { file: 'escalation_threshold_analysis.jpg',   title: 'Escalation Threshold Analysis' },
+      { file: 'eaa_iou_vs_confidence_scatter.jpg',   title: 'EAA-IoU vs Vote Confidence' },
+    ],
+  },
 ]
 
 function ChartCard({ notebook_id, file, title, accent }) {
