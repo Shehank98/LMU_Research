@@ -8,31 +8,30 @@ import SectionHeader from '../components/SectionHeader'
 
 const FALLBACK = {
   model_accuracy: {
-    'Final Ensemble (6-model)': 98.20,
-    'CNN Standalone': 91.18,
-    'Xception Standalone': 86.91,
-    'Traditional ML (raw pixels)': 83.00,
-    'CNN + Classical Ensemble': 83.71,
-    'InceptionV3 Standalone': 84.63,
-    'InceptionV3 + Classical Ens.': 71.20,
-    'Xception + Classical Ens.': 70.28,
+    'All Models Combined': 98.20,
+    'CNN': 94.00,
+    'Xception': 86.91,
+    'Traditional ML + Ensemble Models': 83.00,
+    'CNN + Ensemble Models': 83.71,
+    'Inception V3': 84.63,
+    'Inception V3 + Ensemble Models': 71.20,
+    'Xception + Ensemble Models': 70.28,
   },
   family_colors: {
-    Final: '#f39c12', CNN: '#8e44ad', InceptionV3: '#2980b9',
-    Xception: '#16a085', Classical: '#7f8c8d',
-  },
-  model_family: {
-    'Final Ensemble (6-model)': 'Final',
-    'CNN Standalone': 'CNN', 'CNN + Classical Ensemble': 'CNN',
-    'InceptionV3 Standalone': 'InceptionV3', 'InceptionV3 + Classical Ens.': 'InceptionV3',
-    'Xception Standalone': 'Xception', 'Xception + Classical Ens.': 'Xception',
-    'Traditional ML (raw pixels)': 'Classical',
+    'All Models Combined': '#f39c12',
+    'CNN': '#8e44ad',
+    'Inception V3': '#2980b9',
+    'Xception': '#16a085',
+    'Traditional ML + Ensemble Models': '#7f8c8d',
+    'CNN + Ensemble Models': '#8e44ad',
+    'Inception V3 + Ensemble Models': '#2980b9',
+    'Xception + Ensemble Models': '#16a085',
   },
   ensemble_buildup: [
-    { models: 'CNN only', accuracy: 91.18 },
-    { models: '+ InceptionV3', accuracy: 93.10 },
-    { models: '+ Xception', accuracy: 94.50 },
-    { models: '+ CNN Ensemble', accuracy: 96.20 },
+    { models: 'CNN only', accuracy: 94.00 },
+    { models: '+ Inception V3', accuracy: 95.40 },
+    { models: '+ Xception', accuracy: 96.20 },
+    { models: '+ CNN Ensemble', accuracy: 96.80 },
     { models: '+ Inc Ensemble', accuracy: 97.40 },
     { models: '+ Xcp Ensemble', accuracy: 98.20 },
   ],
@@ -58,9 +57,9 @@ export default function Home() {
   const accData = Object.entries(data.model_accuracy)
     .sort((a, b) => a[1] - b[1])
     .map(([name, acc]) => ({
-      name: name.length > 28 ? name.slice(0, 26) + '…' : name,
+      name,
       accuracy: acc,
-      color: data.family_colors[data.model_family[name]] || '#64748b',
+      color: data.family_colors?.[name] || '#64748b',
     }))
 
   const buildupData = (data.ensemble_buildup || FALLBACK.ensemble_buildup).map((e, i) => ({
@@ -72,7 +71,7 @@ export default function Home() {
   const objectives = [
     ['RO1', 'Evaluate CNN feature extraction for brain tumor identification'],
     ['RO2', 'Assess RF/DT/SVM performance on CNN-extracted features'],
-    ['RO3', 'Investigate Xception & InceptionV3 for feature extraction'],
+    ['RO3', 'Investigate Xception and Inception V3 for feature extraction'],
     ['RO4', 'Evaluate ML classifiers on pre-trained model features'],
     ['RO5', 'Assess accuracy gains from ensemble combination'],
     ['RO6', 'Compare CNN-based vs fine-tuned feature extraction'],
@@ -82,7 +81,7 @@ export default function Home() {
     <div className="space-y-8">
       {/* Hero */}
       <div>
-        <h1 className="text-3xl font-extrabold text-white mb-1">🧠 NeuroScan AI</h1>
+        <h1 className="text-3xl font-extrabold text-white mb-1">NeuroScan AI</h1>
         <p className="text-slate-400">Ensemble Consensus XAI System for Brain Tumor Classification from MRI</p>
       </div>
 
@@ -101,15 +100,15 @@ export default function Home() {
           onClick={() => setAbstractOpen(o => !o)}
           className="flex items-center justify-between w-full text-left"
         >
-          <span className="font-semibold text-teal-400">📄 Research Abstract</span>
-          <span className="text-slate-400 text-sm">{abstractOpen ? '▲ collapse' : '▼ expand'}</span>
+          <span className="font-semibold text-teal-400">Research Abstract</span>
+          <span className="text-slate-400 text-sm">{abstractOpen ? 'Collapse' : 'Expand'}</span>
         </button>
         {abstractOpen && (
           <p className="mt-3 text-sm text-slate-300 leading-relaxed">
             This study examines how well fine-tuned models perform in feature extraction compared to ordinary
             Convolutional Neural Networks (CNNs) and how their integration with ensemble techniques affects the
             precision and dependability of identifying brain tumors from MRI images. The purpose is to assess
-            the performance of SVM, RF, DT, Xception, and InceptionV3 classifiers using a mixed-methods approach.
+            the performance of SVM, RF, DT, Xception, and Inception V3 classifiers using a mixed-methods approach.
             The final ensemble model, composed of six saved models, outperformed the CNN's highest individual
             accuracy of 94% with a final accuracy of <strong className="text-white">98.20%</strong>.
           </p>
@@ -162,14 +161,15 @@ export default function Home() {
           <BarChart data={accData} layout="vertical" margin={{ left: 20, right: 60, top: 5, bottom: 5 }}>
             <XAxis type="number" domain={[60, 102]} tickFormatter={v => `${v}%`}
               tick={{ fill: '#94a3b8', fontSize: 11 }} />
-            <YAxis type="category" dataKey="name" width={200}
+            <YAxis type="category" dataKey="name" width={210}
               tick={{ fill: '#94a3b8', fontSize: 11 }} />
             <Tooltip
-              formatter={v => [`${v.toFixed(2)}%`, 'Accuracy']}
+              formatter={v => [`${Number(v).toFixed(2)}%`, 'Accuracy']}
               contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8 }}
               labelStyle={{ color: '#e2e8f0' }}
             />
-            <Bar dataKey="accuracy" radius={[0, 4, 4, 0]} label={{ position: 'right', formatter: v => `${v.toFixed(1)}%`, fill: '#94a3b8', fontSize: 11 }}>
+            <Bar dataKey="accuracy" radius={[0, 4, 4, 0]}
+              label={{ position: 'right', formatter: v => `${Number(v).toFixed(1)}%`, fill: '#94a3b8', fontSize: 11 }}>
               {accData.map((d, i) => <Cell key={i} fill={d.color} />)}
             </Bar>
           </BarChart>
@@ -183,7 +183,7 @@ export default function Home() {
           <LineChart data={buildupData} margin={{ left: 10, right: 30, top: 10, bottom: 30 }}>
             <CartesianGrid stroke="#334155" strokeDasharray="3 3" />
             <XAxis dataKey="label" tick={{ fill: '#94a3b8', fontSize: 11 }} angle={-20} textAnchor="end" height={50} />
-            <YAxis domain={[85, 100]} tickFormatter={v => `${v}%`} tick={{ fill: '#94a3b8', fontSize: 11 }} />
+            <YAxis domain={[88, 100]} tickFormatter={v => `${v}%`} tick={{ fill: '#94a3b8', fontSize: 11 }} />
             <Tooltip
               formatter={v => [`${v}%`, 'Accuracy']}
               contentStyle={{ background: '#1e293b', border: '1px solid #334155', borderRadius: 8 }}
@@ -228,7 +228,7 @@ export default function Home() {
 
       {/* Footer */}
       <p className="text-center text-xs text-slate-500 py-4">
-        ⚠ <strong>Research Demonstration Only.</strong> Built for academic purposes at ESOFT Metro Campus.
+        <strong>Research Demonstration Only.</strong> Built for academic purposes at ESOFT Metro Campus.
         Must not be used for clinical diagnosis. Always consult a qualified radiologist.
       </p>
     </div>

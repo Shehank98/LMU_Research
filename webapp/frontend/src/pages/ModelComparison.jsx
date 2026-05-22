@@ -15,21 +15,21 @@ const LITERATURE = [
 ]
 
 const ALL_MODELS = [
-  { name: 'Final Ensemble', accuracy: 98.20, color: '#f39c12', family: 'Ensemble' },
-  { name: 'CNN Standalone', accuracy: 91.18, color: '#8e44ad', family: 'CNN' },
-  { name: 'Xception Standalone', accuracy: 86.91, color: '#16a085', family: 'Xception' },
-  { name: 'InceptionV3 Standalone', accuracy: 84.63, color: '#2980b9', family: 'InceptionV3' },
-  { name: 'Traditional ML Ens.', accuracy: 83.00, color: '#7f8c8d', family: 'Classical' },
-  { name: 'CNN + Classical Ens.', accuracy: 83.71, color: '#8e44ad', family: 'CNN' },
-  { name: 'InceptionV3 + Classical Ens.', accuracy: 71.20, color: '#2980b9', family: 'InceptionV3' },
-  { name: 'Xception + Classical Ens.', accuracy: 70.28, color: '#16a085', family: 'Xception' },
+  { name: 'All Models Combined', accuracy: 98.20, color: '#f39c12' },
+  { name: 'CNN', accuracy: 94.00, color: '#8e44ad' },
+  { name: 'Xception', accuracy: 86.91, color: '#16a085' },
+  { name: 'Inception V3', accuracy: 84.63, color: '#2980b9' },
+  { name: 'Traditional ML + Ensemble Models', accuracy: 83.00, color: '#7f8c8d' },
+  { name: 'CNN + Ensemble Models', accuracy: 83.71, color: '#8e44ad' },
+  { name: 'Inception V3 + Ensemble Models', accuracy: 71.20, color: '#2980b9' },
+  { name: 'Xception + Ensemble Models', accuracy: 70.28, color: '#16a085' },
 ].sort((a, b) => a.accuracy - b.accuracy)
 
 const BUILDUP = [
-  { label: 'CNN only', accuracy: 91.18 },
-  { label: '+ InceptionV3', accuracy: 93.10 },
-  { label: '+ Xception', accuracy: 94.50 },
-  { label: '+ CNN Ens.', accuracy: 96.20 },
+  { label: 'CNN only', accuracy: 94.00 },
+  { label: '+ Inception V3', accuracy: 95.40 },
+  { label: '+ Xception', accuracy: 96.20 },
+  { label: '+ CNN Ens.', accuracy: 96.80 },
   { label: '+ Inc Ens.', accuracy: 97.40 },
   { label: '+ Xcp Ens.', accuracy: 98.20 },
 ]
@@ -42,7 +42,7 @@ const FEATURE_SOURCES = [
 ]
 
 const COMPLEXITY = [
-  { name: 'CNN', params: 1.2, accuracy: 91.18, size: 200 },
+  { name: 'CNN', params: 1.2, accuracy: 94.00, size: 200 },
   { name: 'InceptionV3', params: 23.8, accuracy: 84.63, size: 200 },
   { name: 'Xception', params: 22.9, accuracy: 86.91, size: 200 },
   { name: 'SVM (raw)', params: 0.001, accuracy: 88.26, size: 200 },
@@ -55,7 +55,7 @@ export default function ModelComparison() {
   return (
     <div className="space-y-10">
       <div>
-        <h2 className="text-2xl font-extrabold text-white">📚 Model Comparison</h2>
+        <h2 className="text-2xl font-extrabold text-white">Model Comparison</h2>
         <p className="text-slate-400 mt-1">Literature benchmarking, ensemble build-up, and accuracy rankings</p>
       </div>
 
@@ -218,7 +218,7 @@ export default function ModelComparison() {
         <div className="grid sm:grid-cols-2 gap-4 text-sm">
           {[
             ['RO5 — Ensemble Superiority', 'Majority vote across 6 models (98.20%) significantly outperforms any individual model. The synergistic effect reduces individual model biases that are class-specific.'],
-            ['RO6 — CNN vs Fine-Tuned', 'CNN standalone (91.18%) outperforms both Xception (86.91%) and InceptionV3 (84.63%) standalone despite being custom-trained. Pre-trained ImageNet features are not always optimal for medical imaging.'],
+            ['RO6 — CNN vs Fine-Tuned', 'CNN standalone (94%) outperforms both Xception (86.91%) and Inception V3 (84.63%) standalone despite being custom-trained. Pre-trained ImageNet features are not always optimal for medical imaging.'],
             ['RO2 — CNN Features for ML', 'CNN-extracted features give the best classical ML results (RF 85.45%). The CNN learns domain-specific features more useful for classical classifiers than generic ImageNet features.'],
             ['RO4 — Raw Pixels Surprise', 'SVM on raw pixels (88.26%) beats SVM on any deep features. Classical ML can exploit full spatial resolution that deep feature compression discards.'],
           ].map(([title, text]) => (

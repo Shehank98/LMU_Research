@@ -59,15 +59,15 @@ const CLASS_IOU = [
 
 function Check({ yes }) {
   return yes
-    ? <span className="text-green-400 font-bold">✓</span>
-    : <span className="text-slate-600">✗</span>
+    ? <span className="text-green-400 font-semibold text-xs">Yes</span>
+    : <span className="text-slate-500 text-xs">No</span>
 }
 
 export default function XAIAnalysis() {
   return (
     <div className="space-y-10">
       <div>
-        <h2 className="text-2xl font-extrabold text-white">🔍 XAI Analysis</h2>
+        <h2 className="text-2xl font-extrabold text-white">XAI Analysis</h2>
         <p className="text-slate-400 mt-1">Explainable AI methodology, novelty positioning, and EAA-IoU analysis</p>
       </div>
 
@@ -252,7 +252,7 @@ export default function XAIAnalysis() {
       </div>
 
       <p className="text-xs text-slate-500 text-center">
-        ⚠ <strong>Research Demonstration Only.</strong> EAA-IoU thresholds are empirically derived from the Kaggle test set.
+        <strong>Research Demonstration Only.</strong> EAA-IoU thresholds are empirically derived from the Kaggle test set.
         Validate on independent clinical data before any medical application.
       </p>
     </div>

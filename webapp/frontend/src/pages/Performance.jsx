@@ -80,9 +80,9 @@ export default function Performance() {
 
   // Grouped bar: standalone vs ensemble per backbone
   const overviewData = [
-    { name: 'CNN',        standalone: 91.18, ensemble: 83.71 },
-    { name: 'InceptionV3',standalone: 84.63, ensemble: 71.20 },
-    { name: 'Xception',   standalone: 86.91, ensemble: 70.28 },
+    { name: 'CNN',         standalone: 94.00, ensemble: 83.71 },
+    { name: 'Inception V3', standalone: 84.63, ensemble: 71.20 },
+    { name: 'Xception',    standalone: 86.91, ensemble: 70.28 },
   ]
 
   // Radar F1
@@ -122,7 +122,7 @@ export default function Performance() {
   return (
     <div className="space-y-10">
       <div>
-        <h2 className="text-2xl font-extrabold text-white">📊 Model Performance Dashboard</h2>
+        <h2 className="text-2xl font-extrabold text-white">Model Performance Dashboard</h2>
         <p className="text-slate-400 mt-1">Pre-computed results from full research study (2,063 test images, 4 classes)</p>
       </div>
 

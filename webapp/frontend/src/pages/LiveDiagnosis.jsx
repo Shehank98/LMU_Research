@@ -26,8 +26,7 @@ function DropZone({ onFile }) {
     >
       <input ref={inputRef} type="file" accept="image/jpeg,image/png" className="hidden"
         onChange={e => handle(e.target.files[0])} />
-      <div className="text-4xl mb-3">🧬</div>
-      <p className="text-slate-300 font-medium">Drag & drop or click to upload MRI scan</p>
+      <p className="text-slate-300 font-medium text-lg mb-1">Drag and drop or click to upload MRI scan</p>
       <p className="text-slate-500 text-sm mt-1">JPEG or PNG · Any resolution</p>
     </div>
   )
@@ -108,7 +107,7 @@ export default function LiveDiagnosis() {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-extrabold text-white">🔬 Live MRI Diagnosis</h2>
+        <h2 className="text-2xl font-extrabold text-white">Live MRI Diagnosis</h2>
         <p className="text-slate-400 mt-1">Upload a brain MRI scan for ensemble prediction with GRAD-CAM explainability</p>
       </div>
 
@@ -122,11 +121,11 @@ export default function LiveDiagnosis() {
             <div className="flex gap-3 mt-4">
               {!result && !loading && (
                 <button onClick={runInference} className="btn-primary flex-1">
-                  ▶ Run Ensemble Analysis
+                  Run Ensemble Analysis
                 </button>
               )}
               <button onClick={reset} className="btn-secondary">
-                ↩ New Image
+                New Image
               </button>
             </div>
           </div>
@@ -170,13 +169,13 @@ export default function LiveDiagnosis() {
                 </div>
                 <ConfidenceBadge level={result.confidence_level} pct={result.confidence * 100} />
                 {result.confidence_level === 'high' && (
-                  <p className="text-green-400 text-sm">✔ Models strongly agree on this prediction.</p>
+                  <p className="text-green-400 text-sm">Models strongly agree on this prediction.</p>
                 )}
                 {result.confidence_level === 'moderate' && (
-                  <p className="text-amber-400 text-sm">⚠ Moderate agreement. Radiologist review recommended.</p>
+                  <p className="text-amber-400 text-sm">Moderate agreement — radiologist review recommended.</p>
                 )}
                 {result.confidence_level === 'low' && (
-                  <p className="text-red-400 text-sm">✖ Low confidence. Expert review required.</p>
+                  <p className="text-red-400 text-sm">Low confidence — expert review required.</p>
                 )}
               </div>
             )}
@@ -280,7 +279,7 @@ export default function LiveDiagnosis() {
               className="flex items-center justify-between w-full text-left"
             >
               <SectionHeader title="Detailed Probability Table" />
-              <span className="text-slate-400 text-sm mb-5">{detailOpen ? '▲' : '▼'}</span>
+              <span className="text-slate-400 text-sm mb-5">{detailOpen ? 'Collapse' : 'Expand'}</span>
             </button>
             {detailOpen && (
               <div className="overflow-x-auto">
@@ -317,7 +316,7 @@ export default function LiveDiagnosis() {
       )}
 
       <p className="text-xs text-slate-500 text-center">
-        ⚠ <strong>Research Demonstration Only.</strong> Not for clinical use. Always consult a qualified radiologist.
+        <strong>Research Demonstration Only.</strong> Not for clinical use. Always consult a qualified radiologist.
       </p>
     </div>
   )
