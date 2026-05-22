@@ -10,20 +10,25 @@ Run:
     cd training
     python train_01_cnn.py
 """
-import os, sys
+import os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 
 import joblib
 import numpy as np
 
 from config import (
-    MODELS_DIR,
+    MODELS_DIR, RANDOM_SEED,
     SIZE_STANDALONE, SIZE_ENSEMBLE,
     EPOCHS_CNN_STANDALONE, EPOCHS_CNN_ENSEMBLE,
     BATCH_STANDALONE, BATCH_ENSEMBLE,
     CNN_FEAT_LAYER,
     CNN_STANDALONE_FILE, CNN_FEATURE_FILE, CNN_ENSEMBLE_FILE,
 )
+
+random.seed(RANDOM_SEED)
+np.random.seed(RANDOM_SEED)
+import tensorflow as tf
+tf.random.set_seed(RANDOM_SEED)
 from data import get_tf_dataset, load_dataset_numpy
 from models.cnn import build_cnn
 from models.classical import build_classical_ensemble

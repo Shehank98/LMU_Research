@@ -25,12 +25,15 @@ CNN_FEAT_LAYER = 'dense'
 INC_FEAT_LAYER = 'dense_2'
 XCP_FEAT_LAYER = 'dense_3'
 
+# ── Reproducibility ──────────────────────────────────────────────────────────
+RANDOM_SEED = 42   # applied to Python random, NumPy, and TensorFlow in every script
+
 # ── Training hyperparameters ──────────────────────────────────────────────────
 EPOCHS_CNN_STANDALONE = 20
 EPOCHS_CNN_ENSEMBLE   = 10
 EPOCHS_TRANSFER       = 10
 BATCH_STANDALONE      = 32
-BATCH_ENSEMBLE        = 5
+BATCH_ENSEMBLE        = 32  # standardised — same batch size across all models
 
 # ── Saved model filenames (all land in MODELS_DIR) ────────────────────────────
 CNN_STANDALONE_FILE  = 'cnn_standalone.h5'

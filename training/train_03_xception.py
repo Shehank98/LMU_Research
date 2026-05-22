@@ -10,21 +10,27 @@ Run:
     cd training
     python train_03_xception.py
 """
-import os, sys
+import os, sys, random
 sys.path.insert(0, os.path.dirname(__file__))
 
 import joblib
 import numpy as np
+from sklearn.model_selection import train_test_split
 from tensorflow.keras.utils import to_categorical
 
 from config import (
-    MODELS_DIR,
+    MODELS_DIR, RANDOM_SEED,
     SIZE_STANDALONE, SIZE_ENSEMBLE,
     EPOCHS_TRANSFER,
     BATCH_STANDALONE, BATCH_ENSEMBLE,
     XCP_FEAT_LAYER,
     XCP_STANDALONE_FILE, XCP_FEATURE_FILE, XCP_ENSEMBLE_FILE,
 )
+
+random.seed(RANDOM_SEED)
+np.random.seed(RANDOM_SEED)
+import tensorflow as tf
+tf.random.set_seed(RANDOM_SEED)
 from data import get_tf_dataset, load_dataset_numpy
 from models.transfer import build_xception_standalone, build_xception_extractor
 from models.classical import build_classical_ensemble
@@ -72,14 +78,19 @@ print('\n=== 2/3  Xception Feature Extractor (128×128) ===')
 X_train, y_train = load_dataset_numpy('training', SIZE_ENSEMBLE)
 X_test,  y_test  = load_dataset_numpy('testing',  SIZE_ENSEMBLE)
 
+# 10% of training data held out as validation (test set is never seen during training)
+X_tr, X_val, y_tr, y_val = train_test_split(
+    X_train, y_train, test_size=0.1, random_state=RANDOM_SEED, stratify=y_train
+)
+
 xcp_extractor = build_xception_extractor(SIZE_ENSEMBLE)
 xcp_extractor.summary()
 
 history_extractor = xcp_extractor.fit(
-    X_train, to_categorical(y_train),
+    X_tr, to_categorical(y_tr),
     batch_size=BATCH_ENSEMBLE,
     epochs=EPOCHS_TRANSFER,
-    validation_data=(X_test, to_categorical(y_test)),
+    validation_data=(X_val, to_categorical(y_val)),
     verbose=1,
 )
 plot_training_history(history_extractor, 'Xception Feature Extractor (128×128)')
