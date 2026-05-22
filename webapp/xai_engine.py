@@ -105,15 +105,10 @@ def confidence_weighted_predict(pil_image, models, extractors):
     img_256 = preprocess(pil_image, 256)
     img_128 = preprocess(pil_image, 128)
 
-    # CNN standalone (joblib SVC — no predict_proba unless probability=True)
+    # CNN standalone — Keras model, takes (1, 256, 256, 3) directly
     cnn_model = models.get('cnn')
     if cnn_model is not None:
-        flat = img_256.reshape(1, -1)
-        if hasattr(cnn_model, 'predict_proba'):
-            prob = cnn_model.predict_proba(flat)[0]
-        else:
-            pred = int(cnn_model.predict(flat)[0])
-            prob = np.eye(4)[pred]
+        prob = cnn_model.predict(img_256, verbose=0)[0]
         per_model['CNN'] = prob
         combined_probs += prob
 

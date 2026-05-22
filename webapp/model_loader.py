@@ -6,7 +6,7 @@ from tensorflow.keras.models import load_model, Model
 MODELS_DIR = os.path.join(os.path.dirname(__file__), '..', 'MODELS')
 
 MODEL_FILES = {
-    'cnn':         ('MRI_model.sav',          'joblib'),
+    'cnn':         ('cnn_standalone.h5',        'keras'),
     'inception':   ('InceptionV3.h5',          'keras'),
     'xception':    ('Xception.h5',             'keras'),
     'cnn_feat':    ('cnn_ensemble.h5',         'keras'),
