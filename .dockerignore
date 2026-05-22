@@ -30,6 +30,10 @@ CNN_WITH_SVM_RF_DT/
 "InceptionV3 + Ensemble"/
 Final_model_Research/
 
+# Frontend build artifacts — not needed in Docker context
+webapp/frontend/node_modules/
+webapp/frontend/dist/
+
 # Misc
 *.md
 *.zip
