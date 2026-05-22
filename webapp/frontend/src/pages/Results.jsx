@@ -1,0 +1,213 @@
+import { useState } from 'react'
+import SectionHeader from '../components/SectionHeader'
+
+const HF_BASE = 'https://huggingface.co/shehank98/brain-tumor-mri-models/resolve/main/results'
+
+const NOTEBOOKS = [
+  {
+    id: '01_CNN_Standalone',
+    label: '01 — CNN Standalone',
+    color: 'border-purple-500',
+    accent: 'text-purple-400',
+    charts: [
+      { file: '01_cnn_standalone_training_history.jpg', title: 'Training History' },
+      { file: '01_cnn_standalone_confusion_matrix.jpg', title: 'Confusion Matrix' },
+      { file: '01_cnn_standalone_roc_curve.jpg',        title: 'ROC Curve' },
+      { file: '01_cnn_standalone_pr_curve.jpg',         title: 'Precision-Recall Curve' },
+    ],
+  },
+  {
+    id: '02_CNN_Ensemble',
+    label: '02 — CNN + Ensemble',
+    color: 'border-purple-400',
+    accent: 'text-purple-300',
+    charts: [
+      { file: 'cnn___random_forest_confusion_matrix.jpg', title: 'RF — Confusion Matrix' },
+      { file: 'cnn___random_forest_roc_curve.jpg',        title: 'RF — ROC Curve' },
+      { file: 'cnn___decision_tree_confusion_matrix.jpg', title: 'DT — Confusion Matrix' },
+      { file: 'cnn___svm_confusion_matrix.jpg',           title: 'SVM — Confusion Matrix' },
+      { file: 'cnn___soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
+      { file: 'cnn___soft_vote_ensemble_roc_curve.jpg',   title: 'Ensemble — ROC Curve' },
+    ],
+  },
+  {
+    id: '03_InceptionV3_Standalone',
+    label: '03 — InceptionV3 Standalone',
+    color: 'border-blue-500',
+    accent: 'text-blue-400',
+    charts: [
+      { file: '03_inceptionv3_standalone_training_history.jpg', title: 'Training History' },
+      { file: '03_inceptionv3_standalone_confusion_matrix.jpg', title: 'Confusion Matrix' },
+      { file: '03_inceptionv3_standalone_roc_curve.jpg',        title: 'ROC Curve' },
+      { file: '03_inceptionv3_standalone_pr_curve.jpg',         title: 'Precision-Recall Curve' },
+    ],
+  },
+  {
+    id: '04_InceptionV3_Ensemble',
+    label: '04 — InceptionV3 + Ensemble',
+    color: 'border-blue-400',
+    accent: 'text-blue-300',
+    charts: [
+      { file: 'inceptionv3___random_forest_confusion_matrix.jpg', title: 'RF — Confusion Matrix' },
+      { file: 'inceptionv3___random_forest_roc_curve.jpg',        title: 'RF — ROC Curve' },
+      { file: 'inceptionv3___soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
+      { file: 'inceptionv3___soft_vote_ensemble_roc_curve.jpg',   title: 'Ensemble — ROC Curve' },
+    ],
+  },
+  {
+    id: '05_Xception_Standalone',
+    label: '05 — Xception Standalone',
+    color: 'border-teal-500',
+    accent: 'text-teal-400',
+    charts: [
+      { file: '05_xception_standalone_training_history.jpg', title: 'Training History' },
+      { file: '05_xception_standalone_confusion_matrix.jpg', title: 'Confusion Matrix' },
+      { file: '05_xception_standalone_roc_curve.jpg',        title: 'ROC Curve' },
+      { file: '05_xception_standalone_pr_curve.jpg',         title: 'Precision-Recall Curve' },
+    ],
+  },
+  {
+    id: '06_Xception_Ensemble',
+    label: '06 — Xception + Ensemble',
+    color: 'border-teal-400',
+    accent: 'text-teal-300',
+    charts: [
+      { file: 'xception___random_forest_confusion_matrix.jpg', title: 'RF — Confusion Matrix' },
+      { file: 'xception___random_forest_roc_curve.jpg',        title: 'RF — ROC Curve' },
+      { file: 'xception___soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
+      { file: 'xception___soft_vote_ensemble_roc_curve.jpg',   title: 'Ensemble — ROC Curve' },
+    ],
+  },
+  {
+    id: '07_TraditionalML_Ensemble',
+    label: '07 — Traditional ML Baseline',
+    color: 'border-slate-500',
+    accent: 'text-slate-300',
+    charts: [
+      { file: 'random_forest__raw_pixels__confusion_matrix.jpg', title: 'RF — Confusion Matrix' },
+      { file: 'svm__raw_pixels__confusion_matrix.jpg',           title: 'SVM — Confusion Matrix' },
+      { file: 'soft_vote_ensemble__raw_pixels__confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
+      { file: 'soft_vote_ensemble__raw_pixels__roc_curve.jpg',   title: 'Ensemble — ROC Curve' },
+    ],
+  },
+  {
+    id: '08_AllModelsCombined_FinalEnsemble',
+    label: '08 — Final 6-Model Ensemble',
+    color: 'border-amber-500',
+    accent: 'text-amber-400',
+    charts: [
+      { file: 'all_models_accuracy_comparison.jpg',     title: 'All Models Accuracy Comparison' },
+      { file: 'final_ensemble_confusion_matrix.jpg',    title: 'Final Ensemble — Confusion Matrix' },
+      { file: 'final_ensemble_roc_curve.jpg',           title: 'Final Ensemble — ROC Curve' },
+      { file: 'final_ensemble_pr_curve.jpg',            title: 'Final Ensemble — PR Curve' },
+    ],
+  },
+]
+
+function ChartCard({ notebook_id, file, title, accent }) {
+  const [status, setStatus] = useState('loading') // 'loading' | 'ok' | 'missing'
+  const url = `${HF_BASE}/${notebook_id}/${file}`
+  return (
+    <div className="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 flex flex-col">
+      <div className="relative bg-slate-900 flex items-center justify-center min-h-[200px]">
+        {status === 'loading' && (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-teal-400 border-t-transparent rounded-full animate-spin" />
+          </div>
+        )}
+        {status === 'missing' && (
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-500 gap-2 p-4 text-center">
+            <svg className="w-10 h-10 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
+                d="M9 13h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 9.414V19a2 2 0 01-2 2z" />
+            </svg>
+            <span className="text-sm">Not generated yet<br />Run notebook to produce this chart</span>
+          </div>
+        )}
+        <img
+          src={url}
+          alt={title}
+          className={`w-full object-contain transition-opacity duration-300 ${status === 'ok' ? 'opacity-100' : 'opacity-0 absolute'}`}
+          onLoad={() => setStatus('ok')}
+          onError={() => setStatus('missing')}
+        />
+      </div>
+      <div className="px-3 py-2 text-center">
+        <p className={`text-xs font-medium ${accent}`}>{title}</p>
+      </div>
+    </div>
+  )
+}
+
+export default function Results() {
+  const [active, setActive] = useState(null)
+
+  const displayed = active ? NOTEBOOKS.filter(n => n.id === active) : NOTEBOOKS
+
+  return (
+    <div className="space-y-10">
+      <SectionHeader
+        title="Notebook Results Gallery"
+        subtitle="Training charts, confusion matrices, ROC curves, and precision-recall curves generated by each notebook. Images are hosted on HuggingFace and appear here automatically after each Colab run."
+      />
+
+      {/* Filter pills */}
+      <div className="flex flex-wrap gap-2">
+        <button
+          onClick={() => setActive(null)}
+          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+            active === null
+              ? 'bg-teal-400/15 text-teal-400 border-teal-400/40'
+              : 'text-slate-400 border-slate-600 hover:border-slate-400'
+          }`}
+        >
+          All notebooks
+        </button>
+        {NOTEBOOKS.map(nb => (
+          <button
+            key={nb.id}
+            onClick={() => setActive(active === nb.id ? null : nb.id)}
+            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+              active === nb.id
+                ? `bg-teal-400/15 text-teal-400 border-teal-400/40`
+                : `text-slate-400 border-slate-600 hover:border-slate-400`
+            }`}
+          >
+            {nb.label.split(' — ')[0]}
+          </button>
+        ))}
+      </div>
+
+      {/* Notice */}
+      <div className="flex items-start gap-3 bg-slate-800/50 border border-slate-700 rounded-xl p-4 text-sm text-slate-400">
+        <svg className="w-5 h-5 text-teal-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <p>
+          Charts appear here automatically after you run each notebook in Google Colab —
+          Section 10 uploads them to HuggingFace. If a chart shows a placeholder,
+          that notebook has not been run yet.
+        </p>
+      </div>
+
+      {/* Gallery per notebook */}
+      {displayed.map(nb => (
+        <section key={nb.id} className={`border-l-4 ${nb.color} pl-5`}>
+          <h2 className={`text-lg font-semibold mb-4 ${nb.accent}`}>{nb.label}</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {nb.charts.map(chart => (
+              <ChartCard
+                key={chart.file}
+                notebook_id={nb.id}
+                file={chart.file}
+                title={chart.title}
+                accent={nb.accent}
+              />
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  )
+}

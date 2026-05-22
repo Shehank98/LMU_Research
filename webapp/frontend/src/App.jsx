@@ -5,6 +5,7 @@ import Performance from './pages/Performance'
 import LiveDiagnosis from './pages/LiveDiagnosis'
 import XAIAnalysis from './pages/XAIAnalysis'
 import ModelComparison from './pages/ModelComparison'
+import Results from './pages/Results'
 
 export default function App() {
   return (
@@ -17,6 +18,7 @@ export default function App() {
           <Route path="/diagnosis"  element={<LiveDiagnosis />} />
           <Route path="/xai"        element={<XAIAnalysis />} />
           <Route path="/comparison" element={<ModelComparison />} />
+          <Route path="/results"    element={<Results />} />
         </Routes>
       </main>
     </div>
