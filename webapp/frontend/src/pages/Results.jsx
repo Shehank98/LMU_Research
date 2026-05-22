@@ -108,8 +108,9 @@ const NOTEBOOKS = [
     color: 'border-cyan-500',
     accent: 'text-cyan-400',
     charts: [
-      { file: 'sample_gradcam_grid.jpg',      title: 'GRAD-CAM Sample Grid' },
+      { file: 'sample_gradcam_grid.jpg',      title: 'All-6-Model GRAD-CAM Grid' },
       { file: 'eaa_iou_distribution.jpg',     title: 'EAA-IoU Distribution by Class' },
+      { file: 'pairwise_iou_heatmap.jpg',     title: 'Pairwise IoU Matrix (6×6)' },
       { file: 'eaa_iou_low_vs_high.jpg',      title: 'Low vs High EAA-IoU Examples' },
     ],
   },
