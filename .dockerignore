@@ -1,0 +1,35 @@
+# Dataset — never include in Docker image
+MRI_DATASET/
+
+# Notebook outputs and checkpoints
+**/.ipynb_checkpoints/
+**/__pycache__/
+**/*.pyc
+
+# Large model files — downloaded at runtime from HuggingFace Hub
+MODELS/*.h5
+MODELS/*.sav
+MODELS/inc_ensemble_model.pkl
+MODELS/xcp_ensemble_model.pkl
+MODELS/ensemble_model.pkl
+
+# Git and CI
+.git/
+.github/
+
+# Training scripts — not needed at runtime
+training/
+XAI_notebook/
+CNN/
+ALAEXNET/
+Xception_model/
+InceptionV3_model/
+SVM_RF_DT_model/
+CNN_WITH_SVM_RF_DT/
+"Xception + Ensemble"/
+"InceptionV3 + Ensemble"/
+Final_model_Research/
+
+# Misc
+*.md
+*.zip
