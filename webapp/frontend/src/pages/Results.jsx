@@ -10,7 +10,7 @@ const NOTEBOOKS = [
     color: 'border-purple-500',
     accent: 'text-purple-400',
     charts: [
-      { file: '01_cnn_standalone_training_history.jpg', title: 'Training History' },
+      { file: '01_CNN_Standalone_training_history.jpg', title: 'Training History' },
       { file: '01_cnn_standalone_confusion_matrix.jpg', title: 'Confusion Matrix' },
       { file: '01_cnn_standalone_roc_curve.jpg',        title: 'ROC Curve' },
       { file: '01_cnn_standalone_pr_curve.jpg',         title: 'Precision-Recall Curve' },
@@ -22,12 +22,12 @@ const NOTEBOOKS = [
     color: 'border-purple-400',
     accent: 'text-purple-300',
     charts: [
-      { file: 'cnn___random_forest_confusion_matrix.jpg', title: 'RF — Confusion Matrix' },
-      { file: 'cnn___random_forest_roc_curve.jpg',        title: 'RF — ROC Curve' },
-      { file: 'cnn___decision_tree_confusion_matrix.jpg', title: 'DT — Confusion Matrix' },
-      { file: 'cnn___svm_confusion_matrix.jpg',           title: 'SVM — Confusion Matrix' },
-      { file: 'cnn___soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
-      { file: 'cnn___soft_vote_ensemble_roc_curve.jpg',   title: 'Ensemble — ROC Curve' },
+      { file: 'cnn_random_forest_confusion_matrix.jpg',       title: 'RF — Confusion Matrix' },
+      { file: 'cnn_random_forest_roc_curve.jpg',              title: 'RF — ROC Curve' },
+      { file: 'cnn_decision_tree_confusion_matrix.jpg',       title: 'DT — Confusion Matrix' },
+      { file: 'cnn_svm_confusion_matrix.jpg',                 title: 'SVM — Confusion Matrix' },
+      { file: 'cnn_soft_vote_ensemble_confusion_matrix.jpg',  title: 'Ensemble — Confusion Matrix' },
+      { file: 'cnn_soft_vote_ensemble_roc_curve.jpg',         title: 'Ensemble — ROC Curve' },
     ],
   },
   {
@@ -36,7 +36,7 @@ const NOTEBOOKS = [
     color: 'border-blue-500',
     accent: 'text-blue-400',
     charts: [
-      { file: '03_inceptionv3_standalone_training_history.jpg', title: 'Training History' },
+      { file: '03_InceptionV3_Standalone_training_history.jpg', title: 'Training History' },
       { file: '03_inceptionv3_standalone_confusion_matrix.jpg', title: 'Confusion Matrix' },
       { file: '03_inceptionv3_standalone_roc_curve.jpg',        title: 'ROC Curve' },
       { file: '03_inceptionv3_standalone_pr_curve.jpg',         title: 'Precision-Recall Curve' },
@@ -48,10 +48,10 @@ const NOTEBOOKS = [
     color: 'border-blue-400',
     accent: 'text-blue-300',
     charts: [
-      { file: 'inceptionv3___random_forest_confusion_matrix.jpg', title: 'RF — Confusion Matrix' },
-      { file: 'inceptionv3___random_forest_roc_curve.jpg',        title: 'RF — ROC Curve' },
-      { file: 'inceptionv3___soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
-      { file: 'inceptionv3___soft_vote_ensemble_roc_curve.jpg',   title: 'Ensemble — ROC Curve' },
+      { file: 'inceptionv3_random_forest_confusion_matrix.jpg',      title: 'RF — Confusion Matrix' },
+      { file: 'inceptionv3_random_forest_roc_curve.jpg',             title: 'RF — ROC Curve' },
+      { file: 'inceptionv3_soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
+      { file: 'inceptionv3_soft_vote_ensemble_roc_curve.jpg',        title: 'Ensemble — ROC Curve' },
     ],
   },
   {
@@ -60,7 +60,7 @@ const NOTEBOOKS = [
     color: 'border-teal-500',
     accent: 'text-teal-400',
     charts: [
-      { file: '05_xception_standalone_training_history.jpg', title: 'Training History' },
+      { file: '05_Xception_Standalone_training_history.jpg', title: 'Training History' },
       { file: '05_xception_standalone_confusion_matrix.jpg', title: 'Confusion Matrix' },
       { file: '05_xception_standalone_roc_curve.jpg',        title: 'ROC Curve' },
       { file: '05_xception_standalone_pr_curve.jpg',         title: 'Precision-Recall Curve' },
@@ -72,10 +72,12 @@ const NOTEBOOKS = [
     color: 'border-teal-400',
     accent: 'text-teal-300',
     charts: [
-      { file: 'xception___random_forest_confusion_matrix.jpg', title: 'RF — Confusion Matrix' },
-      { file: 'xception___random_forest_roc_curve.jpg',        title: 'RF — ROC Curve' },
-      { file: 'xception___soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
-      { file: 'xception___soft_vote_ensemble_roc_curve.jpg',   title: 'Ensemble — ROC Curve' },
+      { file: 'xception_random_forest_confusion_matrix.jpg',      title: 'RF — Confusion Matrix' },
+      { file: 'xception_random_forest_roc_curve.jpg',             title: 'RF — ROC Curve' },
+      { file: 'xception_decision_tree_confusion_matrix.jpg',      title: 'DT — Confusion Matrix' },
+      { file: 'xception_svm_confusion_matrix.jpg',                title: 'SVM — Confusion Matrix' },
+      { file: 'xception_soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
+      { file: 'xception_soft_vote_ensemble_roc_curve.jpg',        title: 'Ensemble — ROC Curve' },
     ],
   },
   {
@@ -84,10 +86,11 @@ const NOTEBOOKS = [
     color: 'border-slate-500',
     accent: 'text-slate-300',
     charts: [
-      { file: 'random_forest__raw_pixels__confusion_matrix.jpg', title: 'RF — Confusion Matrix' },
-      { file: 'svm__raw_pixels__confusion_matrix.jpg',           title: 'SVM — Confusion Matrix' },
-      { file: 'soft_vote_ensemble__raw_pixels__confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
-      { file: 'soft_vote_ensemble__raw_pixels__roc_curve.jpg',   title: 'Ensemble — ROC Curve' },
+      { file: 'traditional_ml_random_forest_confusion_matrix.jpg',      title: 'RF — Confusion Matrix' },
+      { file: 'traditional_ml_svm_confusion_matrix.jpg',                title: 'SVM — Confusion Matrix' },
+      { file: 'traditional_ml_decision_tree_confusion_matrix.jpg',      title: 'DT — Confusion Matrix' },
+      { file: 'traditional_ml_soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
+      { file: 'traditional_ml_soft_vote_ensemble_roc_curve.jpg',        title: 'Ensemble — ROC Curve' },
     ],
   },
   {

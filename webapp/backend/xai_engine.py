@@ -85,6 +85,8 @@ def get_gradcam(model, image_arr, class_idx):
         # Keras 3 raises "layer has never been called / no defined output"
         # for Sequential models loaded from h5 because they have no symbolic
         # output tensors until actually called.
+        # Also skip InputLayer — Functional models built with tf.keras.Input
+        # include an InputLayer in model.layers that cannot be called directly.
         log.debug('Sub-model GradCAM failed (%s) — using layer-by-layer pass', sub_exc)
         layers = model.layers
         conv_idx = next((i for i, l in enumerate(layers) if l.name == conv_name), -1)
@@ -93,10 +95,14 @@ def get_gradcam(model, image_arr, class_idx):
         with tf.GradientTape() as tape:
             x = img
             for layer in layers[:conv_idx + 1]:
+                if isinstance(layer, tf.keras.layers.InputLayer):
+                    continue
                 x = layer(x)
             conv_outputs = x
             tape.watch(conv_outputs)
             for layer in layers[conv_idx + 1:]:
+                if isinstance(layer, tf.keras.layers.InputLayer):
+                    continue
                 x = layer(x)
             loss = _loss(x)
         grads = tape.gradient(loss, conv_outputs)
