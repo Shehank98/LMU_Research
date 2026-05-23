@@ -51,6 +51,28 @@ def _download_one(filename):
         return False
 
 
+def _load_keras(path):
+    """
+    Load a Keras .h5 model with a Keras 2/3 compatibility shim.
+
+    Colab saves models with Keras 3 config (includes quantization_config in
+    Dense layers). If the runtime is Keras 2 it rejects that key. We catch
+    the specific error and retry with a patched Dense that silently ignores
+    the unknown kwarg — no model re-training or re-saving required.
+    """
+    try:
+        return load_model(path)
+    except Exception as exc:
+        if 'quantization_config' not in str(exc):
+            raise
+        log.warning('Keras 2/3 mismatch detected for %s — retrying with compat shim', os.path.basename(path))
+        from tensorflow.keras.layers import Dense as _Dense
+        class _K3Dense(_Dense):
+            def __init__(self, *args, quantization_config=None, **kwargs):
+                super().__init__(*args, **kwargs)
+        return load_model(path, custom_objects={'Dense': _K3Dense})
+
+
 def _load_all():
     """Download then load all models. Called in a background thread."""
     with _lock:
@@ -73,7 +95,7 @@ def _load_all():
             models[key] = None
             continue
         try:
-            models[key] = load_model(path) if loader == 'keras' else joblib.load(path)
+            models[key] = _load_keras(path) if loader == 'keras' else joblib.load(path)
             log.info('Loaded: %s', filename)
         except Exception as exc:
             log.error('Failed to load %s: %s', filename, exc)
