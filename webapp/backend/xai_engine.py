@@ -58,6 +58,14 @@ def get_gradcam(model, image_arr, class_idx):
     conv_name = _last_conv_name(model)
     img = tf.cast(image_arr, tf.float32)
 
+    # For standalone classifiers (4 outputs) target the predicted class.
+    # For feature extractors (256 outputs) target the sum of all activations —
+    # this shows which spatial regions activate the feature map most strongly.
+    def _loss(predictions):
+        return (predictions[:, class_idx]
+                if predictions.shape[-1] <= 4
+                else tf.reduce_sum(predictions))
+
     conv_outputs = None
     grads = None
 
@@ -70,7 +78,7 @@ def get_gradcam(model, image_arr, class_idx):
         with tf.GradientTape() as tape:
             conv_outputs, predictions = grad_model(img)
             tape.watch(conv_outputs)
-            loss = predictions[:, class_idx]
+            loss = _loss(predictions)
         grads = tape.gradient(loss, conv_outputs)
     except Exception as sub_exc:
         # Approach 2: layer-by-layer forward pass.
@@ -90,7 +98,7 @@ def get_gradcam(model, image_arr, class_idx):
             tape.watch(conv_outputs)
             for layer in layers[conv_idx + 1:]:
                 x = layer(x)
-            loss = x[:, class_idx]
+            loss = _loss(x)
         grads = tape.gradient(loss, conv_outputs)
 
     if grads is None:

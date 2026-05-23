@@ -54,10 +54,31 @@ const URGENCY_STYLES = {
   normal:   { bg: 'bg-green-500/10',  border: 'border-green-500/40',  text: 'text-green-400',  dot: 'bg-green-500' },
 }
 
+const HEATMAP_LABELS = {
+  cnn:      'CNN',
+  xception: 'Xception',
+  inception:'InceptionV3',
+  cnn_feat: 'CNN Features',
+  inc_feat: 'Inc Features',
+  xcp_feat: 'Xcp Features',
+}
+
 const IOU_LABELS = {
-  cnn_vs_xception:       'CNN ↔ Xception',
-  cnn_vs_inception:      'CNN ↔ InceptionV3',
-  xception_vs_inception: 'Xception ↔ InceptionV3',
+  cnn_vs_xception:            'CNN ↔ Xception',
+  cnn_vs_inception:           'CNN ↔ InceptionV3',
+  xception_vs_inception:      'Xception ↔ InceptionV3',
+  cnn_vs_cnn_feat:            'CNN ↔ CNN Feat',
+  cnn_vs_inc_feat:            'CNN ↔ Inc Feat',
+  cnn_vs_xcp_feat:            'CNN ↔ Xcp Feat',
+  xception_vs_cnn_feat:       'Xception ↔ CNN Feat',
+  xception_vs_inc_feat:       'Xception ↔ Inc Feat',
+  xception_vs_xcp_feat:       'Xception ↔ Xcp Feat',
+  inception_vs_cnn_feat:      'InceptionV3 ↔ CNN Feat',
+  inception_vs_inc_feat:      'InceptionV3 ↔ Inc Feat',
+  inception_vs_xcp_feat:      'InceptionV3 ↔ Xcp Feat',
+  cnn_feat_vs_inc_feat:       'CNN Feat ↔ Inc Feat',
+  cnn_feat_vs_xcp_feat:       'CNN Feat ↔ Xcp Feat',
+  inc_feat_vs_xcp_feat:       'Inc Feat ↔ Xcp Feat',
 }
 
 /* ── Sub-components ───────────────────────────────────────────────────────── */
@@ -519,11 +540,11 @@ export default function LiveDiagnosis() {
                       The consensus map is a weighted average of all three heatmaps.
                     </p>
                     {result.heatmaps && Object.keys(result.heatmaps).length > 0 ? (
-                      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
                         {Object.entries(result.heatmaps).map(([key, b64]) => (
                           <div key={key}>
                             <p className="text-xs text-slate-400 font-semibold mb-2 uppercase tracking-wide text-center">
-                              {key === 'cnn' ? 'CNN' : key === 'xception' ? 'Xception' : 'InceptionV3'}
+                              {HEATMAP_LABELS[key] || key}
                             </p>
                             <img src={b64} alt={key}
                               className="w-full rounded-lg border border-slate-700" />
