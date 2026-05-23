@@ -4,12 +4,13 @@ from contextlib import asynccontextmanager
 import numpy as np
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
 
 log = logging.getLogger(__name__)
 
-from model_loader import get_models, start_loading_background, peek_state, MODEL_FILES
+from model_loader import get_models, start_loading_background, peek_state, MODEL_FILES, force_reload
 from xai_engine import (
     CLASS_NAMES, CLASS_COLORS, CONFIDENCE_THRESHOLD,
     preprocess, get_gradcam, overlay_heatmap,
@@ -121,6 +122,17 @@ def debug_models():
     return {'models': info, 'class_names': CLASS_NAMES, 'missing': missing}
 
 
+# ── Model reload ─────────────────────────────────────────────────────────────
+@app.post('/api/admin/reload')
+def reload_models():
+    """
+    Re-download any missing models from HuggingFace and reload them.
+    Call this after uploading new model files to HuggingFace — no redeploy needed.
+    """
+    force_reload()
+    return {'status': 'reload started — check /api/models/status in ~30s'}
+
+
 # ── Prediction endpoint ───────────────────────────────────────────────────────
 @app.post('/api/predict')
 async def predict(file: UploadFile = File(...)):
@@ -221,7 +233,32 @@ async def predict(file: UploadFile = File(...)):
     }
 
 
-# Serve React SPA — must be registered last
+# ── SPA / static file serving ─────────────────────────────────────────────────
+# Must be registered last so API routes take precedence.
+#
+# StaticFiles(html=True) returns HTTP 404 for paths like /diagnosis — the React
+# router never gets a chance to render them.  The correct SPA pattern is:
+#   • Mount /assets explicitly for compiled JS/CSS (cache-friendly, correct MIME)
+#   • Catch everything else with a wildcard GET that returns index.html with 200
+
 _static = os.path.join(os.path.dirname(__file__), 'static')
-if os.path.isdir(_static):
-    app.mount('/', StaticFiles(directory=_static, html=True), name='static')
+_assets = os.path.join(_static, 'assets')
+if os.path.isdir(_assets):
+    app.mount('/assets', StaticFiles(directory=_assets), name='assets')
+
+
+@app.get('/favicon.ico', include_in_schema=False)
+async def favicon():
+    fav = os.path.join(_static, 'favicon.ico')
+    if os.path.exists(fav):
+        return FileResponse(fav)
+    raise HTTPException(404)
+
+
+@app.get('/{full_path:path}', include_in_schema=False)
+async def serve_spa(full_path: str):
+    """Return index.html for every unmatched path so React Router handles routing."""
+    index = os.path.join(_static, 'index.html')
+    if os.path.exists(index):
+        return FileResponse(index, media_type='text/html')
+    raise HTTPException(404, 'Frontend not built — run npm run build in webapp/frontend')

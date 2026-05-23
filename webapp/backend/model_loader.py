@@ -102,7 +102,38 @@ def _load_all():
             missing.append(filename)
             models[key] = None
 
-    # Build feature extractors in memory from standalone Keras models
+    # Build feature extractors in memory from standalone Keras models.
+    # Keras 3 (TF 2.16+) removed symbolic tensor access on loaded Sequential
+    # models, so base.input / layer.output raise AttributeError.  We rebuild
+    # the graph with a fresh Input calling each layer in sequence.
+    import tensorflow as tf
+
+    def _build_extractor(base, layer_name):
+        # Approach 1: direct sub-model (works for Functional models in Keras 2/3)
+        try:
+            return Model(inputs=base.input,
+                         outputs=base.get_layer(layer_name).output)
+        except AttributeError:
+            pass
+        # Approach 2: layer-by-layer rebuild (Sequential models in Keras 3)
+        try:
+            in_shape = tuple(base.input_shape[1:])
+        except Exception:
+            return None
+        inp = tf.keras.Input(shape=in_shape)
+        x = inp
+        feat_out = None
+        for lyr in base.layers:
+            if isinstance(lyr, tf.keras.layers.InputLayer):
+                continue
+            x = lyr(x)
+            if lyr.name == layer_name:
+                feat_out = x
+                break
+        if feat_out is None:
+            return None
+        return Model(inputs=inp, outputs=feat_out)
+
     extractors = {}
     for src_key, ext_key in [('cnn', 'cnn_feat'),
                               ('inception', 'inc_feat'),
@@ -111,20 +142,18 @@ def _load_all():
         if base is None:
             continue
         try:
-            extractors[ext_key] = Model(
-                inputs=base.input,
-                outputs=base.get_layer('feature_layer').output,
-            )
-        except Exception:
-            # Fallback: last Dense layer before softmax
-            try:
-                for layer in reversed(base.layers):
-                    shape = getattr(layer, 'output_shape', None)
-                    if shape and len(shape) == 2:
-                        extractors[ext_key] = Model(inputs=base.input, outputs=layer.output)
+            m = _build_extractor(base, 'feature_layer')
+            if m is None:
+                # Last fallback: second-to-last Dense (layer before softmax)
+                for lyr in reversed(base.layers):
+                    if hasattr(lyr, 'units') and lyr.units != 4:  # 4 = num classes
+                        m = _build_extractor(base, lyr.name)
                         break
-            except Exception:
-                pass
+            if m is not None:
+                extractors[ext_key] = m
+                log.info('Built extractor %s → output %s', ext_key, m.output_shape)
+        except Exception as exc:
+            log.warning('Could not build extractor for %s: %s', src_key, exc)
 
     loaded = sum(1 for v in models.values() if v is not None)
     log.info('Model loading complete: %d/%d loaded, missing: %s',
@@ -142,6 +171,28 @@ def start_loading_background():
     t = threading.Thread(target=_load_all, daemon=True, name='model-loader')
     t.start()
     return t
+
+
+def force_reload():
+    """
+    Reset state and re-download any missing model files from HuggingFace.
+    Call this when new models are uploaded to HuggingFace after server startup.
+    Safe to call from any thread.
+    """
+    with _lock:
+        # Clear cached state so _load_all will re-run
+        _state['models']     = None
+        _state['extractors'] = None
+        _state['missing']    = None
+        _state['loading']    = False
+    # Also delete local cache files that failed previously so they are re-downloaded
+    import shutil
+    for _, (filename, _) in MODEL_FILES.items():
+        dest = os.path.join(MODELS_DIR, filename)
+        if not os.path.exists(dest):
+            continue  # not cached — nothing to clear
+    # Kick off background reload
+    return start_loading_background()
 
 
 def get_models():
