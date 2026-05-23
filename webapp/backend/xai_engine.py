@@ -78,6 +78,10 @@ def overlay_heatmap(pil_image, heatmap, alpha=0.45):
     cam = np.uint8(255 * heatmap)
     cam_color = cv2.applyColorMap(cam, cv2.COLORMAP_JET)
     cam_color = cv2.cvtColor(cam_color, cv2.COLOR_BGR2RGB)
+    # Resize heatmap to match display canvas (orig may be 256×256 while
+    # heatmap was computed at the model's input size, e.g. 224×224)
+    if cam_color.shape[:2] != orig.shape[:2]:
+        cam_color = cv2.resize(cam_color, (orig.shape[1], orig.shape[0]))
     overlay = cv2.addWeighted(orig, 1 - alpha, cam_color, alpha, 0)
     return Image.fromarray(overlay)
 
