@@ -24,7 +24,20 @@ def preprocess(pil_image, size):
 
 
 def _last_conv_name(model):
-    """Return the name of the last layer with a 4-D spatial output."""
+    """Return the name of the last Conv2D-family layer (4-D spatial output)."""
+    # isinstance check is reliable in TF 2.16+/Keras 3 where output_shape
+    # raises exceptions for intermediate layers in functional models
+    _conv_types = (
+        tf.keras.layers.Conv2D,
+        tf.keras.layers.SeparableConv2D,
+        tf.keras.layers.DepthwiseConv2D,
+        tf.keras.layers.Conv2DTranspose,
+    )
+    for layer in reversed(model.layers):
+        if isinstance(layer, _conv_types):
+            log.debug('GradCAM using conv layer: %s (%s)', layer.name, type(layer).__name__)
+            return layer.name
+    # Fallback: output_shape heuristic (works on simpler model topologies)
     for layer in reversed(model.layers):
         try:
             shape = layer.output_shape
