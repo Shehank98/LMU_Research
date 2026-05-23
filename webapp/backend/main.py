@@ -118,11 +118,11 @@ async def predict(file: UploadFile = File(...)):
         for name, probs in per_model_raw.items()
     ]
 
-    # GRAD-CAM
+    # GRAD-CAM uses standalone softmax models (not feature extractors)
     gradcam_sources = {
-        'cnn':       models.get('cnn_feat'),
-        'xception':  models.get('xcp_feat'),
-        'inception': models.get('inc_feat'),
+        'cnn':       models.get('cnn'),
+        'xception':  models.get('xception'),
+        'inception': models.get('inception'),
     }
     heatmaps_raw, heatmap_confs = {}, {}
     for key, gmodel in gradcam_sources.items():
