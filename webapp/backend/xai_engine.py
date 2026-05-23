@@ -56,19 +56,43 @@ def get_gradcam(model, image_arr, class_idx):
     image_arr: shape (1, H, W, 3), already normalised to [0, 1].
     """
     conv_name = _last_conv_name(model)
-    grad_model = tf.keras.models.Model(
-        inputs=model.inputs,
-        outputs=[model.get_layer(conv_name).output, model.output],
-    )
     img = tf.cast(image_arr, tf.float32)
-    with tf.GradientTape() as tape:
-        conv_outputs, predictions = grad_model(img)
-        # conv_outputs is an intermediate tensor (not a tf.Variable) so it must
-        # be watched explicitly for tape.gradient to return a value.
-        tape.watch(conv_outputs)
-        loss = predictions[:, class_idx]
 
-    grads = tape.gradient(loss, conv_outputs)
+    conv_outputs = None
+    grads = None
+
+    # Approach 1: sub-model (works for Functional models — InceptionV3, Xception)
+    try:
+        grad_model = tf.keras.models.Model(
+            inputs=model.inputs,
+            outputs=[model.get_layer(conv_name).output, model.output],
+        )
+        with tf.GradientTape() as tape:
+            conv_outputs, predictions = grad_model(img)
+            tape.watch(conv_outputs)
+            loss = predictions[:, class_idx]
+        grads = tape.gradient(loss, conv_outputs)
+    except Exception as sub_exc:
+        # Approach 2: layer-by-layer forward pass.
+        # Keras 3 raises "layer has never been called / no defined output"
+        # for Sequential models loaded from h5 because they have no symbolic
+        # output tensors until actually called.
+        log.debug('Sub-model GradCAM failed (%s) — using layer-by-layer pass', sub_exc)
+        layers = model.layers
+        conv_idx = next((i for i, l in enumerate(layers) if l.name == conv_name), -1)
+        if conv_idx == -1:
+            raise ValueError(f'Layer {conv_name} not found in model {model.name}')
+        with tf.GradientTape() as tape:
+            x = img
+            for layer in layers[:conv_idx + 1]:
+                x = layer(x)
+            conv_outputs = x
+            tape.watch(conv_outputs)
+            for layer in layers[conv_idx + 1:]:
+                x = layer(x)
+            loss = x[:, class_idx]
+        grads = tape.gradient(loss, conv_outputs)
+
     if grads is None:
         raise ValueError(
             f'GradCAM: tape.gradient returned None for layer {conv_name}. '
