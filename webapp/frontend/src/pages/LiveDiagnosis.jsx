@@ -1,10 +1,15 @@
-import { useState, useRef, useCallback } from 'react'
+import { useState, useRef, useCallback, useEffect } from 'react'
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, Cell } from 'recharts'
 import ConfidenceBadge from '../components/ConfidenceBadge'
 import SectionHeader from '../components/SectionHeader'
 
 const CLASS_COLORS = { Glioma: '#e74c3c', Meningioma: '#e67e22', 'No Tumor': '#27ae60', Pituitary: '#2980b9' }
 const IOULabels = { cnn_vs_xception: 'CNN vs Xception', cnn_vs_inception: 'CNN vs InceptionV3', xception_vs_inception: 'Xception vs InceptionV3' }
+
+const MODEL_LABELS = {
+  cnn: 'CNN', inception: 'InceptionV3', xception: 'Xception',
+  cnn_ens: 'CNN+Ensemble', inc_ens: 'Inc+Ensemble', xcp_ens: 'Xcp+Ensemble',
+}
 
 function DropZone({ onFile }) {
   const [dragging, setDragging] = useState(false)
@@ -55,6 +60,14 @@ export default function LiveDiagnosis() {
   const [result, setResult] = useState(null)
   const [error, setError] = useState(null)
   const [detailOpen, setDetailOpen] = useState(false)
+  const [modelStatus, setModelStatus] = useState(null)
+
+  useEffect(() => {
+    fetch('/api/models/status')
+      .then(r => r.json())
+      .then(d => setModelStatus(d))
+      .catch(() => {})
+  }, [])
 
   const handleFile = f => {
     setFile(f)
@@ -76,6 +89,8 @@ export default function LiveDiagnosis() {
         throw new Error(msg.detail || `HTTP ${res.status}`)
       }
       setResult(await res.json())
+      // refresh model count after a successful prediction
+      fetch('/api/models/status').then(r => r.json()).then(d => setModelStatus(d)).catch(() => {})
     } catch (e) {
       setError(e.message)
     } finally {
@@ -106,9 +121,29 @@ export default function LiveDiagnosis() {
 
   return (
     <div className="space-y-8">
-      <div>
-        <h2 className="text-2xl font-extrabold text-white">Live MRI Diagnosis</h2>
-        <p className="text-slate-400 mt-1">Upload a brain MRI scan for ensemble prediction with GRAD-CAM explainability</p>
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h2 className="text-2xl font-extrabold text-white">Live MRI Diagnosis</h2>
+          <p className="text-slate-400 mt-1">Upload a brain MRI scan for ensemble prediction with GRAD-CAM explainability</p>
+        </div>
+        {modelStatus && (
+          <div className={`flex items-center gap-2 text-sm px-3 py-1.5 rounded-full border ${
+            modelStatus.loaded_count === modelStatus.total_count
+              ? 'bg-green-500/10 border-green-500/30 text-green-400'
+              : modelStatus.loaded_count === 0
+              ? 'bg-red-500/10 border-red-500/30 text-red-400'
+              : 'bg-amber-500/10 border-amber-500/30 text-amber-400'
+          }`}>
+            <span className={`w-2 h-2 rounded-full ${
+              modelStatus.loaded_count === modelStatus.total_count ? 'bg-green-400' :
+              modelStatus.loaded_count === 0 ? 'bg-red-400' : 'bg-amber-400'
+            }`} />
+            {modelStatus.loaded_count} / {modelStatus.total_count} models loaded
+            {modelStatus.loaded_count > 0 && modelStatus.loaded_count < modelStatus.total_count && (
+              <span className="text-xs opacity-70">— more upload to HuggingFace to unlock</span>
+            )}
+          </div>
+        )}
       </div>
 
       {!file ? (
@@ -120,8 +155,11 @@ export default function LiveDiagnosis() {
             <img src={imageURL} alt="Uploaded MRI" className="w-full rounded-lg object-contain max-h-64" />
             <div className="flex gap-3 mt-4">
               {!result && !loading && (
-                <button onClick={runInference} className="btn-primary flex-1">
-                  Run Ensemble Analysis
+                <button onClick={runInference} className="btn-primary flex-1"
+                  disabled={modelStatus && modelStatus.loaded_count === 0}>
+                  {modelStatus && modelStatus.loaded_count > 0
+                    ? `Run ${modelStatus.loaded_count}-Model Ensemble Analysis`
+                    : 'Run Ensemble Analysis'}
                 </button>
               )}
               <button onClick={reset} className="btn-secondary">
@@ -135,7 +173,10 @@ export default function LiveDiagnosis() {
             {loading && (
               <div className="flex flex-col items-center justify-center py-12 gap-4">
                 <div className="w-10 h-10 border-4 border-teal-400 border-t-transparent rounded-full animate-spin" />
-                <p className="text-slate-400 text-sm">Running 6-model ensemble inference…</p>
+                <p className="text-slate-400 text-sm">
+                  Running {modelStatus?.loaded_count ?? ''}
+                  {modelStatus?.loaded_count ? `-model` : ''} ensemble inference…
+                </p>
               </div>
             )}
             {error && (
@@ -166,6 +207,12 @@ export default function LiveDiagnosis() {
                     <div className="h-full rounded-full transition-all duration-700"
                       style={{ width: `${result.confidence * 100}%`, backgroundColor: classColor }} />
                   </div>
+                </div>
+                <div className="text-xs text-slate-500">
+                  Based on {result.models_used} of {result.models_missing !== undefined ? result.models_used + result.models_missing.length : 6} available models
+                  {result.models_missing?.length > 0 && (
+                    <span className="text-amber-500/70"> · {result.models_missing.length} uploading</span>
+                  )}
                 </div>
                 <ConfidenceBadge level={result.confidence_level} pct={result.confidence * 100} />
                 {result.confidence_level === 'high' && (
@@ -206,7 +253,7 @@ export default function LiveDiagnosis() {
           {(result.heatmaps && Object.keys(result.heatmaps).length > 0) && (
             <div className="card-bordered">
               <SectionHeader title="GRAD-CAM Heatmaps"
-                subtitle="Red = high attention · Blue = low attention" />
+                subtitle="Red = high attention · Blue = low attention — showing available models only" />
               <div className={`grid gap-4 ${
                 Object.keys(result.heatmaps).length + (result.consensus_heatmap ? 1 : 0) >= 3
                   ? 'grid-cols-2 lg:grid-cols-4'
@@ -229,6 +276,25 @@ export default function LiveDiagnosis() {
                     </p>
                   </div>
                 )}
+              </div>
+            </div>
+          )}
+
+          {/* Model availability grid */}
+          {modelStatus && modelStatus.loaded_count < modelStatus.total_count && (
+            <div className="card-bordered">
+              <SectionHeader title="Model Availability"
+                subtitle="Upload remaining notebooks to HuggingFace to enable all 6 models" />
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {Object.entries(modelStatus.status || {}).map(([key, loaded]) => (
+                  <div key={key} className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm ${
+                    loaded ? 'bg-green-500/10 text-green-400' : 'bg-slate-700/50 text-slate-500'
+                  }`}>
+                    <span className={`w-2 h-2 rounded-full shrink-0 ${loaded ? 'bg-green-400' : 'bg-slate-600'}`} />
+                    {MODEL_LABELS[key] || key}
+                    {!loaded && <span className="text-xs ml-auto">pending</span>}
+                  </div>
+                ))}
               </div>
             </div>
           )}
