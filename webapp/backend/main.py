@@ -1,4 +1,4 @@
-import base64, io, os
+import base64, io, os, logging
 from contextlib import asynccontextmanager
 
 import numpy as np
@@ -6,6 +6,8 @@ from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
+
+log = logging.getLogger(__name__)
 
 from model_loader import get_models, start_loading_background, peek_state, MODEL_FILES
 from xai_engine import (
@@ -91,6 +93,34 @@ def research_data():
     }
 
 
+# ── Debug info ───────────────────────────────────────────────────────────────
+@app.get('/api/debug/models')
+def debug_models():
+    """Returns model input/output shapes and a zero-image test prediction."""
+    models, extractors, missing = get_models()
+    info = {}
+    for key, m in models.items():
+        if m is None:
+            info[key] = None
+            continue
+        try:
+            in_shape  = list(m.input_shape)
+            out_shape = list(m.output_shape)
+            # Run a zeroed test image through to detect preprocessing/output issues
+            size = in_shape[1] or 224
+            dummy = np.zeros((1, size, size, 3), dtype=np.float32)
+            probs = m.predict(dummy, verbose=0)[0].tolist()
+            info[key] = {
+                'input_shape':  in_shape,
+                'output_shape': out_shape,
+                'test_probs':   [round(p, 4) for p in probs],
+                'test_pred':    CLASS_NAMES[int(np.argmax(probs))] if len(probs) == 4 else 'n/a',
+            }
+        except Exception as exc:
+            info[key] = {'error': str(exc)}
+    return {'models': info, 'class_names': CLASS_NAMES, 'missing': missing}
+
+
 # ── Prediction endpoint ───────────────────────────────────────────────────────
 @app.post('/api/predict')
 async def predict(file: UploadFile = File(...)):
@@ -109,6 +139,14 @@ async def predict(file: UploadFile = File(...)):
 
     final_class, ensemble_conf, per_model_raw, combined_probs = \
         confidence_weighted_predict(pil_image, models, extractors)
+
+    # Log raw per-model probabilities so Railway logs show what the model outputs
+    for mname, probs in per_model_raw.items():
+        log.info('raw probs [%s]: %s → %s (%.1f%%)',
+                 mname,
+                 [f'{p:.3f}' for p in probs],
+                 CLASS_NAMES[int(np.argmax(probs))],
+                 float(np.max(probs)) * 100)
 
     class_name = CLASS_NAMES[final_class]
 
