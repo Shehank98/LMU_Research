@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
 
-from model_loader import get_models, MODEL_FILES
+from model_loader import get_models, start_loading_background, peek_state, MODEL_FILES
 from xai_engine import (
     CLASS_NAMES, CLASS_COLORS, CONFIDENCE_THRESHOLD,
     preprocess, get_gradcam, overlay_heatmap,
@@ -25,7 +25,7 @@ from research_data import (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    get_models()   # warm up model loading at startup
+    start_loading_background()   # non-blocking — health check passes immediately
     yield
 
 
@@ -48,9 +48,14 @@ def _pil_to_b64(img: Image.Image) -> str:
 # ── Health ────────────────────────────────────────────────────────────────────
 @app.get('/health')
 def health():
-    models, _, missing = get_models()
+    models, _, missing, loading = peek_state()
     loaded = sum(1 for v in models.values() if v is not None)
-    return {'status': 'ok', 'models_loaded': loaded, 'models_total': len(MODEL_FILES)}
+    return {
+        'status': 'ok',
+        'models_loaded': loaded,
+        'models_total': len(MODEL_FILES),
+        'models_loading': loading,
+    }
 
 
 # ── Model status ──────────────────────────────────────────────────────────────
