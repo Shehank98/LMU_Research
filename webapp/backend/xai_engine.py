@@ -1,8 +1,11 @@
 import numpy as np
 import cv2
+import logging
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import img_to_array
 from PIL import Image
+
+log = logging.getLogger(__name__)
 
 CLASS_NAMES = ['Glioma', 'Meningioma', 'No Tumor', 'Pituitary']
 CLASS_COLORS = {
@@ -44,11 +47,21 @@ def get_gradcam(model, image_arr, class_idx):
         inputs=model.inputs,
         outputs=[model.get_layer(conv_name).output, model.output],
     )
+    img = tf.cast(image_arr, tf.float32)
     with tf.GradientTape() as tape:
-        conv_outputs, predictions = grad_model(image_arr)
+        conv_outputs, predictions = grad_model(img)
+        # conv_outputs is an intermediate tensor (not a tf.Variable) so it must
+        # be watched explicitly for tape.gradient to return a value.
+        tape.watch(conv_outputs)
         loss = predictions[:, class_idx]
 
     grads = tape.gradient(loss, conv_outputs)
+    if grads is None:
+        raise ValueError(
+            f'GradCAM: tape.gradient returned None for layer {conv_name}. '
+            'Model may not support gradient computation in this TF version.'
+        )
+
     pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
     heatmap = (conv_outputs[0] @ pooled_grads[..., tf.newaxis]).numpy().squeeze()
     heatmap = np.maximum(heatmap, 0)

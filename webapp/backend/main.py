@@ -176,8 +176,8 @@ async def predict(file: UploadFile = File(...)):
             hm = get_gradcam(gmodel, img_in, final_class)
             heatmaps_raw[key]   = hm
             heatmap_confs[key]  = float(np.max(gmodel.predict(img_in, verbose=0)[0]))
-        except Exception:
-            pass
+        except Exception as exc:
+            log.warning('GRAD-CAM failed for %s: %s', key, exc)
 
     heatmaps_b64 = {k: _pil_to_b64(overlay_heatmap(pil_image, hm))
                     for k, hm in heatmaps_raw.items()}
