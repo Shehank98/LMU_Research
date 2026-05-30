@@ -36,13 +36,22 @@ def _download_one(filename):
         if HF_TOKEN:
             hf_login(token=HF_TOKEN, add_to_git_credential=False)
         log.info('Downloading %s from HuggingFace …', filename)
-        # Download to HF cache (no local_dir) then copy — avoids nested subdirectory bug
-        cached = hf_hub_download(
-            repo_id=HF_REPO_ID,
-            filename=f'models/{filename}',
-            token=HF_TOKEN or None,
-        )
+        # Try root of repo first, then models/ subfolder for backwards compat
+        cached = None
         os.makedirs(MODELS_DIR, exist_ok=True)
+        for hf_path in [filename, f'models/{filename}']:
+            try:
+                cached = hf_hub_download(
+                    repo_id=HF_REPO_ID,
+                    filename=hf_path,
+                    token=HF_TOKEN or None,
+                )
+                log.info('Found %s at HF path: %s', filename, hf_path)
+                break
+            except Exception:
+                continue
+        if cached is None:
+            raise FileNotFoundError(f'{filename} not found in HF repo root or models/ subfolder')
         shutil.copy2(cached, dest)
         log.info('Downloaded %s (%.1f MB)', filename, os.path.getsize(dest) / 1e6)
         return True
