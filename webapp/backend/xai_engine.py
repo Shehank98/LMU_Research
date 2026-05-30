@@ -137,22 +137,32 @@ def overlay_heatmap(pil_image, heatmap, alpha=0.45):
     return Image.fromarray(overlay)
 
 
+_CONSENSUS_SIZE = 256  # common canvas for multi-model heatmap ops
+
+
+def _resize_heatmap(heatmap, size=_CONSENSUS_SIZE):
+    if heatmap.shape[0] == size and heatmap.shape[1] == size:
+        return heatmap
+    return cv2.resize(heatmap.astype(np.float32), (size, size))
+
+
 def build_consensus_map(heatmaps, weights):
     """
-    heatmaps : list of (H, W) arrays
+    heatmaps : list of (H, W) arrays — may have different sizes
     weights  : list of floats (confidences), same length
-    Returns  : weighted-average (H, W) normalised 0–1
+    Returns  : weighted-average (_CONSENSUS_SIZE, _CONSENSUS_SIZE) normalised 0–1
     """
+    resized = [_resize_heatmap(h) for h in heatmaps]
     total = sum(weights) or 1.0
-    consensus = sum(h * w for h, w in zip(heatmaps, weights)) / total
+    consensus = sum(h * w for h, w in zip(resized, weights)) / total
     if consensus.max() > 0:
         consensus /= consensus.max()
     return consensus
 
 
 def iou_score(map_a, map_b, threshold=0.5):
-    a = (map_a >= threshold).astype(np.uint8)
-    b = (map_b >= threshold).astype(np.uint8)
+    a = (_resize_heatmap(map_a) >= threshold).astype(np.uint8)
+    b = (_resize_heatmap(map_b) >= threshold).astype(np.uint8)
     intersection = np.logical_and(a, b).sum()
     union        = np.logical_or(a, b).sum()
     return float(intersection / union) if union > 0 else 0.0
