@@ -35,7 +35,7 @@ const TUMOR_INFO = {
     description:
       'No intracranial mass lesion was detected in this MRI scan. The 6-model ensemble did not identify features characteristic of glioma, meningioma, or pituitary adenoma. Structural brain anatomy appears within normal limits for the regions assessed by the model architectures used.',
     recommendation:
-      "Clinical correlation is required. Results must be interpreted alongside the patient's symptoms, clinical history, and assessment by a qualified radiologist. A negative AI prediction does not exclude pathology — the model has not been validated for all neurological conditions.",
+      "Clinical correlation is required. Results must be interpreted alongside the patient's symptoms, clinical history, and assessment by a qualified radiologist. A negative AI prediction does not exclude pathology - the model has not been validated for all neurological conditions.",
   },
   Pituitary: {
     icdCode: 'D35.2',
@@ -99,7 +99,7 @@ function UploadZone({ onFile }) {
         <div className="inline-flex items-center gap-2 bg-teal-500/10 border border-teal-500/20 rounded-full px-4 py-1.5 mb-1">
           <span className="w-1.5 h-1.5 rounded-full bg-teal-400 animate-pulse" />
           <span className="text-teal-400 text-xs font-semibold tracking-widest uppercase">
-            AI Diagnostic System — Research Demo
+            AI Diagnostic System - Research Demo
           </span>
         </div>
         <h3 className="text-xl sm:text-2xl font-bold text-white">Upload Brain MRI Scan</h3>
@@ -187,7 +187,7 @@ function IoUAgreement({ score }) {
   const map = {
     strong:   { text: 'text-green-400',  border: 'border-green-500/30',  bg: 'bg-green-500/10',  label: 'Models strongly agree on tumour location' },
     moderate: { text: 'text-amber-400',  border: 'border-amber-500/30',  bg: 'bg-amber-500/10',  label: 'Moderate inter-model attention agreement' },
-    low:      { text: 'text-red-400',    border: 'border-red-500/30',    bg: 'bg-red-500/10',    label: 'Low agreement — radiologist review advised' },
+    low:      { text: 'text-red-400',    border: 'border-red-500/30',    bg: 'bg-red-500/10',    label: 'Low agreement - radiologist review advised' },
   }
   const s = map[level]
   return (
@@ -199,9 +199,9 @@ function IoUAgreement({ score }) {
       <div>
         <div className={`font-semibold text-sm ${s.text}`}>{s.label}</div>
         <div className="text-xs text-slate-500 mt-0.5">
-          {score >= 0.65 ? '≥0.65 threshold — high spatial consensus' :
-           score >= 0.40 ? '0.40–0.65 — partial agreement' :
-           '<0.40 — escalation recommended'}
+          {score >= 0.65 ? '≥0.65 threshold - high spatial consensus' :
+           score >= 0.40 ? '0.40–0.65 - partial agreement' :
+           '<0.40 - escalation recommended'}
         </div>
       </div>
     </div>
@@ -519,7 +519,7 @@ export default function LiveDiagnosis() {
             </div>
           </div>
 
-          {/* ── Detail tabs — only after prediction ── */}
+          {/* ── Detail tabs - only after prediction ── */}
           {result && (
             <>
               <div className="card-bordered">
@@ -579,7 +579,7 @@ export default function LiveDiagnosis() {
                       </div>
                     ) : (
                       <div className="text-center py-8">
-                        <p className="text-slate-500 text-sm">GRAD-CAM unavailable — model files not loaded</p>
+                        <p className="text-slate-500 text-sm">GRAD-CAM unavailable - model files not loaded</p>
                         <p className="text-slate-600 text-xs mt-1">Upload model files to HuggingFace to enable heatmaps</p>
                       </div>
                     )}
@@ -594,7 +594,7 @@ export default function LiveDiagnosis() {
                   const voteCount = agreeing.length
                   const total = models.length
                   // Average each model's probability for the ENSEMBLE-predicted class
-                  // (not each model's own top-class confidence — that's a different quantity)
+                  // (not each model's own top-class confidence - that's a different quantity)
                   const ensIdx = result.final_class_idx ?? 0
                   const avgConfForClass = total > 0
                     ? models.reduce((s, m) => s + (m.probabilities?.[ensIdx] ?? m.confidence), 0) / total
@@ -664,7 +664,7 @@ export default function LiveDiagnosis() {
 
                         <p className="text-xs text-slate-600 mt-3 leading-relaxed">
                           Compares the ensemble's confidence for the predicted class against each model's
-                          individual probability for that same class. A negative value indicates model disagreement —
+                          individual probability for that same class. A negative value indicates model disagreement -
                           the ensemble prediction is based on the majority vote, not a single model's certainty.
                         </p>
                       </div>
@@ -734,7 +734,7 @@ export default function LiveDiagnosis() {
                 {activeTab === 'iou' && (
                   <div>
                     <p className="text-xs text-slate-500 mb-5 leading-relaxed">
-                      <strong className="text-slate-400">Ensemble Attention Agreement (EAA-IoU)</strong> — Novel contribution.
+                      <strong className="text-slate-400">Ensemble Attention Agreement (EAA-IoU)</strong> - Novel contribution.
                       Measures pairwise spatial overlap between each model's binarised attention map.
                       High agreement (≥0.65) indicates the models consistently localise the same brain region,
                       adding confidence to the prediction. Low agreement (&lt;0.40) suggests uncertainty and
@@ -777,7 +777,7 @@ export default function LiveDiagnosis() {
                         <div className="mt-3 flex flex-wrap gap-4 text-xs text-slate-600">
                           <span><span className="text-green-400">■</span> ≥0.65 Strong agreement</span>
                           <span><span className="text-amber-400">■</span> 0.40–0.65 Moderate</span>
-                          <span><span className="text-red-400">■</span> &lt;0.40 Low — escalate</span>
+                          <span><span className="text-red-400">■</span> &lt;0.40 Low - escalate</span>
                         </div>
                       </div>
                     ) : (
@@ -796,7 +796,7 @@ export default function LiveDiagnosis() {
                   <div className="flex items-center gap-2 mb-3">
                     <div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: classColor }} />
                     <p className="text-xs text-slate-500 uppercase tracking-wider font-semibold">
-                      Clinical Information — {result.final_class}
+                      Clinical Information - {result.final_class}
                     </p>
                   </div>
                   <p className="text-slate-300 text-sm leading-relaxed">{info.description}</p>
@@ -850,13 +850,13 @@ export default function LiveDiagnosis() {
                       d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                   </svg>
                   <div>
-                    <p className="text-amber-400 font-bold text-sm">Research Demonstration Only — Not for Clinical Use</p>
+                    <p className="text-amber-400 font-bold text-sm">Research Demonstration Only - Not for Clinical Use</p>
                     <p className="text-slate-400 text-xs mt-1.5 leading-relaxed">
                       This system is a proof-of-concept developed for academic research (HND Data Analytics, ESOFT Metro Campus, 2024).
                       It has <strong className="text-slate-300">not been validated for clinical diagnosis</strong> and must not substitute
                       professional medical judgement. AI-generated predictions may contain errors.
                       Always consult a qualified radiologist or neurologist before making any clinical decisions.
-                      Image analysis is performed in-browser via a research API — no patient data is stored.
+                      Image analysis is performed in-browser via a research API - no patient data is stored.
                     </p>
                   </div>
                 </div>

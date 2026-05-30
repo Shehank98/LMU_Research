@@ -6,7 +6,7 @@ const HF_BASE = 'https://huggingface.co/shehank98/brain-tumor-mri-models/resolve
 const NOTEBOOKS = [
   {
     id: '01_CNN_Standalone',
-    label: '01 — CNN Standalone',
+    label: '01-CNN Standalone',
     color: 'border-purple-500',
     accent: 'text-purple-400',
     charts: [
@@ -18,21 +18,21 @@ const NOTEBOOKS = [
   },
   {
     id: '02_CNN_Ensemble',
-    label: '02 — CNN + Ensemble',
+    label: '02-CNN + Ensemble',
     color: 'border-purple-400',
     accent: 'text-purple-300',
     charts: [
-      { file: 'cnn_random_forest_confusion_matrix.jpg',       title: 'RF — Confusion Matrix' },
-      { file: 'cnn_random_forest_roc_curve.jpg',              title: 'RF — ROC Curve' },
-      { file: 'cnn_decision_tree_confusion_matrix.jpg',       title: 'DT — Confusion Matrix' },
-      { file: 'cnn_svm_confusion_matrix.jpg',                 title: 'SVM — Confusion Matrix' },
-      { file: 'cnn_soft_vote_ensemble_confusion_matrix.jpg',  title: 'Ensemble — Confusion Matrix' },
-      { file: 'cnn_soft_vote_ensemble_roc_curve.jpg',         title: 'Ensemble — ROC Curve' },
+      { file: 'cnn_random_forest_confusion_matrix.jpg',       title: 'RF-Confusion Matrix' },
+      { file: 'cnn_random_forest_roc_curve.jpg',              title: 'RF-ROC Curve' },
+      { file: 'cnn_decision_tree_confusion_matrix.jpg',       title: 'DT-Confusion Matrix' },
+      { file: 'cnn_svm_confusion_matrix.jpg',                 title: 'SVM-Confusion Matrix' },
+      { file: 'cnn_soft_vote_ensemble_confusion_matrix.jpg',  title: 'Ensemble-Confusion Matrix' },
+      { file: 'cnn_soft_vote_ensemble_roc_curve.jpg',         title: 'Ensemble-ROC Curve' },
     ],
   },
   {
     id: '03_InceptionV3_Standalone',
-    label: '03 — InceptionV3 Standalone',
+    label: '03-InceptionV3 Standalone',
     color: 'border-blue-500',
     accent: 'text-blue-400',
     charts: [
@@ -44,19 +44,19 @@ const NOTEBOOKS = [
   },
   {
     id: '04_InceptionV3_Ensemble',
-    label: '04 — InceptionV3 + Ensemble',
+    label: '04-InceptionV3 + Ensemble',
     color: 'border-blue-400',
     accent: 'text-blue-300',
     charts: [
-      { file: 'inceptionv3_random_forest_confusion_matrix.jpg',      title: 'RF — Confusion Matrix' },
-      { file: 'inceptionv3_random_forest_roc_curve.jpg',             title: 'RF — ROC Curve' },
-      { file: 'inceptionv3_soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
-      { file: 'inceptionv3_soft_vote_ensemble_roc_curve.jpg',        title: 'Ensemble — ROC Curve' },
+      { file: 'inceptionv3_random_forest_confusion_matrix.jpg',      title: 'RF-Confusion Matrix' },
+      { file: 'inceptionv3_random_forest_roc_curve.jpg',             title: 'RF-ROC Curve' },
+      { file: 'inceptionv3_soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble-Confusion Matrix' },
+      { file: 'inceptionv3_soft_vote_ensemble_roc_curve.jpg',        title: 'Ensemble-ROC Curve' },
     ],
   },
   {
     id: '05_Xception_Standalone',
-    label: '05 — Xception Standalone',
+    label: '05-Xception Standalone',
     color: 'border-teal-500',
     accent: 'text-teal-400',
     charts: [
@@ -68,46 +68,46 @@ const NOTEBOOKS = [
   },
   {
     id: '06_Xception_Ensemble',
-    label: '06 — Xception + Ensemble',
+    label: '06-Xception + Ensemble',
     color: 'border-teal-400',
     accent: 'text-teal-300',
     charts: [
-      { file: 'xception_random_forest_confusion_matrix.jpg',      title: 'RF — Confusion Matrix' },
-      { file: 'xception_random_forest_roc_curve.jpg',             title: 'RF — ROC Curve' },
-      { file: 'xception_decision_tree_confusion_matrix.jpg',      title: 'DT — Confusion Matrix' },
-      { file: 'xception_svm_confusion_matrix.jpg',                title: 'SVM — Confusion Matrix' },
-      { file: 'xception_soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
-      { file: 'xception_soft_vote_ensemble_roc_curve.jpg',        title: 'Ensemble — ROC Curve' },
+      { file: 'xception_random_forest_confusion_matrix.jpg',      title: 'RF-Confusion Matrix' },
+      { file: 'xception_random_forest_roc_curve.jpg',             title: 'RF-ROC Curve' },
+      { file: 'xception_decision_tree_confusion_matrix.jpg',      title: 'DT-Confusion Matrix' },
+      { file: 'xception_svm_confusion_matrix.jpg',                title: 'SVM-Confusion Matrix' },
+      { file: 'xception_soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble-Confusion Matrix' },
+      { file: 'xception_soft_vote_ensemble_roc_curve.jpg',        title: 'Ensemble-ROC Curve' },
     ],
   },
   {
     id: '07_TraditionalML_Ensemble',
-    label: '07 — Traditional ML Baseline',
+    label: '07-Traditional ML Baseline',
     color: 'border-slate-500',
     accent: 'text-slate-300',
     charts: [
-      { file: 'traditional_ml_random_forest_confusion_matrix.jpg',      title: 'RF — Confusion Matrix' },
-      { file: 'traditional_ml_svm_confusion_matrix.jpg',                title: 'SVM — Confusion Matrix' },
-      { file: 'traditional_ml_decision_tree_confusion_matrix.jpg',      title: 'DT — Confusion Matrix' },
-      { file: 'traditional_ml_soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble — Confusion Matrix' },
-      { file: 'traditional_ml_soft_vote_ensemble_roc_curve.jpg',        title: 'Ensemble — ROC Curve' },
+      { file: 'traditional_ml_random_forest_confusion_matrix.jpg',      title: 'RF-Confusion Matrix' },
+      { file: 'traditional_ml_svm_confusion_matrix.jpg',                title: 'SVM-Confusion Matrix' },
+      { file: 'traditional_ml_decision_tree_confusion_matrix.jpg',      title: 'DT-Confusion Matrix' },
+      { file: 'traditional_ml_soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble-Confusion Matrix' },
+      { file: 'traditional_ml_soft_vote_ensemble_roc_curve.jpg',        title: 'Ensemble-ROC Curve' },
     ],
   },
   {
     id: '08_AllModelsCombined_FinalEnsemble',
-    label: '08 — Final 6-Model Ensemble',
+    label: '08-Final 6-Model Ensemble',
     color: 'border-amber-500',
     accent: 'text-amber-400',
     charts: [
       { file: 'all_models_accuracy_comparison.jpg',     title: 'All Models Accuracy Comparison' },
-      { file: 'final_ensemble_confusion_matrix.jpg',    title: 'Final Ensemble — Confusion Matrix' },
-      { file: 'final_ensemble_roc_curve.jpg',           title: 'Final Ensemble — ROC Curve' },
-      { file: 'final_ensemble_pr_curve.jpg',            title: 'Final Ensemble — PR Curve' },
+      { file: 'final_ensemble_confusion_matrix.jpg',    title: 'Final Ensemble-Confusion Matrix' },
+      { file: 'final_ensemble_roc_curve.jpg',           title: 'Final Ensemble-ROC Curve' },
+      { file: 'final_ensemble_pr_curve.jpg',            title: 'Final Ensemble-PR Curve' },
     ],
   },
   {
     id: '09_ConsensusGradCAM',
-    label: '09 — Consensus GRAD-CAM (EAA-IoU)',
+    label: '09-Consensus GRAD-CAM (EAA-IoU)',
     color: 'border-cyan-500',
     accent: 'text-cyan-400',
     charts: [
@@ -119,18 +119,18 @@ const NOTEBOOKS = [
   },
   {
     id: '10_ConfidenceVoting',
-    label: '10 — Confidence-Weighted Voting',
+    label: '10-Confidence-Weighted Voting',
     color: 'border-lime-500',
     accent: 'text-lime-400',
     charts: [
-      { file: 'voting_comparison_confusion_matrix.jpg', title: 'Voting — Confusion Matrices' },
+      { file: 'voting_comparison_confusion_matrix.jpg', title: 'Voting-Confusion Matrices' },
       { file: 'voting_comparison_per_class_f1.jpg',     title: 'Per-Class F1 Improvement' },
       { file: 'voting_confidence_distribution.jpg',     title: 'Confidence Distribution' },
     ],
   },
   {
     id: '11_XAIAnalysis',
-    label: '11 — XAI Analysis',
+    label: '11-XAI Analysis',
     color: 'border-rose-500',
     accent: 'text-rose-400',
     charts: [
@@ -225,7 +225,7 @@ export default function Results() {
                 : `text-slate-400 border-slate-600 hover:border-slate-400`
             }`}
           >
-            {nb.label.split(' — ')[0]}
+            {nb.label.split('-')[0]}
           </button>
         ))}
       </div>
