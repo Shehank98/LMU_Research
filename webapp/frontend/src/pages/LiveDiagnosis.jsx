@@ -593,10 +593,13 @@ export default function LiveDiagnosis() {
                   const agreeing = models.filter(m => m.predicted_class === ensClass)
                   const voteCount = agreeing.length
                   const total = models.length
-                  const avgConf = total > 0
-                    ? models.reduce((s, m) => s + m.confidence, 0) / total
+                  // Average each model's probability for the ENSEMBLE-predicted class
+                  // (not each model's own top-class confidence — that's a different quantity)
+                  const ensIdx = result.final_class_idx ?? 0
+                  const avgConfForClass = total > 0
+                    ? models.reduce((s, m) => s + (m.probabilities?.[ensIdx] ?? m.confidence), 0) / total
                     : 0
-                  const advantage = result.confidence - avgConf
+                  const advantage = result.confidence - avgConfForClass
                   const voteRatio = total > 0 ? voteCount / total : 0
                   const votePct = Math.round(voteRatio * 100)
                   const voteColor = voteRatio >= 0.8 ? '#22c55e' : voteRatio >= 0.5 ? '#f59e0b' : '#ef4444'
@@ -639,20 +642,20 @@ export default function LiveDiagnosis() {
                           {/* Ensemble advantage */}
                           <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-3 text-center">
                             <div className="bg-slate-700/40 rounded-lg p-2.5">
-                              <p className="text-xs text-slate-500 mb-0.5">Avg. Individual</p>
+                              <p className="text-xs text-slate-500 mb-0.5">Avg. for Predicted Class</p>
                               <p className="font-mono font-bold text-slate-300 text-base">
-                                {(avgConf * 100).toFixed(1)}%
+                                {(avgConfForClass * 100).toFixed(1)}%
                               </p>
                             </div>
                             <div className="bg-teal-500/10 border border-teal-500/20 rounded-lg p-2.5">
-                              <p className="text-xs text-teal-400 mb-0.5">6-Model Ensemble</p>
+                              <p className="text-xs text-teal-400 mb-0.5">Ensemble Confidence</p>
                               <p className="font-mono font-black text-teal-300 text-base">
                                 {(result.confidence * 100).toFixed(1)}%
                               </p>
                             </div>
-                            <div className={`rounded-lg p-2.5 col-span-2 sm:col-span-1 ${advantage >= 0 ? 'bg-green-500/10 border border-green-500/20' : 'bg-red-500/10 border border-red-500/20'}`}>
-                              <p className={`text-xs mb-0.5 ${advantage >= 0 ? 'text-green-400' : 'text-red-400'}`}>Ensemble Advantage</p>
-                              <p className={`font-mono font-black text-base ${advantage >= 0 ? 'text-green-300' : 'text-red-300'}`}>
+                            <div className={`rounded-lg p-2.5 col-span-2 sm:col-span-1 ${advantage >= 0 ? 'bg-green-500/10 border border-green-500/20' : 'bg-amber-500/10 border border-amber-500/20'}`}>
+                              <p className={`text-xs mb-0.5 ${advantage >= 0 ? 'text-green-400' : 'text-amber-400'}`}>vs Avg. Individual</p>
+                              <p className={`font-mono font-black text-base ${advantage >= 0 ? 'text-green-300' : 'text-amber-300'}`}>
                                 {advantage >= 0 ? '+' : ''}{(advantage * 100).toFixed(1)}%
                               </p>
                             </div>
@@ -660,8 +663,9 @@ export default function LiveDiagnosis() {
                         </div>
 
                         <p className="text-xs text-slate-600 mt-3 leading-relaxed">
-                          Combining all 6 models via confidence-weighted voting produces a higher confidence score
-                          than any single model alone — directly validating the ensemble hypothesis.
+                          Compares the ensemble's confidence for the predicted class against each model's
+                          individual probability for that same class. A negative value indicates model disagreement —
+                          the ensemble prediction is based on the majority vote, not a single model's certainty.
                         </p>
                       </div>
 
