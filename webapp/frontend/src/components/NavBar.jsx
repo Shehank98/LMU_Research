@@ -1,8 +1,8 @@
 import { NavLink } from 'react-router-dom'
 
 const links = [
-  { to: '/diagnosis', label: 'Live Diagnosis' },
-  { to: '/results',   label: 'Results Gallery' },
+  { to: '/',        label: 'Live Diagnosis' },
+  { to: '/results', label: 'Results Gallery' },
 ]
 
 export default function NavBar() {
