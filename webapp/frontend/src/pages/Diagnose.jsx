@@ -2,7 +2,7 @@ import { useRef, useState } from 'react'
 import { analyseImage } from '../api'
 import { Badge, Bar, Card, CLASS_COLORS, PageHeader, Spinner, levelTone, pct } from '../components/ui'
 
-function UploadPanel({ file, preview, busy, onFile, onAnalyse, onClear }) {
+function UploadPanel({ file, preview, busy, onFile, onClear }) {
   const input = useRef(null)
   const [drag, setDrag] = useState(false)
 
@@ -30,15 +30,15 @@ function UploadPanel({ file, preview, busy, onFile, onAnalyse, onClear }) {
           </div>
           <p className="mt-3 truncate text-sm text-slate-500" title={file?.name}>{file?.name}</p>
           <div className="mt-4 flex gap-3">
-            <button className="btn-primary flex-1" onClick={onAnalyse} disabled={busy}>
-              {busy ? <><Spinner /> Analysing</> : 'Analyse scan'}
+            <button className="btn-primary flex-1" onClick={() => input.current?.click()} disabled={busy}>
+              {busy ? <><Spinner /> Analysing</> : 'Upload another scan'}
             </button>
             <button className="btn-secondary" onClick={onClear} disabled={busy}>Clear</button>
           </div>
         </div>
       )}
       <input ref={input} type="file" accept="image/jpeg,image/png" className="hidden"
-        onChange={(e) => accept(e.target.files[0])} />
+        onChange={(e) => { accept(e.target.files[0]); e.target.value = '' }} />
     </Card>
   )
 }
@@ -67,7 +67,7 @@ function PredictionPanel({ result, busy, error }) {
       <Card title="Prediction">
         <div className="py-16 text-center">
           <p className="text-sm font-medium text-slate-700">No scan analysed yet</p>
-          <p className="mt-1 text-sm text-slate-500">Upload an MRI image and select Analyse scan.</p>
+          <p className="mt-1 text-sm text-slate-500">Upload an MRI image and it is analysed automatically.</p>
         </div>
       </Card>
     )
@@ -203,25 +203,25 @@ export default function Diagnose() {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
-  const choose = (f) => {
-    setFile(f); setResult(null); setError('')
-    setPreview(URL.createObjectURL(f))
-  }
-  const clear = () => { setFile(null); setPreview(null); setResult(null); setError('') }
-  const analyse = async () => {
+  const analyse = async (f) => {
     setBusy(true); setError('')
-    try { setResult(await analyseImage(file)) }
+    try { setResult(await analyseImage(f)) }
     catch (e) { setError(e.message) }
     finally { setBusy(false) }
   }
+  const choose = (f) => {                 // a new upload starts the analysis straight away
+    setFile(f); setResult(null); setError('')
+    setPreview(URL.createObjectURL(f))
+    analyse(f)
+  }
+  const clear = () => { setFile(null); setPreview(null); setResult(null); setError('') }
 
   return (
     <>
-      <PageHeader title="Diagnose an MRI scan"
-        description="The scan is classified as glioma, meningioma, pituitary tumour or no tumour by six predictors, and an agreement score shows how consistently the deep models focus on the same region." />
+      <PageHeader title="Diagnose an MRI scan" />
       <div className="grid gap-6 lg:grid-cols-5">
         <div className="lg:col-span-2">
-          <UploadPanel file={file} preview={preview} busy={busy} onFile={choose} onAnalyse={analyse} onClear={clear} />
+          <UploadPanel file={file} preview={preview} busy={busy} onFile={choose} onClear={clear} />
         </div>
         <div className="lg:col-span-3">
           <PredictionPanel result={result} busy={busy} error={error} />

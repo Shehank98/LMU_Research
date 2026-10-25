@@ -5,7 +5,6 @@ import { getModelStatus } from '../api'
 const NAV = [
   { to: '/', label: 'Diagnose', end: true },
   { to: '/results', label: 'Results' },
-  { to: '/about', label: 'About' },
 ]
 
 function ModelStatus() {

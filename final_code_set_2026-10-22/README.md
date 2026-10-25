@@ -113,8 +113,8 @@ xception_ext.h5, cnn_ensemble_model.pkl, inceptionv3_ensemble_model.pkl, xceptio
    ```
 4. **Check it worked**: open `https://<your-railway-domain>/api/models/status`.
    `loaded_count` should be `9`. The header of the site shows **9 of 9 model files ready**.
-5. Open the site: **Diagnose** to upload a scan, **Results** for the live numbers from your run
-   (badge: *Live results · results_2026-10-22*), **About** for the method.
+5. Open the site: **Diagnose** to upload a scan (the analysis starts automatically), **Results** for
+   the live numbers from your run (badge: *Live results · results_2026-10-22*).
 
 ---
 
