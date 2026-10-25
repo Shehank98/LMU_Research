@@ -7,6 +7,9 @@ One Google Colab notebook, `Brain_Tumor_Train_And_Log.ipynb`, that:
 3. runs the explainability analysis (Grad-CAM family + EAA-IoU) on the whole test set,
 4. uploads the models and results to Hugging Face, where the web app picks them up.
 
+> **Prefer one notebook per model?** The folder `individual_models/` has the same code split into
+> 10 notebooks (01_CNN ... 10_Upload_to_HuggingFace) that you run one by one. See its README.
+
 It is built so a crash or disconnect does not lose work, and it was tested end to end before
 delivery, including a simulated crash in the middle of training.
 
