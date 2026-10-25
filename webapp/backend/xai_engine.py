@@ -1,226 +1,184 @@
-import numpy as np
-import cv2
+"""
+Prediction and explainability.
+
+predict_all()   runs the six predictors and fuses them with a confidence-weighted vote.
+explain()       builds Grad-CAM maps for CNN, Xception and InceptionV3, the consensus map,
+                and the Ensemble Attention Agreement score (EAA-IoU = mean pairwise IoU).
+The Grad-CAM code is the same as in the Colab notebook, so the app and the report agree.
+"""
 import logging
+
+import cv2
+import numpy as np
 import tensorflow as tf
-from tensorflow.keras.preprocessing.image import img_to_array
 from PIL import Image
+from tensorflow.keras.models import Model
+
+from model_loader import ensemble_proba, input_size
 
 log = logging.getLogger(__name__)
 
 CLASS_NAMES = ['Glioma', 'Meningioma', 'No Tumor', 'Pituitary']
-CLASS_COLORS = {
-    'Glioma':      '#e74c3c',
-    'Meningioma':  '#e67e22',
-    'No Tumor':    '#27ae60',
-    'Pituitary':   '#2980b9',
-}
-CONFIDENCE_THRESHOLD = 0.70
+MAP_SIZE = 256
+IOU_THRESHOLD = 0.5
+EAA_HIGH, EAA_LOW = 0.65, 0.40          # >= high: agree; < low: flag for radiologist review
+CAM_METHOD = 'hirescam'                  # 'hirescam' (default) or 'gradcam'; must match the notebook
+
+DEEP_MODELS = [('cnn', 'CNN'), ('xception', 'Xception'), ('inception', 'InceptionV3')]
+FEATURE_MODELS = [('cnn', 'CNN + Ensemble'), ('inception', 'InceptionV3 + Ensemble'),
+                  ('xception', 'Xception + Ensemble')]
 
 
 def preprocess(pil_image, size):
-    img = pil_image.convert('RGB').resize((size, size))
-    arr = img_to_array(img) / 255.0
-    return np.expand_dims(arr, axis=0)  # (1, size, size, 3)
+    img = pil_image.convert('RGB').resize((size, size), Image.BILINEAR)
+    return (np.asarray(img, dtype=np.float32) / 255.0)[None, ...]
 
 
-def _last_conv_name(model):
-    """Return the name of the last Conv2D-family layer (4-D spatial output)."""
-    # isinstance check is reliable in TF 2.16+/Keras 3 where output_shape
-    # raises exceptions for intermediate layers in functional models
-    _conv_types = (
-        tf.keras.layers.Conv2D,
-        tf.keras.layers.SeparableConv2D,
-        tf.keras.layers.DepthwiseConv2D,
-        tf.keras.layers.Conv2DTranspose,
-    )
-    for layer in reversed(model.layers):
-        if isinstance(layer, _conv_types):
-            log.debug('GradCAM using conv layer: %s (%s)', layer.name, type(layer).__name__)
-            return layer.name
-    # Fallback: output_shape heuristic (works on simpler model topologies)
+def _input_size(model):
+    return input_size(model, 256)
+
+
+# ── Prediction ───────────────────────────────────────────────────────────────
+def predict_all(pil_image, models, extractors):
+    """Returns (final_idx, confidence, per_model[(name, family, probs)], fused_probs)."""
+    per_model = []
+    for key, name in [('cnn', 'CNN'), ('inception', 'InceptionV3'), ('xception', 'Xception')]:
+        m = models.get(key)
+        if m is not None:
+            probs = m.predict(preprocess(pil_image, _input_size(m)), verbose=0)[0]
+            per_model.append((name, 'Deep model', np.asarray(probs, dtype=float)))
+    for family, name in FEATURE_MODELS:
+        ext, ens = extractors.get(family), models.get(f'{family}_ens')
+        if ext is None or ens is None:
+            continue
+        feats = ext.predict(preprocess(pil_image, ext.input_size))
+        per_model.append((name, 'Feature ensemble', np.asarray(ensemble_proba(ens, feats)[0], dtype=float)))
+    if not per_model:
+        raise RuntimeError('no models available')
+    fused = np.sum([p for _, _, p in per_model], axis=0)
+    final = int(np.argmax(fused))
+    confidence = float(fused[final] / fused.sum())
+    return final, confidence, per_model, fused / fused.sum()
+
+
+# ── Grad-CAM ─────────────────────────────────────────────────────────────────
+_grad_models = {}
+
+
+def _last_conv_index(model):
+    idx = None
+    for i, layer in enumerate(model.layers):
+        if isinstance(layer, (tf.keras.layers.Conv2D, tf.keras.layers.SeparableConv2D)):
+            idx = i
+    return idx
+
+
+def _last_spatial_layer(model):
     for layer in reversed(model.layers):
         try:
-            shape = layer.output_shape
-            if isinstance(shape, list):
-                shape = shape[0]
-            if len(shape) == 4:
+            if len(layer.output.shape) == 4:
                 return layer.name
         except Exception:
             continue
-    raise ValueError(f"No conv layer found in model {model.name}")
+    raise ValueError(f'no spatial layer in {model.name}')
 
 
-def get_gradcam(model, image_arr, class_idx):
-    """
-    Returns a normalised (0–1) heatmap of shape (H, W).
-    image_arr: shape (1, H, W, 3), already normalised to [0, 1].
-    """
-    conv_name = _last_conv_name(model)
-    img = tf.cast(image_arr, tf.float32)
+def _final_dense(model):
+    last = model.layers[-1]
+    return last if isinstance(last, tf.keras.layers.Dense) else None
 
-    # For standalone classifiers (4 outputs) target the predicted class.
-    # For feature extractors (256 outputs) target the sum of all activations —
-    # this shows which spatial regions activate the feature map most strongly.
-    def _loss(predictions):
-        return (predictions[:, class_idx]
-                if predictions.shape[-1] <= 4
-                else tf.reduce_sum(predictions))
 
-    conv_outputs = None
-    grads = None
+def _logits(dense, h):
+    # Pre-softmax class scores. Grad-CAM must use these: when a model is confident the
+    # softmax output saturates, its gradients vanish and the heatmap comes out empty.
+    z = tf.matmul(h, dense.kernel)
+    return z + dense.bias if dense.bias is not None else z
 
-    # Approach 1: sub-model (works for Functional models — InceptionV3, Xception)
-    try:
-        grad_model = tf.keras.models.Model(
-            inputs=model.inputs,
-            outputs=[model.get_layer(conv_name).output, model.output],
-        )
+
+def gradcam(model, image, class_idx):
+    """Normalised Grad-CAM map (MAP_SIZE x MAP_SIZE) for one image of shape (1, H, W, 3)."""
+    x = tf.convert_to_tensor(image, tf.float32)
+    dense = _final_dense(model)
+    if isinstance(model, tf.keras.Sequential):
+        conv_i = _last_conv_index(model)
+        body = model.layers[:-1] if dense is not None else model.layers
         with tf.GradientTape() as tape:
-            conv_outputs, predictions = grad_model(img)
-            tape.watch(conv_outputs)
-            loss = _loss(predictions)
-        grads = tape.gradient(loss, conv_outputs)
-    except Exception as sub_exc:
-        # Approach 2: layer-by-layer forward pass.
-        # Keras 3 raises "layer has never been called / no defined output"
-        # for Sequential models loaded from h5 because they have no symbolic
-        # output tensors until actually called.
-        # Also skip InputLayer — Functional models built with tf.keras.Input
-        # include an InputLayer in model.layers that cannot be called directly.
-        log.debug('Sub-model GradCAM failed (%s) — using layer-by-layer pass', sub_exc)
-        layers = model.layers
-        conv_idx = next((i for i, l in enumerate(layers) if l.name == conv_name), -1)
-        if conv_idx == -1:
-            raise ValueError(f'Layer {conv_name} not found in model {model.name}')
+            out, conv = x, None
+            for i, layer in enumerate(body):
+                out = layer(out, training=False)
+                if i == conv_i:
+                    conv = out
+                    tape.watch(conv)
+            scores = _logits(dense, out) if dense is not None else out
+            score = scores[:, class_idx]
+        grads = tape.gradient(score, conv)
+    else:
+        key = id(model)
+        if key not in _grad_models:
+            head_input = dense.input if dense is not None else model.output
+            _grad_models[key] = Model(model.inputs,
+                                      [model.get_layer(_last_spatial_layer(model)).output, head_input])
         with tf.GradientTape() as tape:
-            x = img
-            for layer in layers[:conv_idx + 1]:
-                if isinstance(layer, tf.keras.layers.InputLayer):
-                    continue
-                x = layer(x)
-            conv_outputs = x
-            tape.watch(conv_outputs)
-            for layer in layers[conv_idx + 1:]:
-                if isinstance(layer, tf.keras.layers.InputLayer):
-                    continue
-                x = layer(x)
-            loss = _loss(x)
-        grads = tape.gradient(loss, conv_outputs)
-
-    if grads is None:
-        raise ValueError(
-            f'GradCAM: tape.gradient returned None for layer {conv_name}. '
-            'Model may not support gradient computation in this TF version.'
-        )
-
-    pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2))
-    heatmap = (conv_outputs[0] @ pooled_grads[..., tf.newaxis]).numpy().squeeze()
-    heatmap = np.maximum(heatmap, 0)
-    if heatmap.max() > 0:
-        heatmap /= heatmap.max()
-
-    h, w = image_arr.shape[1], image_arr.shape[2]
-    return cv2.resize(heatmap, (w, h))
+            conv, h = _grad_models[key](x, training=False)
+            scores = _logits(dense, h) if dense is not None else h
+            score = scores[:, class_idx]
+        grads = tape.gradient(score, conv)
+    if CAM_METHOD == 'gradcam':
+        cam = tf.einsum('bhwc,bc->bhw', conv, tf.reduce_mean(grads, axis=(1, 2)))
+    else:
+        # HiResCAM: element-wise gradient x activation keeps spatial detail. It equals Grad-CAM for
+        # Global-Average-Pooling heads (InceptionV3, Xception) and stays correct for the CNN's
+        # Flatten + Dense head, where averaging the gradients cancels out and gives an empty map.
+        cam = tf.reduce_sum(grads * conv, axis=-1)
+    cam = tf.nn.relu(cam)
+    cam = tf.math.divide_no_nan(cam, tf.reduce_max(cam, axis=(1, 2), keepdims=True))
+    return tf.image.resize(cam[..., None], (MAP_SIZE, MAP_SIZE))[0, ..., 0].numpy()
 
 
-def overlay_heatmap(pil_image, heatmap, alpha=0.45):
-    """Overlay a heatmap on a PIL image. Returns a PIL image."""
-    orig = np.array(pil_image.convert('RGB').resize((256, 256)))
-    cam = np.uint8(255 * heatmap)
-    cam_color = cv2.applyColorMap(cam, cv2.COLORMAP_JET)
-    cam_color = cv2.cvtColor(cam_color, cv2.COLOR_BGR2RGB)
-    # Resize heatmap to match display canvas (orig may be 256×256 while
-    # heatmap was computed at the model's input size, e.g. 224×224)
-    if cam_color.shape[:2] != orig.shape[:2]:
-        cam_color = cv2.resize(cam_color, (orig.shape[1], orig.shape[0]))
-    overlay = cv2.addWeighted(orig, 1 - alpha, cam_color, alpha, 0)
-    return Image.fromarray(overlay)
+def iou(a, b, t=IOU_THRESHOLD):
+    A, B = a >= t, b >= t
+    union = np.logical_or(A, B).sum()
+    return float(np.logical_and(A, B).sum() / union) if union else 0.0
 
 
-_CONSENSUS_SIZE = 256  # common canvas for multi-model heatmap ops
+def overlay(pil_image, heatmap, alpha=0.45):
+    base = np.asarray(pil_image.convert('RGB').resize((MAP_SIZE, MAP_SIZE)))
+    colour = cv2.cvtColor(cv2.applyColorMap(np.uint8(255 * heatmap), cv2.COLORMAP_JET), cv2.COLOR_BGR2RGB)
+    return Image.fromarray(cv2.addWeighted(base, 1 - alpha, colour, alpha, 0))
 
 
-def _resize_heatmap(heatmap, size=_CONSENSUS_SIZE):
-    if heatmap.shape[0] == size and heatmap.shape[1] == size:
-        return heatmap
-    return cv2.resize(heatmap.astype(np.float32), (size, size))
+def agreement_level(eaa):
+    if eaa is None:
+        return None
+    return 'high' if eaa >= EAA_HIGH else 'moderate' if eaa >= EAA_LOW else 'low'
 
 
-def build_consensus_map(heatmaps, weights):
-    """
-    heatmaps : list of (H, W) arrays — may have different sizes
-    weights  : list of floats (confidences), same length
-    Returns  : weighted-average (_CONSENSUS_SIZE, _CONSENSUS_SIZE) normalised 0–1
-    """
-    resized = [_resize_heatmap(h) for h in heatmaps]
-    total = sum(weights) or 1.0
-    consensus = sum(h * w for h, w in zip(resized, weights)) / total
-    if consensus.max() > 0:
-        consensus /= consensus.max()
-    return consensus
-
-
-def iou_score(map_a, map_b, threshold=0.5):
-    a = (_resize_heatmap(map_a) >= threshold).astype(np.uint8)
-    b = (_resize_heatmap(map_b) >= threshold).astype(np.uint8)
-    intersection = np.logical_and(a, b).sum()
-    union        = np.logical_or(a, b).sum()
-    return float(intersection / union) if union > 0 else 0.0
-
-
-def average_pairwise_iou(heatmaps, threshold=0.5):
-    n = len(heatmaps)
-    scores = [iou_score(heatmaps[i], heatmaps[j], threshold)
-              for i in range(n) for j in range(i + 1, n)]
-    return float(np.mean(scores)) if scores else 0.0
-
-
-def confidence_weighted_predict(pil_image, models, extractors):
-    """
-    Runs all 6 ensemble components.  Each model uses its own trained input size
-    (read from model.input_shape[1]) — no hardcoded dimensions.
-
-    Returns (final_class_idx, ensemble_confidence, per_model_dict, combined_probs).
-    """
-    per_model     = {}
-    combined_probs = np.zeros(4)
-
-    def _add(probs, name):
-        per_model[name] = probs
-        combined_probs[:] += probs
-
-    # --- Standalone DL models ---
-    for model_key, display_name in [('cnn',       'CNN'),
-                                     ('inception', 'InceptionV3'),
-                                     ('xception',  'Xception')]:
-        m = models.get(model_key)
+def explain(pil_image, models, class_idx, per_model):
+    """Grad-CAM for the three deep models, consensus map and EAA-IoU."""
+    conf = {name: float(p.max()) for name, _, p in per_model}
+    maps = {}
+    for key, name in DEEP_MODELS:
+        m = models.get(key)
         if m is None:
             continue
-        size = m.input_shape[1]          # actual trained input size
-        img  = preprocess(pil_image, size)
-        _add(m.predict(img, verbose=0)[0], display_name)
-
-    # --- Feature extractor → classical ensemble ---
-    for feat_key, ens_key, display_name in [
-        ('cnn_feat', 'cnn_ens', 'CNN + Ensemble'),
-        ('inc_feat', 'inc_ens', 'InceptionV3 + Ensemble'),
-        ('xcp_feat', 'xcp_ens', 'Xception + Ensemble'),
-    ]:
-        feat_model = extractors.get(feat_key)
-        clf        = models.get(ens_key)
-        if feat_model is None or clf is None:
-            continue
-        size  = feat_model.input_shape[1]
-        img   = preprocess(pil_image, size)
-        feats = feat_model.predict(img, verbose=0)
-        if hasattr(clf, 'predict_proba'):
-            prob = clf.predict_proba(feats)[0]
-        else:
-            prob = np.eye(4)[int(clf.predict(feats)[0])]
-        _add(prob, display_name)
-
-    final_class = int(np.argmax(combined_probs))
-    total       = float(np.sum(combined_probs))
-    ensemble_confidence = float(np.max(combined_probs) / total) if total > 0 else 0.0
-
-    return final_class, ensemble_confidence, per_model, combined_probs
+        try:
+            maps[name] = gradcam(m, preprocess(pil_image, _input_size(m)), class_idx)
+        except Exception as exc:
+            log.warning('Grad-CAM failed for %s: %s', name, exc)
+    names = list(maps)
+    pairs = [{'pair': f'{names[i]} vs {names[j]}', 'iou': iou(maps[names[i]], maps[names[j]])}
+             for i in range(len(names)) for j in range(i + 1, len(names))]
+    eaa = float(np.mean([p['iou'] for p in pairs])) if pairs else None
+    consensus = None
+    if maps:
+        w = [conf.get(n, 1.0) for n in names]
+        consensus = sum(maps[n] * wi for n, wi in zip(names, w)) / (sum(w) or 1.0)
+        consensus = consensus / consensus.max() if consensus.max() > 0 else consensus
+    return {
+        'maps': {n: overlay(pil_image, maps[n]) for n in names},
+        'consensus': overlay(pil_image, consensus) if consensus is not None else None,
+        'pairwise_iou': pairs,
+        'eaa_iou': eaa,
+        'agreement_level': agreement_level(eaa),
+        'alert': eaa is not None and eaa < EAA_LOW,
+    }

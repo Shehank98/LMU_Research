@@ -3,9 +3,11 @@ export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'],
+      },
       colors: {
-        teal:  { 400: '#00b4d8', 500: '#0096c7', 600: '#0077b6' },
-        navy:  { 900: '#0d1b2a', 800: '#1a2e44', 700: '#1e3a5f' },
+        brand: { 50: '#f0fdfa', 100: '#ccfbf1', 600: '#0d9488', 700: '#0f766e', 800: '#115e59' },
       },
     },
   },

@@ -1,241 +1,222 @@
-import os, threading, joblib, shutil, logging
-from tensorflow.keras.models import load_model, Model
+"""
+Downloads the trained models from Hugging Face and loads them once, in the background.
+
+Files expected in the Hugging Face repo under models/ (written by the Colab notebook
+final_code_set_2026-10-22/Brain_Tumor_Train_And_Log.ipynb):
+
+    cnn_model.h5, inceptionv3_model.h5, xception_model.h5      standalone classifiers (256 px)
+    cnn_ext.h5, inceptionv3_ext.h5, xception_ext.h5            feature extractors (128 px)
+    cnn_ensemble_model.pkl, ...                                 [RF, DT, SVM] on those features
+    manifest.json                                               layer names, sizes, versions
+"""
+import json
+import logging
+import os
+import shutil
+import threading
+
+import joblib
+import numpy as np
+import tensorflow as tf
+from tensorflow.keras.models import Model, load_model
 
 log = logging.getLogger(__name__)
 
-# Use /tmp — guaranteed writable in any Docker/Railway environment.
-# Override with MODELS_DIR env var if a persistent volume is mounted.
 MODELS_DIR = os.environ.get('MODELS_DIR', '/tmp/neuro_models')
-HF_REPO_ID = os.environ.get('HF_REPO_ID', '')
-HF_TOKEN   = os.environ.get('HF_TOKEN', '')
+HF_REPO_ID = os.environ.get('HF_REPO_ID', 'shehank98/brain-tumor-mri-models')
+HF_TOKEN = os.environ.get('HF_TOKEN', '')
 
-# Exact filenames saved by the standardised training notebooks
 MODEL_FILES = {
-    'cnn':       ('cnn_model.h5',                    'keras'),
-    'inception': ('inceptionv3_model.h5',            'keras'),
-    'xception':  ('xception_model.h5',               'keras'),
-    'cnn_ens':   ('cnn_ensemble_model.pkl',          'joblib'),
-    'inc_ens':   ('inceptionv3_ensemble_model.pkl',  'joblib'),
-    'xcp_ens':   ('xception_ensemble_model.pkl',     'joblib'),
+    'cnn':           'cnn_model.h5',
+    'inception':     'inceptionv3_model.h5',
+    'xception':      'xception_model.h5',
+    'cnn_ext':       'cnn_ext.h5',
+    'inception_ext': 'inceptionv3_ext.h5',
+    'xception_ext':  'xception_ext.h5',
+    'cnn_ens':       'cnn_ensemble_model.pkl',
+    'inception_ens': 'inceptionv3_ensemble_model.pkl',
+    'xception_ens':  'xception_ensemble_model.pkl',
 }
+DEFAULT_FEATURE_LAYERS = {'cnn': 'dense', 'inception': 'dense_2', 'xception': 'dense_3'}
 
-_lock  = threading.Lock()
-_state = {'models': None, 'extractors': None, 'missing': None, 'loading': False}
+_lock = threading.Lock()
+_state = {'models': None, 'extractors': None, 'missing': None, 'loading': False, 'manifest': {}}
 
 
-def _download_one(filename):
-    """Download one model file from HF Hub into MODELS_DIR. Returns True on success."""
-    dest = os.path.join(MODELS_DIR, filename)
+def download_file(path_in_repo):
+    """Download one file from the HF repo into MODELS_DIR. Returns the local path or None."""
+    dest = os.path.join(MODELS_DIR, os.path.basename(path_in_repo))
     if os.path.exists(dest):
-        return True
+        return dest
     if not HF_REPO_ID:
-        log.warning('HF_REPO_ID not set — cannot download %s', filename)
-        return False
+        return None
     try:
-        from huggingface_hub import hf_hub_download, login as hf_login
-        if HF_TOKEN:
-            hf_login(token=HF_TOKEN, add_to_git_credential=False)
-        log.info('Downloading %s from HuggingFace …', filename)
-        # Try root of repo first, then models/ subfolder for backwards compat
-        cached = None
+        from huggingface_hub import hf_hub_download
+        cached = hf_hub_download(repo_id=HF_REPO_ID, filename=path_in_repo, token=HF_TOKEN or None)
         os.makedirs(MODELS_DIR, exist_ok=True)
-        for hf_path in [filename, f'models/{filename}']:
-            try:
-                cached = hf_hub_download(
-                    repo_id=HF_REPO_ID,
-                    filename=hf_path,
-                    token=HF_TOKEN or None,
-                )
-                log.info('Found %s at HF path: %s', filename, hf_path)
-                break
-            except Exception:
-                continue
-        if cached is None:
-            raise FileNotFoundError(f'{filename} not found in HF repo root or models/ subfolder')
         shutil.copy2(cached, dest)
-        log.info('Downloaded %s (%.1f MB)', filename, os.path.getsize(dest) / 1e6)
-        return True
+        log.info('Downloaded %s (%.1f MB)', path_in_repo, os.path.getsize(dest) / 1e6)
+        return dest
     except Exception as exc:
-        log.error('Failed to download %s: %s', filename, exc)
-        return False
+        log.warning('Could not download %s: %s', path_in_repo, exc)
+        return None
+
+
+def _download_model(filename):
+    return download_file(f'models/{filename}') or download_file(filename)
 
 
 def _load_keras(path):
-    """
-    Load a Keras .h5 model with a Keras 2/3 compatibility shim.
-
-    Colab saves models with Keras 3 config (includes quantization_config in
-    Dense layers). If the runtime is Keras 2 it rejects that key. We catch
-    the specific error and retry with a patched Dense that silently ignores
-    the unknown kwarg — no model re-training or re-saving required.
-    """
+    """Load .h5, tolerating the Keras 2/3 'quantization_config' mismatch from Colab saves."""
     try:
-        return load_model(path)
+        return load_model(path, compile=False)
     except Exception as exc:
         if 'quantization_config' not in str(exc):
             raise
-        log.warning('Keras 2/3 mismatch detected for %s — retrying with compat shim', os.path.basename(path))
-        from tensorflow.keras.layers import Dense as _Dense
-        class _K3Dense(_Dense):
+        from tensorflow.keras.layers import Dense
+
+        class _Dense(Dense):
             def __init__(self, *args, quantization_config=None, **kwargs):
                 super().__init__(*args, **kwargs)
-        return load_model(path, custom_objects={'Dense': _K3Dense})
+
+        return load_model(path, compile=False, custom_objects={'Dense': _Dense})
+
+
+def input_size(model, default=256):
+    """Image size a model expects. Keras 3 Sequential models without an Input layer
+    raise on .input_shape, so fall back to the build config."""
+    getters = (lambda: model.input_shape[1],
+               lambda: model.get_build_config()['input_shape'][1])
+    for get in getters:
+        try:
+            value = get()
+            if value:
+                return int(value)
+        except Exception:
+            continue
+    return default
+
+
+class FeatureExtractor:
+    """Returns the activations of one named Dense layer (the 256-d feature vector)."""
+
+    def __init__(self, model, layer_name):
+        self.layer_name = layer_name
+        self.input_size = input_size(model, 128)
+        self._sub = None
+        self._model = model
+        try:
+            self._sub = Model(model.inputs, model.get_layer(layer_name).output)
+        except Exception:
+            self._sub = None          # fall back to a manual pass for Sequential models
+
+    def predict(self, x):
+        if self._sub is not None:
+            return self._sub.predict(x, verbose=0)
+        out = tf.convert_to_tensor(x, tf.float32)
+        for layer in self._model.layers:
+            out = layer(out, training=False)
+            if layer.name == self.layer_name:
+                return out.numpy()
+        raise ValueError(f'layer {self.layer_name} not found')
+
+
+def ensemble_proba(ensemble, features):
+    """Ensemble file is a list [RF, DT, SVM] (new) or one sklearn estimator (older uploads)."""
+    if isinstance(ensemble, (list, tuple)):
+        return np.mean([m.predict_proba(features) for m in ensemble], axis=0)
+    if hasattr(ensemble, 'predict_proba'):
+        return ensemble.predict_proba(features)
+    return np.eye(4)[np.asarray(ensemble.predict(features), dtype=int)]
 
 
 def _load_all():
-    """Download then load all models. Called in a background thread."""
     with _lock:
-        if _state['models'] is not None:
+        if _state['models'] is not None or _state['loading']:
             return
         _state['loading'] = True
+    try:
+        _do_load()
+    except Exception as exc:                       # never leave callers waiting forever
+        log.exception('Model loading crashed: %s', exc)
+        with _lock:
+            _state.update(models={k: None for k in MODEL_FILES}, extractors={},
+                          missing=list(MODEL_FILES.values()), loading=False)
 
+
+def _do_load():
     os.makedirs(MODELS_DIR, exist_ok=True)
+    log.info('Loading models from Hugging Face repo %s', HF_REPO_ID)
 
-    # Download phase
-    for _, (filename, _) in MODEL_FILES.items():
-        _download_one(filename)
+    manifest = {}
+    mpath = _download_model('manifest.json')
+    if mpath:
+        try:
+            manifest = json.load(open(mpath))
+            log.info('Manifest versions: %s', manifest.get('versions'))
+        except Exception as exc:
+            log.warning('Bad manifest: %s', exc)
 
     models, missing = {}, []
-    for key, (filename, loader) in MODEL_FILES.items():
-        path = os.path.join(MODELS_DIR, filename)
-        if not os.path.exists(path):
-            log.warning('Model file not found after download attempt: %s', filename)
-            missing.append(filename)
+    for key, filename in MODEL_FILES.items():
+        path = _download_model(filename)
+        if not path:
             models[key] = None
+            missing.append(filename)
             continue
         try:
-            models[key] = _load_keras(path) if loader == 'keras' else joblib.load(path)
-            log.info('Loaded: %s', filename)
+            models[key] = _load_keras(path) if filename.endswith('.h5') else joblib.load(path)
+            log.info('Loaded %s', filename)
         except Exception as exc:
             log.error('Failed to load %s: %s', filename, exc)
-            missing.append(filename)
             models[key] = None
-
-    # Build feature extractors in memory from standalone Keras models.
-    # Keras 3 (TF 2.16+) removed symbolic tensor access on loaded Sequential
-    # models, so base.input / layer.output raise AttributeError.  We rebuild
-    # the graph with a fresh Input calling each layer in sequence.
-    import tensorflow as tf
-
-    def _build_extractor(base, layer_name):
-        # Approach 1: direct sub-model (works for Functional models in Keras 2/3)
-        try:
-            return Model(inputs=base.input,
-                         outputs=base.get_layer(layer_name).output)
-        except AttributeError:
-            pass
-        # Approach 2: layer-by-layer rebuild (Sequential models in Keras 3)
-        try:
-            in_shape = tuple(base.input_shape[1:])
-        except Exception:
-            return None
-        inp = tf.keras.Input(shape=in_shape)
-        x = inp
-        feat_out = None
-        for lyr in base.layers:
-            if isinstance(lyr, tf.keras.layers.InputLayer):
-                continue
-            x = lyr(x)
-            if lyr.name == layer_name:
-                feat_out = x
-                break
-        if feat_out is None:
-            return None
-        return Model(inputs=inp, outputs=feat_out)
+            missing.append(filename)
 
     extractors = {}
-    for src_key, ext_key in [('cnn', 'cnn_feat'),
-                              ('inception', 'inc_feat'),
-                              ('xception', 'xcp_feat')]:
-        base = models.get(src_key)
-        if base is None:
+    for family in ('cnn', 'inception', 'xception'):
+        ext = models.get(f'{family}_ext')
+        if ext is None:
             continue
+        layer = (manifest.get('extractors', {}).get(family, {}).get('layer')
+                 or DEFAULT_FEATURE_LAYERS[family])
         try:
-            m = _build_extractor(base, 'feature_layer')
-            if m is None:
-                # Last fallback: second-to-last Dense (layer before softmax)
-                for lyr in reversed(base.layers):
-                    if hasattr(lyr, 'units') and lyr.units != 4:  # 4 = num classes
-                        m = _build_extractor(base, lyr.name)
-                        break
-            if m is not None:
-                extractors[ext_key] = m
-                log.info('Built extractor %s → output %s', ext_key, m.output_shape)
+            extractors[family] = FeatureExtractor(ext, layer)
         except Exception as exc:
-            log.warning('Could not build extractor for %s: %s', src_key, exc)
+            log.error('Feature extractor %s failed: %s', family, exc)
 
-    loaded = sum(1 for v in models.values() if v is not None)
-    log.info('Model loading complete: %d/%d loaded, missing: %s',
-             loaded, len(MODEL_FILES), missing)
-
+    loaded = sum(v is not None for v in models.values())
+    log.info('Models ready: %d/%d loaded, missing %s', loaded, len(MODEL_FILES), missing)
     with _lock:
-        _state['models']     = models
-        _state['extractors'] = extractors
-        _state['missing']    = missing
-        _state['loading']    = False
+        _state.update(models=models, extractors=extractors, missing=missing,
+                      loading=False, manifest=manifest)
 
 
 def start_loading_background():
-    """Kick off model loading in a daemon thread. Returns immediately."""
     t = threading.Thread(target=_load_all, daemon=True, name='model-loader')
     t.start()
     return t
 
 
 def force_reload():
-    """
-    Reset state and re-download any missing model files from HuggingFace.
-    Call this when new models are uploaded to HuggingFace after server startup.
-    Safe to call from any thread.
-    """
+    """Delete the local copies and download everything again (after a new upload to HF)."""
     with _lock:
-        # Clear cached state so _load_all will re-run
-        _state['models']     = None
-        _state['extractors'] = None
-        _state['missing']    = None
-        _state['loading']    = False
-    # Also delete local cache files that failed previously so they are re-downloaded
-    import shutil
-    for _, (filename, _) in MODEL_FILES.items():
-        dest = os.path.join(MODELS_DIR, filename)
-        if not os.path.exists(dest):
-            continue  # not cached — nothing to clear
-    # Kick off background reload
+        _state.update(models=None, extractors=None, missing=None, loading=False, manifest={})
+    shutil.rmtree(MODELS_DIR, ignore_errors=True)
     return start_loading_background()
 
 
 def get_models():
-    """
-    Returns (models, extractors, missing).
-    Blocks until loading is complete if already started.
-    Starts loading synchronously if not yet started.
-    """
-    with _lock:
-        if _state['models'] is not None:
-            return _state['models'], _state['extractors'], _state['missing']
-        already_loading = _state['loading']
-
-    if not already_loading:
+    """Blocks until loading is done. Returns (models, extractors, missing)."""
+    import time
+    if _state['models'] is None and not _state['loading']:
         _load_all()
-    else:
-        # Another thread is loading — wait for it
-        import time
-        while True:
-            with _lock:
-                if _state['models'] is not None:
-                    break
-            time.sleep(0.5)
-
-    with _lock:
-        return _state['models'], _state['extractors'], _state['missing']
+    while _state['models'] is None:
+        time.sleep(0.5)
+    return _state['models'], _state['extractors'], _state['missing']
 
 
 def peek_state():
-    """Non-blocking — returns current state without triggering a download."""
+    """Non-blocking snapshot: (models, extractors, missing, loading, manifest)."""
     with _lock:
-        return (
-            _state['models'] or {},
-            _state['extractors'] or {},
-            _state['missing'] or [],
-            _state['loading'],
-        )
+        return (_state['models'] or {}, _state['extractors'] or {}, _state['missing'] or [],
+                _state['loading'], _state['manifest'] or {})

@@ -1,266 +1,188 @@
-import { useState, useCallback } from 'react'
-import SectionHeader from '../components/SectionHeader'
+import { useEffect, useMemo, useState } from 'react'
+import { getResults } from '../api'
+import { Badge, Bar, Card, CLASS_COLORS, PageHeader, Spinner, Stat, pct } from '../components/ui'
 
-const HF_BASE = 'https://huggingface.co/shehank98/brain-tumor-mri-models/resolve/main/results'
+const GROUP_COLORS = {
+  'Final ensemble': '#0f766e',
+  'Deep model': '#334155',
+  'Classical ML': '#94a3b8',
+  Reference: '#334155',
+  Other: '#94a3b8',
+}
 
-const NOTEBOOKS = [
-  {
-    id: '01_CNN_Standalone',
-    label: '01-CNN Standalone',
-    color: 'border-purple-500',
-    accent: 'text-purple-400',
-    charts: [
-      { file: '01_CNN_Standalone_training_history.jpg', title: 'Training History' },
-      { file: '01_cnn_standalone_confusion_matrix.jpg', title: 'Confusion Matrix' },
-      { file: '01_cnn_standalone_roc_curve.jpg',        title: 'ROC Curve' },
-      { file: '01_cnn_standalone_pr_curve.jpg',         title: 'Precision-Recall Curve' },
-    ],
-  },
-  {
-    id: '02_CNN_Ensemble',
-    label: '02-CNN + Ensemble',
-    color: 'border-purple-400',
-    accent: 'text-purple-300',
-    charts: [
-      { file: 'cnn_random_forest_confusion_matrix.jpg',       title: 'RF-Confusion Matrix' },
-      { file: 'cnn_random_forest_roc_curve.jpg',              title: 'RF-ROC Curve' },
-      { file: 'cnn_decision_tree_confusion_matrix.jpg',       title: 'DT-Confusion Matrix' },
-      { file: 'cnn_svm_confusion_matrix.jpg',                 title: 'SVM-Confusion Matrix' },
-      { file: 'cnn_soft_vote_ensemble_confusion_matrix.jpg',  title: 'Ensemble-Confusion Matrix' },
-      { file: 'cnn_soft_vote_ensemble_roc_curve.jpg',         title: 'Ensemble-ROC Curve' },
-    ],
-  },
-  {
-    id: '03_InceptionV3_Standalone',
-    label: '03-InceptionV3 Standalone',
-    color: 'border-blue-500',
-    accent: 'text-blue-400',
-    charts: [
-      { file: '03_InceptionV3_Standalone_training_history.jpg', title: 'Training History' },
-      { file: '03_inceptionv3_standalone_confusion_matrix.jpg', title: 'Confusion Matrix' },
-      { file: '03_inceptionv3_standalone_roc_curve.jpg',        title: 'ROC Curve' },
-      { file: '03_inceptionv3_standalone_pr_curve.jpg',         title: 'Precision-Recall Curve' },
-    ],
-  },
-  {
-    id: '04_InceptionV3_Ensemble',
-    label: '04-InceptionV3 + Ensemble',
-    color: 'border-blue-400',
-    accent: 'text-blue-300',
-    charts: [
-      { file: 'inceptionv3_random_forest_confusion_matrix.jpg',      title: 'RF-Confusion Matrix' },
-      { file: 'inceptionv3_random_forest_roc_curve.jpg',             title: 'RF-ROC Curve' },
-      { file: 'inceptionv3_soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble-Confusion Matrix' },
-      { file: 'inceptionv3_soft_vote_ensemble_roc_curve.jpg',        title: 'Ensemble-ROC Curve' },
-    ],
-  },
-  {
-    id: '05_Xception_Standalone',
-    label: '05-Xception Standalone',
-    color: 'border-teal-500',
-    accent: 'text-teal-400',
-    charts: [
-      { file: '05_Xception_Standalone_training_history.jpg', title: 'Training History' },
-      { file: '05_xception_standalone_confusion_matrix.jpg', title: 'Confusion Matrix' },
-      { file: '05_xception_standalone_roc_curve.jpg',        title: 'ROC Curve' },
-      { file: '05_xception_standalone_pr_curve.jpg',         title: 'Precision-Recall Curve' },
-    ],
-  },
-  {
-    id: '06_Xception_Ensemble',
-    label: '06-Xception + Ensemble',
-    color: 'border-teal-400',
-    accent: 'text-teal-300',
-    charts: [
-      { file: 'xception_random_forest_confusion_matrix.jpg',      title: 'RF-Confusion Matrix' },
-      { file: 'xception_random_forest_roc_curve.jpg',             title: 'RF-ROC Curve' },
-      { file: 'xception_decision_tree_confusion_matrix.jpg',      title: 'DT-Confusion Matrix' },
-      { file: 'xception_svm_confusion_matrix.jpg',                title: 'SVM-Confusion Matrix' },
-      { file: 'xception_soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble-Confusion Matrix' },
-      { file: 'xception_soft_vote_ensemble_roc_curve.jpg',        title: 'Ensemble-ROC Curve' },
-    ],
-  },
-  {
-    id: '07_TraditionalML_Ensemble',
-    label: '07-Traditional ML Baseline',
-    color: 'border-slate-500',
-    accent: 'text-slate-300',
-    charts: [
-      { file: 'traditional_ml_random_forest_confusion_matrix.jpg',      title: 'RF-Confusion Matrix' },
-      { file: 'traditional_ml_svm_confusion_matrix.jpg',                title: 'SVM-Confusion Matrix' },
-      { file: 'traditional_ml_decision_tree_confusion_matrix.jpg',      title: 'DT-Confusion Matrix' },
-      { file: 'traditional_ml_soft_vote_ensemble_confusion_matrix.jpg', title: 'Ensemble-Confusion Matrix' },
-      { file: 'traditional_ml_soft_vote_ensemble_roc_curve.jpg',        title: 'Ensemble-ROC Curve' },
-    ],
-  },
-  {
-    id: '08_AllModelsCombined_FinalEnsemble',
-    label: '08-Final 6-Model Ensemble',
-    color: 'border-amber-500',
-    accent: 'text-amber-400',
-    charts: [
-      { file: 'all_models_accuracy_comparison.jpg',     title: 'All Models Accuracy Comparison' },
-      { file: 'final_ensemble_confusion_matrix.jpg',    title: 'Final Ensemble-Confusion Matrix' },
-      { file: 'final_ensemble_roc_curve.jpg',           title: 'Final Ensemble-ROC Curve' },
-      { file: 'final_ensemble_pr_curve.jpg',            title: 'Final Ensemble-PR Curve' },
-    ],
-  },
-  {
-    id: '09_ConsensusGradCAM',
-    label: '09-Consensus GRAD-CAM (EAA-IoU)',
-    color: 'border-cyan-500',
-    accent: 'text-cyan-400',
-    charts: [
-      { file: 'sample_gradcam_grid.jpg',      title: 'All-6-Model GRAD-CAM Grid' },
-      { file: 'eaa_iou_distribution.jpg',     title: 'EAA-IoU Distribution by Class' },
-      { file: 'pairwise_iou_heatmap.jpg',     title: 'Pairwise IoU Matrix (6×6)' },
-      { file: 'eaa_iou_low_vs_high.jpg',      title: 'Low vs High EAA-IoU Examples' },
-    ],
-  },
-  {
-    id: '10_ConfidenceVoting',
-    label: '10-Confidence-Weighted Voting',
-    color: 'border-lime-500',
-    accent: 'text-lime-400',
-    charts: [
-      { file: 'voting_comparison_confusion_matrix.jpg', title: 'Voting-Confusion Matrices' },
-      { file: 'voting_comparison_per_class_f1.jpg',     title: 'Per-Class F1 Improvement' },
-      { file: 'voting_confidence_distribution.jpg',     title: 'Confidence Distribution' },
-    ],
-  },
-  {
-    id: '11_XAIAnalysis',
-    label: '11-XAI Analysis',
-    color: 'border-rose-500',
-    accent: 'text-rose-400',
-    charts: [
-      { file: 'eaa_iou_roc_pr_curve.jpg',           title: 'EAA-IoU ROC & PR Curves' },
-      { file: 'eaa_iou_by_class_boxplot.jpg',        title: 'EAA-IoU by Class (Box Plots)' },
-      { file: 'escalation_threshold_analysis.jpg',   title: 'Escalation Threshold Analysis' },
-      { file: 'eaa_iou_vs_confidence_scatter.jpg',   title: 'EAA-IoU vs Vote Confidence' },
-    ],
-  },
-]
+// Headline view: deep models, ensembles and the final vote. Every single classifier is in the table below.
+const isHeadline = (m) => m.group !== 'Classical ML' || /ensemble/i.test(m.name)
 
-function ChartCard({ notebook_id, file, title, accent, cacheBust }) {
-  const [status, setStatus] = useState('loading') // 'loading' | 'ok' | 'missing'
-  const url = `${HF_BASE}/${notebook_id}/${file}${cacheBust ? `?v=${cacheBust}` : ''}`
+function AccuracyChart({ models }) {
+  const headline = models.filter(isHeadline)
+  const sorted = [...(headline.length ? headline : models)].sort((a, b) => b.accuracy - a.accuracy)
   return (
-    <div className="bg-slate-800 rounded-xl overflow-hidden border border-slate-700 flex flex-col">
-      <div className="relative bg-slate-900 flex items-center justify-center min-h-[200px]">
-        {status === 'loading' && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-teal-400 border-t-transparent rounded-full animate-spin" />
-          </div>
-        )}
-        {status === 'missing' && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-500 gap-2 p-4 text-center">
-            <svg className="w-10 h-10 opacity-40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5}
-                d="M9 13h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414A1 1 0 0119 9.414V19a2 2 0 01-2 2z" />
-            </svg>
-            <span className="text-sm">Not generated yet<br />Run notebook to produce this chart</span>
-          </div>
-        )}
-        <img
-          src={url}
-          alt={title}
-          className={`w-full object-contain transition-opacity duration-300 ${status === 'ok' ? 'opacity-100' : 'opacity-0 absolute'}`}
-          onLoad={() => setStatus('ok')}
-          onError={() => setStatus('missing')}
-        />
-      </div>
-      <div className="px-3 py-2 text-center">
-        <p className={`text-xs font-medium ${accent}`}>{title}</p>
-      </div>
+    <div className="space-y-2.5">
+      {sorted.map((m) => (
+        <div key={m.id} className="grid grid-cols-[minmax(0,16rem)_1fr_4rem] items-center gap-3 text-sm">
+          <span className="truncate text-slate-700" title={m.name}>{m.name}</span>
+          <Bar value={m.accuracy} color={GROUP_COLORS[m.group] || '#334155'} height="h-2.5" />
+          <span className="text-right tabular-nums font-medium text-slate-900">{pct(m.accuracy, 2)}</span>
+        </div>
+      ))}
     </div>
   )
 }
 
-export default function Results() {
-  const [active, setActive] = useState(null)
-  const [cacheBust, setCacheBust] = useState(0)
-  const refresh = useCallback(() => setCacheBust(Date.now()), [])
-
-  const displayed = active ? NOTEBOOKS.filter(n => n.id === active) : NOTEBOOKS
-
+function ResultsTable({ models }) {
+  const sorted = [...models].sort((a, b) => b.accuracy - a.accuracy)
   return (
-    <div className="space-y-10">
-      <div className="flex flex-wrap items-start justify-between gap-4">
-        <SectionHeader
-          title="Notebook Results Gallery"
-          subtitle="Training charts, confusion matrices, ROC curves, and precision-recall curves generated by each notebook. Images are hosted on HuggingFace and appear here automatically after each Colab run."
-        />
-        <button
-          onClick={refresh}
-          className="shrink-0 flex items-center gap-2 px-4 py-2 rounded-lg bg-teal-500/10 border border-teal-500/30 text-teal-400 text-sm font-medium hover:bg-teal-500/20 transition-colors"
-        >
-          <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-            <path strokeLinecap="round" strokeLinejoin="round"
-              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-          </svg>
-          Refresh Images
-        </button>
-      </div>
-
-      {/* Filter pills */}
-      <div className="flex flex-wrap gap-2">
-        <button
-          onClick={() => setActive(null)}
-          className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-            active === null
-              ? 'bg-teal-400/15 text-teal-400 border-teal-400/40'
-              : 'text-slate-400 border-slate-600 hover:border-slate-400'
-          }`}
-        >
-          All notebooks
-        </button>
-        {NOTEBOOKS.map(nb => (
-          <button
-            key={nb.id}
-            onClick={() => setActive(active === nb.id ? null : nb.id)}
-            className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
-              active === nb.id
-                ? `bg-teal-400/15 text-teal-400 border-teal-400/40`
-                : `text-slate-400 border-slate-600 hover:border-slate-400`
-            }`}
-          >
-            {nb.label.split('-')[0]}
-          </button>
-        ))}
-      </div>
-
-      {/* Notice */}
-      <div className="flex items-start gap-3 bg-slate-800/50 border border-slate-700 rounded-xl p-4 text-sm text-slate-400">
-        <svg className="w-5 h-5 text-teal-400 mt-0.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
-            d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <p>
-          Charts appear here automatically after you run each notebook in Google Colab —
-          Section 10 uploads them to HuggingFace. If a chart shows a placeholder,
-          that notebook has not been run yet.
-        </p>
-      </div>
-
-      {/* Gallery per notebook */}
-      {displayed.map(nb => (
-        <section key={nb.id} className={`border-l-4 ${nb.color} pl-5`}>
-          <h2 className={`text-lg font-semibold mb-4 ${nb.accent}`}>{nb.label}</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {nb.charts.map(chart => (
-              <ChartCard
-                key={`${chart.file}-${cacheBust}`}
-                notebook_id={nb.id}
-                file={chart.file}
-                title={chart.title}
-                accent={nb.accent}
-                cacheBust={cacheBust}
-              />
-            ))}
-          </div>
-        </section>
-      ))}
+    <div className="-mx-5 -my-5 overflow-x-auto sm:-mx-6 sm:-my-6">
+      <table className="min-w-full divide-y divide-slate-100">
+        <thead className="bg-slate-50">
+          <tr>
+            <th className="th">Model</th><th className="th">Group</th>
+            <th className="th text-right">Accuracy</th><th className="th text-right">Precision</th>
+            <th className="th text-right">Recall</th><th className="th text-right">F1</th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-slate-100">
+          {sorted.map((m) => (
+            <tr key={m.id}>
+              <td className="td font-medium text-slate-900">{m.name}</td>
+              <td className="td text-slate-500">{m.group}</td>
+              <td className="td text-right tabular-nums">{pct(m.accuracy, 2)}</td>
+              <td className="td text-right tabular-nums">{pct(m.precision, 2)}</td>
+              <td className="td text-right tabular-nums">{pct(m.recall, 2)}</td>
+              <td className="td text-right tabular-nums">{pct(m.f1, 2)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
+  )
+}
+
+function EaaCard({ eaa }) {
+  const byClass = Object.entries(eaa.mean_eaa_by_true_class || {})
+  return (
+    <Card title="Explainability: EAA-IoU on the test set"
+      subtitle="Does low agreement between the models' Grad-CAM maps signal a wrong prediction?">
+      <div className="grid gap-4 sm:grid-cols-4">
+        <Stat label="Mean EAA, correct" value={eaa.mean_eaa_correct?.toFixed(3) ?? '–'} />
+        <Stat label="Mean EAA, wrong" value={eaa.mean_eaa_misclassified?.toFixed(3) ?? '–'} />
+        <Stat label="AUROC" value={eaa.auroc_low_eaa_predicts_error?.toFixed(3) ?? '–'} hint="low EAA as an error detector" />
+        <Stat label="Mann-Whitney p" value={typeof eaa.mann_whitney_p_value === 'number' ? eaa.mann_whitney_p_value.toExponential(2) : '–'} />
+      </div>
+      <div className="mt-6 grid gap-8 lg:grid-cols-2">
+        <div>
+          <p className="mb-3 text-xs font-medium uppercase tracking-wide text-slate-500">Mean EAA-IoU by true class</p>
+          <div className="space-y-2.5">
+            {byClass.map(([name, v]) => {
+              const label = name === 'notumor' ? 'No Tumor' : name.charAt(0).toUpperCase() + name.slice(1)
+              return (
+                <div key={name} className="grid grid-cols-[7rem_1fr_3rem] items-center gap-3 text-sm">
+                  <span className="text-slate-700">{label}</span>
+                  <Bar value={v} color={CLASS_COLORS[label] || '#334155'} />
+                  <span className="text-right tabular-nums text-slate-600">{v.toFixed(2)}</span>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+        <div>
+          <p className="mb-3 text-xs font-medium uppercase tracking-wide text-slate-500">Escalation threshold</p>
+          <table className="min-w-full text-sm">
+            <thead><tr className="text-left text-xs text-slate-500">
+              <th className="py-1.5 font-medium">Flag if EAA below</th><th className="py-1.5 text-right font-medium">Scans flagged</th>
+              <th className="py-1.5 text-right font-medium">Errors caught</th></tr></thead>
+            <tbody className="divide-y divide-slate-100">
+              {(eaa.threshold_table || []).map((r) => (
+                <tr key={r.threshold}>
+                  <td className="py-1.5 tabular-nums">{r.threshold}</td>
+                  <td className="py-1.5 text-right tabular-nums">{r.flagged_pct}%</td>
+                  <td className="py-1.5 text-right tabular-nums">{r.errors_caught_pct}%</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </Card>
+  )
+}
+
+function DatasetCard({ dataset }) {
+  const classes = Object.keys(dataset.Training)
+  const total = (split) => Object.values(dataset[split]).reduce((a, b) => a + b, 0)
+  return (
+    <Card title="Dataset" subtitle="Kaggle Brain Tumor MRI dataset. The official test split is never used for training.">
+      <div className="-mx-5 -my-5 overflow-x-auto sm:-mx-6 sm:-my-6">
+        <table className="min-w-full divide-y divide-slate-100">
+          <thead className="bg-slate-50"><tr><th className="th">Class</th><th className="th text-right">Training</th><th className="th text-right">Testing</th></tr></thead>
+          <tbody className="divide-y divide-slate-100">
+            {classes.map((c) => (
+              <tr key={c}>
+                <td className="td"><span className="inline-flex items-center gap-2">
+                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: CLASS_COLORS[c] }} />{c}</span></td>
+                <td className="td text-right tabular-nums">{dataset.Training[c].toLocaleString()}</td>
+                <td className="td text-right tabular-nums">{dataset.Testing[c].toLocaleString()}</td>
+              </tr>
+            ))}
+            <tr className="bg-slate-50 font-semibold">
+              <td className="td text-slate-900">Total</td>
+              <td className="td text-right tabular-nums text-slate-900">{total('Training').toLocaleString()}</td>
+              <td className="td text-right tabular-nums text-slate-900">{total('Testing').toLocaleString()}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </Card>
+  )
+}
+
+export default function Results() {
+  const [data, setData] = useState(null)
+  const [error, setError] = useState('')
+  useEffect(() => { getResults().then(setData).catch((e) => setError(e.message)) }, [])
+
+  const summary = useMemo(() => {
+    if (!data) return null
+    const models = data.models
+    const best = [...models].sort((a, b) => b.accuracy - a.accuracy)[0]
+    const finals = models.filter((m) => m.group === 'Final ensemble')
+    const final = finals.sort((a, b) => b.accuracy - a.accuracy)[0]
+    const testTotal = Object.values(data.dataset.Testing).reduce((a, b) => a + b, 0)
+    return { best, final, testTotal }
+  }, [data])
+
+  if (error) return <div className="card card-pad text-sm text-rose-700">{error}</div>
+  if (!data) return <div className="flex items-center gap-2 text-sm text-slate-500"><Spinner /> Loading results</div>
+
+  const live = data.source !== 'reference'
+  return (
+    <>
+      <PageHeader title="Results"
+        description="Test-set performance of every model, computed in the Colab training run and published to Hugging Face.">
+        {live ? <Badge tone="green">Live results · {data.run}</Badge>
+              : <Badge tone="amber">Reference values · new run not uploaded yet</Badge>}
+      </PageHeader>
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <Stat label="Best model" value={pct(summary.best?.accuracy, 2)} hint={summary.best?.name} />
+        <Stat label="Final ensemble" value={summary.final ? pct(summary.final.accuracy, 2) : '–'} hint={summary.final?.name || 'not in this run yet'} />
+        <Stat label="Models evaluated" value={data.models.length} />
+        <Stat label="Test images" value={summary.testTotal.toLocaleString()} />
+      </div>
+
+      <div className="mt-6 grid gap-6">
+        <Card title="Test accuracy by model" subtitle={live ? "Deep models, ensembles and the final vote. Individual classifiers are listed in the table below." : undefined}
+          action={<div className="hidden gap-3 text-xs text-slate-500 sm:flex">
+            {['Final ensemble', 'Deep model', 'Classical ML'].map((g) => (
+              <span key={g} className="inline-flex items-center gap-1.5">
+                <span className="h-2 w-2 rounded-full" style={{ backgroundColor: GROUP_COLORS[g] }} />{g}</span>))}
+          </div>}>
+          <AccuracyChart models={data.models} />
+        </Card>
+        {live && <Card title="All metrics" subtitle="Macro-averaged over the four classes."><ResultsTable models={data.models} /></Card>}
+        {data.eaa && <EaaCard eaa={data.eaa} />}
+        <DatasetCard dataset={data.dataset} />
+      </div>
+    </>
   )
 }

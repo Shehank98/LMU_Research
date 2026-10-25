@@ -1,268 +1,203 @@
-import base64, io, os, logging
+import base64
+import csv
+import io
+import json
+import logging
+import os
+import time
 from contextlib import asynccontextmanager
 
-import numpy as np
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
 
-log = logging.getLogger(__name__)
+from model_loader import (HF_REPO_ID, HF_TOKEN, MODEL_FILES, force_reload, get_models,
+                          peek_state, start_loading_background)
+from research_data import DATASET, MODEL_ACCURACY
+from xai_engine import CLASS_NAMES, EAA_HIGH, EAA_LOW, explain, predict_all
 
-from model_loader import get_models, start_loading_background, peek_state, MODEL_FILES, force_reload
-from xai_engine import (
-    CLASS_NAMES, CLASS_COLORS, CONFIDENCE_THRESHOLD,
-    preprocess, get_gradcam, overlay_heatmap,
-    build_consensus_map, iou_score, average_pairwise_iou,
-    confidence_weighted_predict,
-)
-from research_data import (
-    MODEL_ACCURACY, MODEL_FAMILY, FAMILY_COLORS,
-    CONFUSION_MATRICES, CLASSIFICATION_REPORTS,
-    FEATURE_ML_ACCURACY, RAW_PIXEL_ACCURACY,
-    DATASET, ENSEMBLE_BUILDUP, LITERATURE, MODEL_PARAMS,
-    CLASS_COLORS as DATA_CLASS_COLORS,
-)
+logging.basicConfig(level=logging.INFO)
+log = logging.getLogger(__name__)
+RESULTS_PREFIX = os.environ.get('RESULTS_PREFIX', 'results_2026-10-22')
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    start_loading_background()   # non-blocking — health check passes immediately
+    start_loading_background()          # health check passes while models download
     yield
 
 
-app = FastAPI(title='NeuroScan AI', lifespan=lifespan)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=['*'],
-    allow_methods=['*'],
-    allow_headers=['*'],
-)
+app = FastAPI(title='NeuroScan', lifespan=lifespan)
+app.add_middleware(CORSMiddleware, allow_origins=['*'], allow_methods=['*'], allow_headers=['*'])
 
 
-def _pil_to_b64(img: Image.Image) -> str:
+def _b64(img):
+    if img is None:
+        return None
     buf = io.BytesIO()
     img.save(buf, format='PNG')
     return 'data:image/png;base64,' + base64.b64encode(buf.getvalue()).decode()
 
 
-# ── Health ────────────────────────────────────────────────────────────────────
+# ── Status ───────────────────────────────────────────────────────────────────
 @app.get('/health')
 def health():
-    models, _, missing, loading = peek_state()
-    loaded = sum(1 for v in models.values() if v is not None)
-    return {
-        'status': 'ok',
-        'models_loaded': loaded,
-        'models_total': len(MODEL_FILES),
-        'models_loading': loading,
-    }
+    models, _, _, loading, _ = peek_state()
+    return {'status': 'ok', 'models_loaded': sum(v is not None for v in models.values()),
+            'models_total': len(MODEL_FILES), 'loading': loading}
 
 
-# ── Model status ──────────────────────────────────────────────────────────────
 @app.get('/api/models/status')
 def models_status():
-    models, _, missing = get_models()
+    models, extractors, missing, loading, manifest = peek_state()
     return {
-        'status': {k: (v is not None) for k, v in models.items()},
-        'missing': missing,
-        'loaded_count': sum(1 for v in models.values() if v is not None),
+        'repo': HF_REPO_ID,
+        'loading': loading,
+        'loaded_count': sum(v is not None for v in models.values()),
         'total_count': len(MODEL_FILES),
+        'files': {f: models.get(k) is not None for k, f in MODEL_FILES.items()},
+        'missing': missing,
+        'feature_extractors': sorted(extractors),
+        'trained_with': manifest.get('versions'),
     }
 
 
-# ── Pre-computed research data ────────────────────────────────────────────────
-@app.get('/api/research')
-def research_data():
-    return {
-        'model_accuracy':         MODEL_ACCURACY,
-        'model_family':           MODEL_FAMILY,
-        'family_colors':          FAMILY_COLORS,
-        'confusion_matrices':     CONFUSION_MATRICES,
-        'classification_reports': CLASSIFICATION_REPORTS,
-        'feature_ml_accuracy':    FEATURE_ML_ACCURACY,
-        'raw_pixel_accuracy':     RAW_PIXEL_ACCURACY,
-        'dataset':                DATASET,
-        'ensemble_buildup':       ENSEMBLE_BUILDUP,
-        'literature':             LITERATURE,
-        'model_params':           MODEL_PARAMS,
-        'class_names':            CLASS_NAMES,
-        'class_colors':           CLASS_COLORS,
-        'confidence_threshold':   CONFIDENCE_THRESHOLD,
-    }
-
-
-# ── Debug info ───────────────────────────────────────────────────────────────
-@app.get('/api/debug/models')
-def debug_models():
-    """Returns model input/output shapes and a zero-image test prediction."""
-    models, extractors, missing = get_models()
-    info = {}
-    for key, m in models.items():
-        if m is None:
-            info[key] = None
-            continue
-        try:
-            in_shape  = list(m.input_shape)
-            out_shape = list(m.output_shape)
-            # Run a zeroed test image through to detect preprocessing/output issues
-            size = in_shape[1] or 224
-            dummy = np.zeros((1, size, size, 3), dtype=np.float32)
-            probs = m.predict(dummy, verbose=0)[0].tolist()
-            info[key] = {
-                'input_shape':  in_shape,
-                'output_shape': out_shape,
-                'test_probs':   [round(p, 4) for p in probs],
-                'test_pred':    CLASS_NAMES[int(np.argmax(probs))] if len(probs) == 4 else 'n/a',
-            }
-        except Exception as exc:
-            info[key] = {'error': str(exc)}
-    return {'models': info, 'class_names': CLASS_NAMES, 'missing': missing}
-
-
-# ── Model reload ─────────────────────────────────────────────────────────────
 @app.post('/api/admin/reload')
 def reload_models():
-    """
-    Re-download any missing models from HuggingFace and reload them.
-    Call this after uploading new model files to HuggingFace — no redeploy needed.
-    """
+    """Re-download every model from Hugging Face (use after a new upload, no redeploy needed)."""
     force_reload()
-    return {'status': 'reload started — check /api/models/status in ~30s'}
+    _results_cache['time'] = 0
+    return {'status': 'reload started, check /api/models/status in about a minute'}
 
 
-# ── Prediction endpoint ───────────────────────────────────────────────────────
+# ── Prediction ───────────────────────────────────────────────────────────────
 @app.post('/api/predict')
 async def predict(file: UploadFile = File(...)):
-    if file.content_type not in ('image/jpeg', 'image/png', 'image/jpg'):
-        raise HTTPException(400, 'Only JPEG/PNG images are accepted')
-
-    data = await file.read()
+    if file.content_type not in ('image/jpeg', 'image/jpg', 'image/png'):
+        raise HTTPException(400, 'Please upload a JPEG or PNG image.')
     try:
-        pil_image = Image.open(io.BytesIO(data)).convert('RGB')
+        image = Image.open(io.BytesIO(await file.read())).convert('RGB')
     except Exception:
-        raise HTTPException(400, 'Could not decode image')
+        raise HTTPException(400, 'The file could not be read as an image.')
 
     models, extractors, missing = get_models()
-    if sum(1 for v in models.values() if v is not None) == 0:
-        raise HTTPException(503, 'No models loaded. Configure HF_REPO_ID to auto-download.')
+    if not any(v is not None for v in models.values()):
+        raise HTTPException(503, f'No models are loaded yet. Check that {HF_REPO_ID} has a models/ folder.')
 
-    final_class, ensemble_conf, per_model_raw, combined_probs = \
-        confidence_weighted_predict(pil_image, models, extractors)
-
-    # Log raw per-model probabilities so Railway logs show what the model outputs
-    for mname, probs in per_model_raw.items():
-        log.info('raw probs [%s]: %s → %s (%.1f%%)',
-                 mname,
-                 [f'{p:.3f}' for p in probs],
-                 CLASS_NAMES[int(np.argmax(probs))],
-                 float(np.max(probs)) * 100)
-
-    class_name = CLASS_NAMES[final_class]
-
-    per_model_out = [
-        {
-            'name': name,
-            'predicted_class': CLASS_NAMES[int(np.argmax(probs))],
-            'predicted_idx':   int(np.argmax(probs)),
-            'confidence':      float(np.max(probs)),
-            'probabilities':   [float(p) for p in probs],
-        }
-        for name, probs in per_model_raw.items()
-    ]
-
-    # GRAD-CAM uses standalone softmax models + feature extractors.
-    # Extractors have 256 outputs; get_gradcam() handles them via reduce_sum loss.
-    gradcam_sources = {
-        'cnn':       models.get('cnn'),
-        'xception':  models.get('xception'),
-        'inception': models.get('inception'),
-        'cnn_feat':  extractors.get('cnn_feat'),
-        'inc_feat':  extractors.get('inc_feat'),
-        'xcp_feat':  extractors.get('xcp_feat'),
-    }
-    heatmaps_raw, heatmap_confs = {}, {}
-    for key, gmodel in gradcam_sources.items():
-        if gmodel is None:
-            continue
-        img_in = preprocess(pil_image, gmodel.input_shape[1])
-        try:
-            hm = get_gradcam(gmodel, img_in, final_class)
-            heatmaps_raw[key]   = hm
-            heatmap_confs[key]  = float(np.max(gmodel.predict(img_in, verbose=0)[0]))
-        except Exception as exc:
-            log.warning('GRAD-CAM failed for %s: %s', key, exc)
-
-    heatmaps_b64 = {k: _pil_to_b64(overlay_heatmap(pil_image, hm))
-                    for k, hm in heatmaps_raw.items()}
-
-    iou_scores, consensus_b64, avg_iou = {}, None, 0.0
-    if len(heatmaps_raw) >= 2:
-        keys    = list(heatmaps_raw.keys())
-        maps    = [heatmaps_raw[k] for k in keys]
-        weights = [heatmap_confs.get(k, 1.0) for k in keys]
-        consensus     = build_consensus_map(maps, weights)
-        consensus_b64 = _pil_to_b64(overlay_heatmap(pil_image, consensus))
-        avg_iou       = average_pairwise_iou(maps)
-        for i in range(len(keys)):
-            for j in range(i + 1, len(keys)):
-                iou_scores[f'{keys[i]}_vs_{keys[j]}'] = iou_score(
-                    heatmaps_raw[keys[i]], heatmaps_raw[keys[j]])
-
-    prob_sum = float(combined_probs.sum()) or 1.0
-    class_probabilities = [float(p / prob_sum) for p in combined_probs]
-
-    confidence_level = (
-        'high'     if ensemble_conf >= CONFIDENCE_THRESHOLD else
-        'moderate' if ensemble_conf >= 0.50 else 'low'
-    )
+    final, confidence, per_model, fused = predict_all(image, models, extractors)
+    xai = explain(image, models, final, per_model)
+    level = 'high' if confidence >= 0.70 else 'moderate' if confidence >= 0.50 else 'low'
 
     return {
-        'final_class':         class_name,
-        'final_class_idx':     final_class,
-        'confidence':          ensemble_conf,
-        'confidence_level':    confidence_level,
-        'class_names':         CLASS_NAMES,
-        'class_colors':        CLASS_COLORS,
-        'class_probabilities': class_probabilities,
-        'per_model':           per_model_out,
-        'heatmaps':            heatmaps_b64,
-        'consensus_heatmap':   consensus_b64,
-        'iou_scores':          iou_scores,
-        'average_iou':         avg_iou,
-        'models_used':         sum(1 for v in models.values() if v is not None),
-        'models_missing':      missing,
+        'final_class': CLASS_NAMES[final],
+        'final_class_idx': final,
+        'confidence': confidence,
+        'confidence_level': level,
+        'class_names': CLASS_NAMES,
+        'class_probabilities': [float(p) for p in fused],
+        'per_model': [{'name': name, 'family': fam,
+                       'predicted_class': CLASS_NAMES[int(p.argmax())],
+                       'confidence': float(p.max()),
+                       'probabilities': [float(v) for v in p]} for name, fam, p in per_model],
+        'xai': {
+            'original': _b64(image.resize((256, 256))),
+            'heatmaps': [{'name': n, 'image': _b64(img)} for n, img in xai['maps'].items()],
+            'consensus': _b64(xai['consensus']),
+            'pairwise_iou': xai['pairwise_iou'],
+            'eaa_iou': xai['eaa_iou'],
+            'agreement_level': xai['agreement_level'],
+            'alert': xai['alert'],
+            'thresholds': {'high': EAA_HIGH, 'low': EAA_LOW},
+        },
+        'models_used': len(per_model),
+        'models_missing': missing,
     }
 
 
-# ── SPA / static file serving ─────────────────────────────────────────────────
-# Must be registered last so API routes take precedence.
-#
-# StaticFiles(html=True) returns HTTP 404 for paths like /diagnosis — the React
-# router never gets a chance to render them.  The correct SPA pattern is:
-#   • Mount /assets explicitly for compiled JS/CSS (cache-friendly, correct MIME)
-#   • Catch everything else with a wildcard GET that returns index.html with 200
+# ── Results from the latest Colab run (on Hugging Face) ──────────────────────
+_results_cache = {'time': 0, 'data': None}
 
+_PRETTY = {
+    'CNN_standalone': ('Custom CNN', 'Deep model'),
+    'InceptionV3_standalone': ('InceptionV3', 'Deep model'),
+    'Xception_standalone': ('Xception', 'Deep model'),
+    'FINAL_confidence_weighted': ('Final ensemble, confidence-weighted', 'Final ensemble'),
+    'FINAL_majority_vote': ('Final ensemble, majority vote', 'Final ensemble'),
+}
+_SOURCES = {'cnn_feat_': 'CNN features', 'inceptionv3_feat_': 'InceptionV3 features',
+            'xception_feat_': 'Xception features', 'raw_': 'Raw pixels'}
+_CLFS = {'rf': 'Random Forest', 'dt': 'Decision Tree', 'svm': 'SVM', 'lr': 'Logistic Regression',
+         'softvote_ensemble': 'Soft-vote ensemble'}
+
+
+def _pretty(name):
+    if name in _PRETTY:
+        return _PRETTY[name]
+    for prefix, source in _SOURCES.items():
+        if name.startswith(prefix):
+            clf = name[len(prefix):]
+            return f'{_CLFS.get(clf, clf)} on {source}', 'Classical ML'
+    return name, 'Other'
+
+
+RESULTS_LOCAL_DIR = os.environ.get('RESULTS_LOCAL_DIR', '')   # optional: a downloaded results folder
+
+
+def _hf_text(path):
+    if RESULTS_LOCAL_DIR:
+        return open(os.path.join(RESULTS_LOCAL_DIR, path.split('/', 1)[1])).read()
+    from huggingface_hub import hf_hub_download
+    return open(hf_hub_download(HF_REPO_ID, path, token=HF_TOKEN or None)).read()
+
+
+def _load_results():
+    try:
+        rows = {}
+        for r in csv.DictReader(io.StringIO(_hf_text(f'{RESULTS_PREFIX}/metrics/results_master.csv'))):
+            rows[r['model']] = r                               # keep the latest row per model
+        models = []
+        for name, r in rows.items():
+            label, group = _pretty(name)
+            models.append({'id': name, 'name': label, 'group': group,
+                           'accuracy': float(r['accuracy']),
+                           'precision': float(r['precision_macro']),
+                           'recall': float(r['recall_macro']),
+                           'f1': float(r['f1_macro']),
+                           'train_time_sec': float(r.get('train_time_sec') or 0)})
+        eaa = None
+        try:
+            eaa = json.loads(_hf_text(f'{RESULTS_PREFIX}/metrics/eaa_iou_summary.json'))
+        except Exception:
+            pass
+        return {'source': 'local' if RESULTS_LOCAL_DIR else 'huggingface', 'run': RESULTS_PREFIX,
+                'models': models, 'eaa': eaa}
+    except Exception as exc:
+        log.info('Live results not available yet (%s); using reference numbers', exc)
+        models = [{'id': k, 'name': k, 'group': 'Reference', 'accuracy': v / 100,
+                   'precision': None, 'recall': None, 'f1': None, 'train_time_sec': None}
+                  for k, v in MODEL_ACCURACY.items()]
+        return {'source': 'reference', 'run': None, 'models': models, 'eaa': None}
+
+
+@app.get('/api/results')
+def results():
+    if _results_cache['data'] is None or time.time() - _results_cache['time'] > 600:
+        _results_cache['data'] = _load_results()
+        _results_cache['time'] = time.time()
+    return {**_results_cache['data'], 'dataset': DATASET, 'class_names': CLASS_NAMES}
+
+
+# ── Frontend (built React app) ───────────────────────────────────────────────
 _static = os.path.join(os.path.dirname(__file__), 'static')
-_assets = os.path.join(_static, 'assets')
-if os.path.isdir(_assets):
-    app.mount('/assets', StaticFiles(directory=_assets), name='assets')
-
-
-@app.get('/favicon.ico', include_in_schema=False)
-async def favicon():
-    fav = os.path.join(_static, 'favicon.ico')
-    if os.path.exists(fav):
-        return FileResponse(fav)
-    raise HTTPException(404)
+if os.path.isdir(os.path.join(_static, 'assets')):
+    app.mount('/assets', StaticFiles(directory=os.path.join(_static, 'assets')), name='assets')
 
 
 @app.get('/{full_path:path}', include_in_schema=False)
-async def serve_spa(full_path: str):
-    """Return index.html for every unmatched path so React Router handles routing."""
+async def spa(full_path: str):
     index = os.path.join(_static, 'index.html')
     if os.path.exists(index):
         return FileResponse(index, media_type='text/html')
-    raise HTTPException(404, 'Frontend not built — run npm run build in webapp/frontend')
+    raise HTTPException(404, 'Frontend not built. Run npm run build in webapp/frontend.')

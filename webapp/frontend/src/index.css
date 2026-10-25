@@ -3,15 +3,18 @@
 @tailwind utilities;
 
 @layer base {
-  body { @apply bg-slate-900 text-slate-100 font-sans antialiased; }
-  ::-webkit-scrollbar { @apply w-1.5; }
-  ::-webkit-scrollbar-track { @apply bg-slate-800; }
-  ::-webkit-scrollbar-thumb { @apply bg-slate-600 rounded-full; }
+  body { @apply bg-slate-50 text-slate-800 font-sans antialiased; }
+  h1, h2, h3 { @apply text-slate-900; }
 }
 
 @layer components {
-  .card { @apply bg-slate-800 rounded-xl p-5 shadow-lg; }
-  .card-bordered { @apply card border border-slate-700; }
-  .btn-primary { @apply px-4 py-2 bg-teal-500 hover:bg-teal-400 text-white font-semibold rounded-lg transition-colors; }
-  .btn-secondary { @apply px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold rounded-lg transition-colors; }
+  .card { @apply bg-white border border-slate-200 rounded-xl; }
+  .card-pad { @apply p-5 sm:p-6; }
+  .section-title { @apply text-base font-semibold text-slate-900; }
+  .muted { @apply text-sm text-slate-500; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed; }
+  .btn-primary { @apply btn bg-brand-700 text-white hover:bg-brand-800; }
+  .btn-secondary { @apply btn border border-slate-300 bg-white text-slate-700 hover:bg-slate-50; }
+  .th { @apply px-4 py-2.5 text-left text-xs font-semibold uppercase tracking-wide text-slate-500; }
+  .td { @apply px-4 py-3 text-sm text-slate-700; }
 }
