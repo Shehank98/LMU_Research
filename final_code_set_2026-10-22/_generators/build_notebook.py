@@ -578,15 +578,18 @@ def _hf_token():
     import getpass
     return getpass.getpass('Paste your Hugging Face WRITE token: ')
 
-def run_hf_upload():
-    from huggingface_hub import HfApi, CommitOperationAdd
+ENSEMBLE_PACKS = [('cnn_feat', 'cnn_ensemble_model.pkl'), ('inceptionv3_feat', 'inceptionv3_ensemble_model.pkl'),
+                  ('xception_feat', 'xception_ensemble_model.pkl')]
+
+def pack_ensemble(tag, out):
     # one file per feature ensemble: a list [RandomForest, DecisionTree, SVM]; the app averages their probabilities
-    for tag, out in [('cnn_feat','cnn_ensemble_model.pkl'), ('inceptionv3_feat','inceptionv3_ensemble_model.pkl'),
-                     ('xception_feat','xception_ensemble_model.pkl')]:
-        parts = [joblib.load(os.path.join(MODELS_DIR, tag + '_' + k + '.pkl')) for k in ['rf','dt','svm']
-                 if os.path.exists(os.path.join(MODELS_DIR, tag + '_' + k + '.pkl'))]
-        if parts:
-            joblib.dump(parts, os.path.join(MODELS_DIR, out))
+    parts = [joblib.load(os.path.join(MODELS_DIR, tag + '_' + k + '.pkl')) for k in ['rf', 'dt', 'svm']
+             if os.path.exists(os.path.join(MODELS_DIR, tag + '_' + k + '.pkl'))]
+    if parts:
+        joblib.dump(parts, os.path.join(MODELS_DIR, out))
+    return bool(parts)
+
+def write_manifest():
     manifest = {'created': str(datetime.datetime.now()), 'class_names': CLASS_NAMES,
                 'standalone': {'cnn': 'cnn_model.h5', 'inception': 'inceptionv3_model.h5',
                                'xception': 'xception_model.h5', 'input_size': SIZE_STD},
@@ -600,24 +603,43 @@ def run_hf_upload():
                              'scikit_learn': __import__('sklearn').__version__}}
     json.dump(manifest, open(os.path.join(MODELS_DIR, 'manifest.json'), 'w'), indent=2)
 
-    api = HfApi(token=_hf_token())
-    api.create_repo(HF_REPO_ID, exist_ok=True)
-    ops = [CommitOperationAdd(path_in_repo='models/' + f, path_or_fileobj=os.path.join(MODELS_DIR, f))
-           for f in WEBAPP_FILES if os.path.exists(os.path.join(MODELS_DIR, f))]
-    if not ops:
-        raise RuntimeError('No model files to upload yet. Run the training stages first.')
-    log('HF: uploading {} model files (large files take a few minutes) ...'.format(len(ops)))
-    api.create_commit(repo_id=HF_REPO_ID, operations=ops, commit_message='Models from final run ' + RESULTS_PREFIX)
-    res = []
+def hf_push(model_files, message):
+    # Uploads the given model files plus ALL current result files in ONE commit. Safe to re-run.
+    # Files the web app uses go to models/, every other model (single RF/DT/SVM/LR) to models/classical/.
+    from huggingface_hub import HfApi, CommitOperationAdd
+    ops = []
+    for f in model_files:
+        path = os.path.join(MODELS_DIR, f)
+        if not os.path.exists(path):
+            raise RuntimeError(f + ' not found. Train this model first (run the cell above).')
+        folder = 'models/' if f in WEBAPP_FILES else 'models/classical/'
+        ops.append(CommitOperationAdd(path_in_repo=folder + f, path_or_fileobj=path))
+    n_models = len(ops)
     for sub in ['metrics', 'confusion', 'history', 'logs']:
         folder = os.path.join(OUTPUT_DIR, sub)
         for fn in sorted(os.listdir(folder)):
-            if fn.endswith('.npz'): continue
-            res.append(CommitOperationAdd(path_in_repo=RESULTS_PREFIX + '/' + sub + '/' + fn,
-                                          path_or_fileobj=os.path.join(folder, fn)))
-    api.create_commit(repo_id=HF_REPO_ID, operations=res, commit_message='Results ' + RESULTS_PREFIX)
+            if not fn.endswith('.npz'):
+                ops.append(CommitOperationAdd(path_in_repo=RESULTS_PREFIX + '/' + sub + '/' + fn,
+                                              path_or_fileobj=os.path.join(folder, fn)))
+    api = HfApi(token=_hf_token())
+    api.create_repo(HF_REPO_ID, exist_ok=True)
+    log('HF: uploading {} model files and {} result files (large models take a few minutes) ...'.format(
+        n_models, len(ops) - n_models))
+    api.create_commit(repo_id=HF_REPO_ID, operations=ops, commit_message=message)
     log('HF: uploaded {} model files and {} result files to https://huggingface.co/{}'.format(
-        len(ops), len(res), HF_REPO_ID))
+        n_models, len(ops) - n_models, HF_REPO_ID))
+    return n_models
+
+def run_hf_upload():
+    # Final sync: every trained model (web app files + every single classifier) and every result file.
+    for tag, out in ENSEMBLE_PACKS:
+        pack_ensemble(tag, out)
+    write_manifest()
+    files = sorted(f for f in os.listdir(MODELS_DIR)
+                   if f.endswith(('.h5', '.pkl')) or f == 'manifest.json')
+    if not [f for f in files if f != 'manifest.json']:
+        raise RuntimeError('No model files to upload yet. Run the training stages first.')
+    hf_push(files, 'All models and results from run ' + RESULTS_PREFIX)
 
 print('XAI and upload functions ready.')""")
 

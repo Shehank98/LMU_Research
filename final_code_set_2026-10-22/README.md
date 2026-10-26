@@ -8,7 +8,8 @@ One Google Colab notebook, `Brain_Tumor_Train_And_Log.ipynb`, that:
 4. uploads the models and results to Hugging Face, where the web app picks them up.
 
 > **Prefer one notebook per model?** The folder `individual_models/` has the same code split into
-> 10 notebooks (01_CNN ... 10_Upload_to_HuggingFace) that you run one by one. See its README.
+> 10 notebooks (01_CNN ... 10_Upload_to_HuggingFace) that you run one by one. Each of them uploads its
+> own trained model to Hugging Face as soon as it finishes. See its README.
 
 It is built so a crash or disconnect does not lose work, and it was tested end to end before
 delivery, including a simulated crash in the middle of training.
@@ -62,7 +63,7 @@ If yours is somewhere else, change `DRIVE_DATA_DIR` in cell 2.
    | 7 | `Traditional_raw_pixels` | RF, DT, SVM, Logistic Regression on raw pixels | 30–90 min (SVM is slow) |
    | 8 | `FINAL_ensemble` | 6-model majority and confidence-weighted vote | about 5 min |
    | 9 | `EAA_IoU_analysis` | CAM maps + EAA-IoU for every test image | 10–20 min |
-   | 10 | `HF_upload` | Upload models and results to Hugging Face | 5–10 min |
+   | 10 | `HF_upload` | Upload every model (web app files to `models/`, each single classifier to `models/classical/`) and all results | 5–10 min |
 
    Times are estimates; free Colab can be slower when busy.
 

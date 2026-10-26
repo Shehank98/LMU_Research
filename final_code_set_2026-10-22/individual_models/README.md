@@ -18,7 +18,30 @@ all-in-one notebook. Finished work is never repeated.
 | 07 | `07_Traditional_ML_Raw_Pixels.ipynb` | RF, DT, SVM, Logistic Regression on 65,536 raw pixels | – | 30–90 min |
 | 08 | `08_Final_Ensemble.ipynb` | Combines the 6 predictors: majority vote and confidence-weighted vote | 01–06 | ~5 min |
 | 09 | `09_EAA_IoU_Analysis.ipynb` | Attention maps for CNN / Xception / InceptionV3, EAA-IoU for every test image | 01–03, 08 | 10–20 min |
-| 10 | `10_Upload_to_HuggingFace.ipynb` | Uploads models (for the web app) and all results | whatever is finished | 5–10 min |
+| 10 | `10_Upload_to_HuggingFace.ipynb` | Optional final sync of every model and result (useful if an earlier upload failed) | whatever is finished | 5–10 min |
+
+## Every notebook uploads its own model to Hugging Face
+
+The last cell of each notebook uploads what that notebook trained to
+`shehank98/brain-tumor-mri-models`, together with every result file so far:
+
+| Notebook | Uploaded to `models/` (used by the web app) | Uploaded to `models/classical/` |
+|---|---|---|
+| 01 | `cnn_model.h5` | – |
+| 02 | `inceptionv3_model.h5` | – |
+| 03 | `xception_model.h5` | – |
+| 04 | `cnn_ext.h5`, `cnn_ensemble_model.pkl` | `cnn_feat_rf.pkl`, `cnn_feat_dt.pkl`, `cnn_feat_svm.pkl` |
+| 05 | `inceptionv3_ext.h5`, `inceptionv3_ensemble_model.pkl` | `inceptionv3_feat_rf/dt/svm.pkl` |
+| 06 | `xception_ext.h5`, `xception_ensemble_model.pkl` | `xception_feat_rf/dt/svm.pkl` |
+| 07 | – | `raw_rf.pkl`, `raw_dt.pkl`, `raw_svm.pkl`, `raw_lr.pkl` |
+| 08, 09 | no new model, only result files | – |
+
+- It needs your Hugging Face **WRITE** token saved once as the Colab secret `HF_TOKEN` (key icon on the left).
+- It only uploads after training has finished; a half-trained model is never uploaded.
+- If the upload fails (for example a network error), just re-run that last cell. Training is not repeated.
+- If the web app is already running, call `POST /api/admin/reload` (see `../README.md`) so it loads the new model.
+
+## Order
 
 01 to 07 are independent: run them in any order, on different days, or in two Colab accounts.
 08 and 09 check their prerequisites first and stop with a clear message if something is missing.
@@ -33,7 +56,8 @@ all-in-one notebook. Finished work is never repeated.
 | 1–7 | **Shared and identical in every notebook**: Google Drive, settings, logging, metric saving, crash-safe training, data loading, helpers |
 | 8–9 | **This model only**: the model definition and its training / evaluation code |
 | Run cell | `stage('...', run_...)`: runs it safely (resumes after a crash, skips if already done) |
-| Last cell | Reads this model's results back from Drive: metrics, confusion matrix, last training epochs |
+| Results cell | Reads this model's results back from Drive: metrics, confusion matrix, last training epochs |
+| Last cell | Uploads this notebook's model(s) and all result files to Hugging Face |
 
 ## How to run one
 
