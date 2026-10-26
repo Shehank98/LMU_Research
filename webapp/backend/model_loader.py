@@ -154,6 +154,12 @@ def _do_load():
         try:
             manifest = json.load(open(mpath))
             log.info('Manifest versions: %s', manifest.get('versions'))
+            import sklearn
+            trained = (manifest.get('versions') or {}).get('scikit_learn')
+            if trained and trained != sklearn.__version__:
+                log.warning('Models were trained with scikit-learn %s but the server has %s. Pin '
+                            'scikit-learn==%s in requirements.txt to avoid invalid ensemble results.',
+                            trained, sklearn.__version__, trained)
         except Exception as exc:
             log.warning('Bad manifest: %s', exc)
 
