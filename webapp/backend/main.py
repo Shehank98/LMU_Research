@@ -118,6 +118,7 @@ async def predict(file: UploadFile = File(...)):
 
 # ── Results from the latest Colab run (on Hugging Face) ──────────────────────
 _results_cache = {'time': 0, 'data': None}
+_FOLDERS = ['glioma', 'meningioma', 'notumor', 'pituitary']    # dataset folder names, same order as CLASS_NAMES
 
 _PRETTY = {
     'CNN_standalone': ('Custom CNN', 'Deep model'),
@@ -171,14 +172,21 @@ def _load_results():
             eaa = json.loads(_hf_text(f'{RESULTS_PREFIX}/metrics/eaa_iou_summary.json'))
         except Exception:
             pass
+        dataset = DATASET
+        try:                                                   # real image counts from the run
+            raw = json.loads(_hf_text(f'{RESULTS_PREFIX}/metrics/dataset_counts.json'))
+            dataset = {split: {CLASS_NAMES[i]: raw[split][c] for i, c in enumerate(_FOLDERS)}
+                       for split in ('Training', 'Testing')}
+        except Exception:
+            pass
         return {'source': 'local' if RESULTS_LOCAL_DIR else 'huggingface', 'run': RESULTS_PREFIX,
-                'models': models, 'eaa': eaa}
+                'models': models, 'eaa': eaa, 'dataset': dataset}
     except Exception as exc:
         log.info('Live results not available yet (%s); using reference numbers', exc)
         models = [{'id': k, 'name': k, 'group': 'Reference', 'accuracy': v / 100,
                    'precision': None, 'recall': None, 'f1': None, 'train_time_sec': None}
                   for k, v in MODEL_ACCURACY.items()]
-        return {'source': 'reference', 'run': None, 'models': models, 'eaa': None}
+        return {'source': 'reference', 'run': None, 'models': models, 'eaa': None, 'dataset': DATASET}
 
 
 @app.get('/api/results')
@@ -186,7 +194,7 @@ def results():
     if _results_cache['data'] is None or time.time() - _results_cache['time'] > 600:
         _results_cache['data'] = _load_results()
         _results_cache['time'] = time.time()
-    return {**_results_cache['data'], 'dataset': DATASET, 'class_names': CLASS_NAMES}
+    return {**_results_cache['data'], 'class_names': CLASS_NAMES}
 
 
 # ── Frontend (built React app) ───────────────────────────────────────────────

@@ -73,12 +73,18 @@ MASTER_CSV  = os.path.join(METRICS_DIR, 'results_master.csv')
 RUN_LOG     = os.path.join(LOG_DIR, 'run_log.txt')
 PROGRESS    = os.path.join(OUTPUT_DIR, 'progress.json')
 
-# sanity check: every class folder must exist and contain images
+# sanity check: every class folder must exist and contain images; the real counts are saved for the report
+import json
+counts = {}
 for split in ['Training', 'Testing']:
+    counts[split] = {}
     for c in CLASS_NAMES:
         pth = os.path.join(DATA_DIR, split, c)
         n = len(os.listdir(pth)) if os.path.isdir(pth) else 0
+        counts[split][c] = n
         print('{:8s} {:11s} {:5d} images {}'.format(split, c, n, '' if n else '  <-- MISSING, check DRIVE_DATA_DIR'))
+    print('{:8s} {:11s} {:5d} images in total'.format(split, '', sum(counts[split].values())))
+json.dump(counts, open(os.path.join(METRICS_DIR, 'dataset_counts.json'), 'w'), indent=2)
 print('Results ->', OUTPUT_DIR)""")
 
 # 3 imports + logging + progress

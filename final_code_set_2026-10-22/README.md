@@ -61,7 +61,7 @@ If yours is somewhere else, change `DRIVE_DATA_DIR` in cell 2.
    | 6 | `Xception_feature_ensemble` | Xception features + RF / DT / SVM | 10–20 min |
    | 7 | `Traditional_raw_pixels` | RF, DT, SVM, Logistic Regression on raw pixels | 30–90 min (SVM is slow) |
    | 8 | `FINAL_ensemble` | 6-model majority and confidence-weighted vote | about 5 min |
-   | 9 | `EAA_IoU_analysis` | CAM maps + EAA-IoU for all 2,063 test images | 10–20 min |
+   | 9 | `EAA_IoU_analysis` | CAM maps + EAA-IoU for every test image | 10–20 min |
    | 10 | `HF_upload` | Upload models and results to Hugging Face | 5–10 min |
 
    Times are estimates; free Colab can be slower when busy.
@@ -79,6 +79,7 @@ If yours is somewhere else, change `DRIVE_DATA_DIR` in cell 2.
 ```
 MyDrive/brain_tumor_results_2026-10-22/
 ├── metrics/results_master.csv                  one row per model: accuracy, precision, recall, F1, per-class F1, time
+├── metrics/dataset_counts.json                 the real number of images per class in your Training / Testing folders
 ├── metrics/<model>_classification_report.json  per-class precision / recall / F1
 ├── metrics/final_per_image_predictions.csv     every test image: true class, each model's vote, ensemble result
 ├── metrics/eaa_iou_per_image.csv               every test image: pairwise IoU and EAA-IoU, correct or not
@@ -122,6 +123,7 @@ xception_ext.h5, cnn_ensemble_model.pkl, inceptionv3_ensemble_model.pkl, xceptio
 
 | Report section | File |
 |---|---|
+| Dataset description (use these counts, not older figures) | `metrics/dataset_counts.json` |
 | Main comparison table | `metrics/results_master.csv` |
 | Per-class precision / recall / F1 | `metrics/<model>_classification_report.json` |
 | Confusion matrices | `confusion/<model>_confusion_matrix.csv` |
