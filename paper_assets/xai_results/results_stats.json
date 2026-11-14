@@ -1,0 +1,420 @@
+{
+  "history": {
+    "cnn_model": {
+      "epochs_logged": 19,
+      "final_train_acc": 0.9933,
+      "final_val_acc": 0.9643,
+      "best_val_acc": 0.9661,
+      "best_val_epoch": 15,
+      "min_val_loss_epoch": 6,
+      "final_val_loss": 0.1731,
+      "min_val_loss": 0.1374
+    },
+    "inceptionv3_model": {
+      "epochs_logged": 10,
+      "final_train_acc": 0.9429,
+      "final_val_acc": 0.925,
+      "best_val_acc": 0.9304,
+      "best_val_epoch": 7,
+      "min_val_loss_epoch": 10,
+      "final_val_loss": 0.2128,
+      "min_val_loss": 0.2128
+    },
+    "xception_model": {
+      "epochs_logged": 10,
+      "final_train_acc": 0.9379,
+      "final_val_acc": 0.9321,
+      "best_val_acc": 0.9321,
+      "best_val_epoch": 7,
+      "min_val_loss_epoch": 10,
+      "final_val_loss": 0.2143,
+      "min_val_loss": 0.2143
+    },
+    "cnn_ext": {
+      "epochs_logged": 10,
+      "final_train_acc": 0.9748,
+      "final_val_acc": 0.9482,
+      "best_val_acc": 0.9482,
+      "best_val_epoch": 10,
+      "min_val_loss_epoch": 10,
+      "final_val_loss": 0.1487,
+      "min_val_loss": 0.1487
+    },
+    "inceptionv3_ext": {
+      "epochs_logged": 10,
+      "final_train_acc": 0.8488,
+      "final_val_acc": 0.9,
+      "best_val_acc": 0.9071,
+      "best_val_epoch": 9,
+      "min_val_loss_epoch": 9,
+      "final_val_loss": 0.2882,
+      "min_val_loss": 0.272
+    },
+    "xception_ext": {
+      "epochs_logged": 10,
+      "final_train_acc": 0.904,
+      "final_val_acc": 0.9071,
+      "best_val_acc": 0.9125,
+      "best_val_epoch": 9,
+      "min_val_loss_epoch": 7,
+      "final_val_loss": 0.274,
+      "min_val_loss": 0.2503
+    }
+  },
+  "wilson_ci": {
+    "raw_dt": [
+      75.78,
+      79.85
+    ],
+    "raw_lr": [
+      77.83,
+      81.76
+    ],
+    "raw_svm": [
+      80.3,
+      84.04
+    ],
+    "inceptionv3_feat_dt": [
+      81.8,
+      85.42
+    ],
+    "raw_softvote_ensemble": [
+      82.19,
+      85.77
+    ],
+    "inceptionv3_feat_svm": [
+      83.56,
+      87.03
+    ],
+    "xception_feat_dt": [
+      84.21,
+      87.61
+    ],
+    "inceptionv3_feat_softvote_ensemble": [
+      84.34,
+      87.73
+    ],
+    "cnn_feat_dt": [
+      84.74,
+      88.09
+    ],
+    "InceptionV3_standalone": [
+      84.86,
+      88.2
+    ],
+    "inceptionv3_feat_rf": [
+      85.0,
+      88.32
+    ],
+    "raw_rf": [
+      85.26,
+      88.56
+    ],
+    "Xception_standalone": [
+      85.92,
+      89.14
+    ],
+    "xception_feat_svm": [
+      85.99,
+      89.21
+    ],
+    "xception_feat_softvote_ensemble": [
+      86.64,
+      89.79
+    ],
+    "xception_feat_rf": [
+      86.72,
+      89.86
+    ],
+    "cnn_feat_softvote_ensemble": [
+      87.7,
+      90.73
+    ],
+    "cnn_feat_svm": [
+      88.1,
+      91.09
+    ],
+    "cnn_feat_rf": [
+      88.37,
+      91.32
+    ],
+    "CNN_standalone": [
+      88.9,
+      91.79
+    ],
+    "FINAL_confidence_weighted": [
+      90.84,
+      93.46
+    ],
+    "FINAL_majority_vote": [
+      91.11,
+      93.69
+    ]
+  },
+  "auc": {
+    "CNN": {
+      "glioma": {
+        "roc_auc": 0.8995,
+        "pr_auc": 0.8827
+      },
+      "meningioma": {
+        "roc_auc": 0.9786,
+        "pr_auc": 0.9359
+      },
+      "notumor": {
+        "roc_auc": 0.9941,
+        "pr_auc": 0.9737
+      },
+      "pituitary": {
+        "roc_auc": 0.9972,
+        "pr_auc": 0.9883
+      },
+      "macro_roc_auc": 0.9673
+    },
+    "InceptionV3": {
+      "glioma": {
+        "roc_auc": 0.9356,
+        "pr_auc": 0.8925
+      },
+      "meningioma": {
+        "roc_auc": 0.9529,
+        "pr_auc": 0.8519
+      },
+      "notumor": {
+        "roc_auc": 0.9974,
+        "pr_auc": 0.9924
+      },
+      "pituitary": {
+        "roc_auc": 0.9926,
+        "pr_auc": 0.9766
+      },
+      "macro_roc_auc": 0.9696
+    },
+    "Xception": {
+      "glioma": {
+        "roc_auc": 0.9152,
+        "pr_auc": 0.8841
+      },
+      "meningioma": {
+        "roc_auc": 0.9545,
+        "pr_auc": 0.8652
+      },
+      "notumor": {
+        "roc_auc": 0.9973,
+        "pr_auc": 0.9906
+      },
+      "pituitary": {
+        "roc_auc": 0.9922,
+        "pr_auc": 0.9787
+      },
+      "macro_roc_auc": 0.9648
+    }
+  },
+  "bootstrap_ci": {
+    "CNN": {
+      "acc": 90.5,
+      "ci95": [
+        89.12,
+        91.81
+      ]
+    },
+    "InceptionV3": {
+      "acc": 86.38,
+      "ci95": [
+        84.69,
+        88.0
+      ]
+    },
+    "Xception": {
+      "acc": 87.75,
+      "ci95": [
+        86.19,
+        89.38
+      ]
+    },
+    "CNN_ensemble": {
+      "acc": 89.31,
+      "ci95": [
+        87.75,
+        90.81
+      ]
+    },
+    "InceptionV3_ensemble": {
+      "acc": 86.12,
+      "ci95": [
+        84.44,
+        87.75
+      ]
+    },
+    "Xception_ensemble": {
+      "acc": 88.31,
+      "ci95": [
+        86.75,
+        89.88
+      ]
+    },
+    "FINAL_majority": {
+      "acc": 92.5,
+      "ci95": [
+        91.25,
+        93.69
+      ]
+    },
+    "FINAL_confidence_weighted": {
+      "acc": 92.25,
+      "ci95": [
+        91.0,
+        93.5
+      ]
+    }
+  },
+  "mcnemar": [
+    {
+      "a": "FINAL_majority",
+      "b": "CNN",
+      "a_right_b_wrong": 56,
+      "a_wrong_b_right": 24,
+      "p_exact": 0.000452,
+      "p_holm": 0.001806
+    },
+    {
+      "a": "FINAL_majority",
+      "b": "InceptionV3",
+      "a_right_b_wrong": 121,
+      "a_wrong_b_right": 23,
+      "p_exact": 0.0,
+      "p_holm": 0.0
+    },
+    {
+      "a": "FINAL_majority",
+      "b": "Xception",
+      "a_right_b_wrong": 90,
+      "a_wrong_b_right": 14,
+      "p_exact": 0.0,
+      "p_holm": 0.0
+    },
+    {
+      "a": "FINAL_majority",
+      "b": "CNN_ensemble",
+      "a_right_b_wrong": 69,
+      "a_wrong_b_right": 18,
+      "p_exact": 0.0,
+      "p_holm": 0.0
+    },
+    {
+      "a": "FINAL_majority",
+      "b": "InceptionV3_ensemble",
+      "a_right_b_wrong": 123,
+      "a_wrong_b_right": 21,
+      "p_exact": 0.0,
+      "p_holm": 0.0
+    },
+    {
+      "a": "FINAL_majority",
+      "b": "Xception_ensemble",
+      "a_right_b_wrong": 83,
+      "a_wrong_b_right": 16,
+      "p_exact": 0.0,
+      "p_holm": 0.0
+    },
+    {
+      "a": "FINAL_majority",
+      "b": "FINAL_confidence_weighted",
+      "a_right_b_wrong": 13,
+      "a_wrong_b_right": 9,
+      "p_exact": 0.523467,
+      "p_holm": 0.523467
+    },
+    {
+      "a": "CNN",
+      "b": "Xception",
+      "a_right_b_wrong": 99,
+      "a_wrong_b_right": 55,
+      "p_exact": 0.00049,
+      "p_holm": 0.001806
+    },
+    {
+      "a": "CNN",
+      "b": "InceptionV3",
+      "a_right_b_wrong": 129,
+      "a_wrong_b_right": 63,
+      "p_exact": 2e-06,
+      "p_holm": 1.1e-05
+    },
+    {
+      "a": "Xception",
+      "b": "InceptionV3",
+      "a_right_b_wrong": 93,
+      "a_wrong_b_right": 71,
+      "p_exact": 0.100749,
+      "p_holm": 0.201497
+    }
+  ],
+  "member_acc_in_ensemble_pipeline": {
+    "CNN": 90.5,
+    "InceptionV3": 86.38,
+    "Xception": 87.75,
+    "CNN_ensemble": 89.31,
+    "InceptionV3_ensemble": 86.12,
+    "Xception_ensemble": 88.31,
+    "FINAL_majority": 92.5,
+    "FINAL_confidence_weighted": 92.25
+  },
+  "vote_agreement": {
+    "2_of_6": {
+      "images": 7,
+      "majority_acc_pct": 71.43
+    },
+    "3_of_6": {
+      "images": 74,
+      "majority_acc_pct": 52.7
+    },
+    "4_of_6": {
+      "images": 155,
+      "majority_acc_pct": 67.1
+    },
+    "5_of_6": {
+      "images": 211,
+      "majority_acc_pct": 93.36
+    },
+    "6_of_6": {
+      "images": 1153,
+      "majority_acc_pct": 98.44
+    }
+  },
+  "oracle_any_member_correct_pct": 96.75,
+  "all_members_wrong": 52,
+  "meningioma_aug": {
+    "n_aug": 103,
+    "n_orig": 297,
+    "ensemble_recall_aug_pct": 94.17,
+    "ensemble_recall_orig_pct": 95.96,
+    "cnn_recall_aug_pct": 85.44,
+    "cnn_recall_orig_pct": 94.61
+  },
+  "eaa_recomputed": {
+    "auroc": 0.7525,
+    "n": 1600,
+    "median_correct": 0.1043,
+    "median_misclassified": 0.0237,
+    "pair_means": {
+      "iou_cnn_xcp": 0.0057,
+      "iou_cnn_inc": 0.0049,
+      "iou_xcp_inc": 0.285
+    },
+    "share_zero_eaa_pct": 2.62,
+    "threshold_0.05": {
+      "flagged_pct": 28.62,
+      "errors_caught_pct": 61.29,
+      "error_rate_flagged_pct": 16.59,
+      "error_rate_unflagged_pct": 4.2
+    },
+    "threshold_0.1": {
+      "flagged_pct": 50.81,
+      "errors_caught_pct": 82.26,
+      "error_rate_flagged_pct": 12.55,
+      "error_rate_unflagged_pct": 2.8
+    }
+  },
+  "confidence_auroc": 0.9127
+}

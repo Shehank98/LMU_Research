@@ -1,0 +1,29 @@
+{
+  "n_test": 1600,
+  "majority": {
+    "accuracy_pct": 92.5,
+    "macro_f1": 0.9237,
+    "agreement_with_log": 1.0
+  },
+  "confidence_weighted": {
+    "accuracy_pct": 92.25,
+    "macro_f1": 0.9206,
+    "agreement_with_log": 1.0
+  },
+  "members_accuracy_pct": {
+    "CNN": 90.5,
+    "InceptionV3": 86.38,
+    "Xception": 87.75,
+    "CNN_ensemble": 89.31,
+    "InceptionV3_ensemble": 86.12,
+    "Xception_ensemble": 88.31
+  },
+  "members_agreement_with_log": {
+    "CNN": 1.0,
+    "InceptionV3": 1.0,
+    "Xception": 1.0,
+    "CNN_ensemble": 1.0,
+    "InceptionV3_ensemble": 1.0,
+    "Xception_ensemble": 1.0
+  }
+}

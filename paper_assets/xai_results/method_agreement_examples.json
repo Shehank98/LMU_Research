@@ -1,0 +1,11 @@
+{
+ "gradcam_CNN~occlusion_CNN": 0.092,
+ "gradcampp_CNN~occlusion_CNN": 0.149,
+ "hirescam_CNN~occlusion_CNN": 0.171,
+ "lime_CNN~occlusion_CNN": 0.138,
+ "shap_CNN~occlusion_CNN": 0.24,
+ "gradcam_Xception~occlusion_Xception": 0.442,
+ "gradcampp_Xception~occlusion_Xception": 0.452,
+ "hirescam_Xception~occlusion_Xception": 0.442,
+ "lime_Xception~occlusion_Xception": 0.231
+}

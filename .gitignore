@@ -1,0 +1,5 @@
+# large intermediate XAI arrays (regenerate with paper_assets/scripts)
+paper_assets/xai_results/sample_maps.npz
+paper_assets/xai_results/example_maps.npz
+paper_assets/build/__pycache__/
+paper_assets/scripts/__pycache__/

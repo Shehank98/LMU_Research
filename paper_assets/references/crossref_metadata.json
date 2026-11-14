@@ -1,0 +1,4659 @@
+{
+ "10.1007/978-981-10-9035-6_33": {
+  "author": [
+   {
+    "given": "Nyoman",
+    "family": "Abiwinanda",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Muhammad",
+    "family": "Hanif",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "S. Tafwida",
+    "family": "Hesaputra",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Astri",
+    "family": "Handayani",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Tati Rajab",
+    "family": "Mengko",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Brain Tumor Classification Using Convolutional Neural Network"
+  ],
+  "container-title": [
+   "IFMBE Proceedings",
+   "World Congress on Medical Physics and Biomedical Engineering 2018"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "183-189",
+  "issued": {
+   "date-parts": [
+    [
+     2018,
+     5,
+     30
+    ]
+   ]
+  },
+  "publisher": "Springer Nature Singapore",
+  "type": "book-chapter",
+  "article-number": null,
+  "event": null
+ },
+ "10.1371/journal.pone.0140381": {
+  "author": [
+   {
+    "given": "Jun",
+    "family": "Cheng",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Wei",
+    "family": "Huang",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Shuangliang",
+    "family": "Cao",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Ru",
+    "family": "Yang",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Wei",
+    "family": "Yang",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Zhaoqiang",
+    "family": "Yun",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Zhijian",
+    "family": "Wang",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Qianjin",
+    "family": "Feng",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Enhanced Performance of Brain Tumor Classification via Tumor Region Augmentation and Partition"
+  ],
+  "container-title": [
+   "PLOS ONE"
+  ],
+  "volume": "10",
+  "issue": "10",
+  "page": "e0140381",
+  "issued": {
+   "date-parts": [
+    [
+     2015,
+     10,
+     8
+    ]
+   ]
+  },
+  "publisher": "Public Library of Science (PLoS)",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1007/BF00994018": {
+  "author": [
+   {
+    "given": "Corinna",
+    "family": "Cortes",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Vladimir",
+    "family": "Vapnik",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Support-vector networks"
+  ],
+  "container-title": [
+   "Machine Learning"
+  ],
+  "volume": "20",
+  "issue": "3",
+  "page": "273-297",
+  "issued": {
+   "date-parts": [
+    [
+     1995,
+     9
+    ]
+   ]
+  },
+  "publisher": "Springer Science and Business Media LLC",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1109/EIT.2018.8500308": {
+  "author": [
+   {
+    "given": "Mustafa R.",
+    "family": "Ismael",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Ikhlas",
+    "family": "Abdel-Qader",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Brain Tumor Classification via Statistical Features and Back-Propagation Neural Network"
+  ],
+  "container-title": [
+   "2018 IEEE International Conference on Electro/Information Technology (EIT)"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "0252-0257",
+  "issued": {
+   "date-parts": [
+    [
+     2018,
+     5
+    ]
+   ]
+  },
+  "publisher": "IEEE",
+  "type": "proceedings-article",
+  "article-number": null,
+  "event": {
+   "name": "2018 IEEE International Conference on Electro/Information Technology (EIT)",
+   "location": "Rochester, MI",
+   "start": {
+    "date-parts": [
+     [
+      2018,
+      5,
+      3
+     ]
+    ]
+   },
+   "end": {
+    "date-parts": [
+     [
+      2018,
+      5,
+      5
+     ]
+    ]
+   }
+  }
+ },
+ "10.1016/j.cogsys.2018.12.007": {
+  "author": [
+   {
+    "given": "Muhammed",
+    "family": "Talo",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Ulas Baran",
+    "family": "Baloglu",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "\u00d6zal",
+    "family": "Y\u0131ld\u0131r\u0131m",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "U",
+    "family": "Rajendra Acharya",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Application of deep transfer learning for automated brain abnormality classification using MR images"
+  ],
+  "container-title": [
+   "Cognitive Systems Research"
+  ],
+  "volume": "54",
+  "issue": null,
+  "page": "176-188",
+  "issued": {
+   "date-parts": [
+    [
+     2019,
+     5
+    ]
+   ]
+  },
+  "publisher": "Elsevier BV",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1109/IACC.2017.0146": {
+  "author": [
+   {
+    "given": "Astina",
+    "family": "Minz",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Chandrakant",
+    "family": "Mahobiya",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "MR Image Classification Using Adaboost for Brain Tumor Type"
+  ],
+  "container-title": [
+   "2017 IEEE 7th International Advance Computing Conference (IACC)"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "701-705",
+  "issued": {
+   "date-parts": [
+    [
+     2017,
+     1
+    ]
+   ]
+  },
+  "publisher": "IEEE",
+  "type": "proceedings-article",
+  "article-number": null,
+  "event": {
+   "name": "2017 IEEE 7th International Advance Computing Conference (IACC)",
+   "location": "Hyderabad, India",
+   "start": {
+    "date-parts": [
+     [
+      2017,
+      1,
+      5
+     ]
+    ]
+   },
+   "end": {
+    "date-parts": [
+     [
+      2017,
+      1,
+      7
+     ]
+    ]
+   }
+  }
+ },
+ "10.1109/ACCESS.2019.2927792": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0003-0671-4744",
+    "authenticated-orcid": false,
+    "given": "Ajay",
+    "family": "Patel",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-6047-3051",
+    "authenticated-orcid": false,
+    "given": "Sil. C.",
+    "family": "van de Leemput",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Mathias",
+    "family": "Prokop",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Bram",
+    "family": "Van Ginneken",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Rashindra",
+    "family": "Manniesing",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Image Level Training and Prediction: Intracranial Hemorrhage Identification in 3D Non-Contrast CT"
+  ],
+  "container-title": [
+   "IEEE Access"
+  ],
+  "volume": "7",
+  "issue": null,
+  "page": "92355-92364",
+  "issued": {
+   "date-parts": [
+    [
+     2019
+    ]
+   ]
+  },
+  "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1109/ACCESS.2019.2919122": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0002-6958-7503",
+    "authenticated-orcid": false,
+    "given": "Hossam H.",
+    "family": "Sultan",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-7093-2944",
+    "authenticated-orcid": false,
+    "given": "Nancy M.",
+    "family": "Salem",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-8141-2511",
+    "authenticated-orcid": false,
+    "given": "Walid",
+    "family": "Al-Atabany",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Multi-Classification of Brain Tumor Images Using Deep Neural Network"
+  ],
+  "container-title": [
+   "IEEE Access"
+  ],
+  "volume": "7",
+  "issue": null,
+  "page": "69215-69225",
+  "issued": {
+   "date-parts": [
+    [
+     2019
+    ]
+   ]
+  },
+  "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1016/j.bspc.2023.104875": {
+  "author": [
+   {
+    "given": "Fatima",
+    "family": "Yousaf",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-8464-2275",
+    "authenticated-orcid": false,
+    "given": "Sajid",
+    "family": "Iqbal",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Nosheen",
+    "family": "Fatima",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Tanzeela",
+    "family": "Kousar",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Mohd",
+    "family": "Shafry Mohd Rahim",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Multi-class disease detection using deep learning and human brain medical imaging"
+  ],
+  "container-title": [
+   "Biomedical Signal Processing and Control"
+  ],
+  "volume": "85",
+  "issue": null,
+  "page": "104875",
+  "issued": {
+   "date-parts": [
+    [
+     2023,
+     8
+    ]
+   ]
+  },
+  "publisher": "Elsevier BV",
+  "type": "journal-article",
+  "article-number": "104875",
+  "event": null
+ },
+ "10.1007/978-3-030-11723-8_21": {
+  "author": [
+   {
+    "given": "Yufan",
+    "family": "Zhou",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Zheshuo",
+    "family": "Li",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Hong",
+    "family": "Zhu",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Changyou",
+    "family": "Chen",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Mingchen",
+    "family": "Gao",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Kai",
+    "family": "Xu",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Jinhui",
+    "family": "Xu",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Holistic Brain Tumor Screening and Classification Based on DenseNet and Recurrent Neural Network"
+  ],
+  "container-title": [
+   "Lecture Notes in Computer Science",
+   "Brainlesion: Glioma, Multiple Sclerosis, Stroke and Traumatic Brain Injuries"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "208-217",
+  "issued": {
+   "date-parts": [
+    [
+     2019
+    ]
+   ]
+  },
+  "publisher": "Springer International Publishing",
+  "type": "book-chapter",
+  "article-number": null,
+  "event": null
+ },
+ "10.1109/ICCV.2017.74": {
+  "author": [
+   {
+    "given": "Ramprasaath R.",
+    "family": "Selvaraju",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Michael",
+    "family": "Cogswell",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Abhishek",
+    "family": "Das",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Ramakrishna",
+    "family": "Vedantam",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Devi",
+    "family": "Parikh",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Dhruv",
+    "family": "Batra",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Grad-CAM: Visual Explanations from Deep Networks via Gradient-Based Localization"
+  ],
+  "container-title": [
+   "2017 IEEE International Conference on Computer Vision (ICCV)"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "618-626",
+  "issued": {
+   "date-parts": [
+    [
+     2017,
+     10
+    ]
+   ]
+  },
+  "publisher": "IEEE",
+  "type": "proceedings-article",
+  "article-number": null,
+  "event": {
+   "name": "2017 IEEE International Conference on Computer Vision (ICCV)",
+   "location": "Venice",
+   "start": {
+    "date-parts": [
+     [
+      2017,
+      10,
+      22
+     ]
+    ]
+   },
+   "end": {
+    "date-parts": [
+     [
+      2017,
+      10,
+      29
+     ]
+    ]
+   }
+  }
+ },
+ "10.1109/WACV.2018.00097": {
+  "author": [
+   {
+    "given": "Aditya",
+    "family": "Chattopadhay",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Anirban",
+    "family": "Sarkar",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Prantik",
+    "family": "Howlader",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Vineeth N",
+    "family": "Balasubramanian",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Grad-CAM++: Generalized Gradient-Based Visual Explanations for Deep Convolutional Networks"
+  ],
+  "container-title": [
+   "2018 IEEE Winter Conference on Applications of Computer Vision (WACV)"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "839-847",
+  "issued": {
+   "date-parts": [
+    [
+     2018,
+     3
+    ]
+   ]
+  },
+  "publisher": "IEEE",
+  "type": "proceedings-article",
+  "article-number": null,
+  "event": {
+   "name": "2018 IEEE Winter Conference on Applications of Computer Vision (WACV)",
+   "location": "Lake Tahoe, NV",
+   "start": {
+    "date-parts": [
+     [
+      2018,
+      3,
+      12
+     ]
+    ]
+   },
+   "end": {
+    "date-parts": [
+     [
+      2018,
+      3,
+      15
+     ]
+    ]
+   }
+  }
+ },
+ "10.1145/2939672.2939778": {
+  "author": [
+   {
+    "given": "Marco Tulio",
+    "family": "Ribeiro",
+    "sequence": "first",
+    "affiliation": [
+     {
+      "name": "University of Washington, Seattle, WA, USA"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Sameer",
+    "family": "Singh",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "University of Washington, Seattle, WA, USA"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Carlos",
+    "family": "Guestrin",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "University of Washington, Seattle, WA, USA"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "\"Why Should I Trust You?\""
+  ],
+  "container-title": [
+   "Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "1135-1144",
+  "issued": {
+   "date-parts": [
+    [
+     2016,
+     8,
+     13
+    ]
+   ]
+  },
+  "publisher": "ACM",
+  "type": "proceedings-article",
+  "article-number": null,
+  "event": {
+   "name": "KDD '16: The 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining",
+   "location": "San Francisco California USA",
+   "acronym": "KDD '16",
+   "sponsor": [
+    "SIGMOD ACM Special Interest Group on Management of Data",
+    "SIGKDD ACM Special Interest Group on Knowledge Discovery in Data"
+   ]
+  }
+ },
+ "10.1109/CVPR.2017.195": {
+  "author": [
+   {
+    "given": "Francois",
+    "family": "Chollet",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Xception: Deep Learning with Depthwise Separable Convolutions"
+  ],
+  "container-title": [
+   "2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "1800-1807",
+  "issued": {
+   "date-parts": [
+    [
+     2017,
+     7
+    ]
+   ]
+  },
+  "publisher": "IEEE",
+  "type": "proceedings-article",
+  "article-number": null,
+  "event": {
+   "name": "2017 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)",
+   "location": "Honolulu, HI",
+   "start": {
+    "date-parts": [
+     [
+      2017,
+      7,
+      21
+     ]
+    ]
+   },
+   "end": {
+    "date-parts": [
+     [
+      2017,
+      7,
+      26
+     ]
+    ]
+   }
+  }
+ },
+ "10.1109/CVPR.2016.308": {
+  "author": [
+   {
+    "given": "Christian",
+    "family": "Szegedy",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Vincent",
+    "family": "Vanhoucke",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Sergey",
+    "family": "Ioffe",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Jon",
+    "family": "Shlens",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Zbigniew",
+    "family": "Wojna",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Rethinking the Inception Architecture for Computer Vision"
+  ],
+  "container-title": [
+   "2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "2818-2826",
+  "issued": {
+   "date-parts": [
+    [
+     2016,
+     6
+    ]
+   ]
+  },
+  "publisher": "IEEE",
+  "type": "proceedings-article",
+  "article-number": null,
+  "event": {
+   "name": "2016 IEEE Conference on Computer Vision and Pattern Recognition (CVPR)",
+   "location": "Las Vegas, NV, USA",
+   "start": {
+    "date-parts": [
+     [
+      2016,
+      6,
+      27
+     ]
+    ]
+   },
+   "end": {
+    "date-parts": [
+     [
+      2016,
+      6,
+      30
+     ]
+    ]
+   }
+  }
+ },
+ "10.1007/3-540-45014-9_1": {
+  "author": [
+   {
+    "given": "Thomas G.",
+    "family": "Dietterich",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Ensemble Methods in Machine Learning"
+  ],
+  "container-title": [
+   "Lecture Notes in Computer Science",
+   "Multiple Classifier Systems"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "1-15",
+  "issued": {
+   "date-parts": [
+    [
+     2000
+    ]
+   ]
+  },
+  "publisher": "Springer Berlin Heidelberg",
+  "type": "book-chapter",
+  "article-number": null,
+  "event": null
+ },
+ "10.1038/s42256-019-0048-x": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0003-4283-2780",
+    "authenticated-orcid": false,
+    "given": "Cynthia",
+    "family": "Rudin",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Stop explaining black box machine learning models for high stakes decisions and use interpretable models instead"
+  ],
+  "container-title": [
+   "Nature Machine Intelligence"
+  ],
+  "volume": "1",
+  "issue": "5",
+  "page": "206-215",
+  "issued": {
+   "date-parts": [
+    [
+     2019,
+     5,
+     13
+    ]
+   ]
+  },
+  "publisher": "Springer Science and Business Media LLC",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1007/978-3-319-10590-1_53": {
+  "author": [
+   {
+    "given": "Matthew D.",
+    "family": "Zeiler",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Rob",
+    "family": "Fergus",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Visualizing and Understanding Convolutional Networks"
+  ],
+  "container-title": [
+   "Lecture Notes in Computer Science",
+   "Computer Vision \u2013 ECCV 2014"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "818-833",
+  "issued": {
+   "date-parts": [
+    [
+     2014
+    ]
+   ]
+  },
+  "publisher": "Springer International Publishing",
+  "type": "book-chapter",
+  "article-number": null,
+  "event": null
+ },
+ "10.1023/A:1010933404324": {
+  "author": [
+   {
+    "given": "Leo",
+    "family": "Breiman",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Random Forests"
+  ],
+  "container-title": [
+   "Machine Learning"
+  ],
+  "volume": "45",
+  "issue": "1",
+  "page": "5-32",
+  "issued": {
+   "date-parts": [
+    [
+     2001,
+     10
+    ]
+   ]
+  },
+  "publisher": "Springer Science and Business Media LLC",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1007/BF00116251": {
+  "author": [
+   {
+    "given": "J. R.",
+    "family": "Quinlan",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Induction of decision trees"
+  ],
+  "container-title": [
+   "Machine Learning"
+  ],
+  "volume": "1",
+  "issue": "1",
+  "page": "81-106",
+  "issued": {
+   "date-parts": [
+    [
+     1986,
+     3
+    ]
+   ]
+  },
+  "publisher": "Springer Science and Business Media LLC",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1007/BF02295996": {
+  "author": [
+   {
+    "given": "Quinn",
+    "family": "McNemar",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Note on the Sampling Error of the Difference Between Correlated Proportions or Percentages"
+  ],
+  "container-title": [
+   "Psychometrika"
+  ],
+  "volume": "12",
+  "issue": "2",
+  "page": "153-157",
+  "issued": {
+   "date-parts": [
+    [
+     1947,
+     6
+    ]
+   ]
+  },
+  "publisher": "Cambridge University Press (CUP)",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1162/089976698300017197": {
+  "author": [
+   {
+    "given": "Thomas G.",
+    "family": "Dietterich",
+    "sequence": "first",
+    "affiliation": [
+     {
+      "name": "Department of Computer Science, Oregon State University, Corvallis, OR 97331, U.S.A."
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Approximate Statistical Tests for Comparing Supervised Classification Learning Algorithms"
+  ],
+  "container-title": [
+   "Neural Computation"
+  ],
+  "volume": "10",
+  "issue": "7",
+  "page": "1895-1923",
+  "issued": {
+   "date-parts": [
+    [
+     1998,
+     10,
+     1
+    ]
+   ]
+  },
+  "publisher": "MIT Press",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1214/aos/1176344552": {
+  "author": [
+   {
+    "given": "B.",
+    "family": "Efron",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Bootstrap Methods: Another Look at the Jackknife"
+  ],
+  "container-title": [
+   "The Annals of Statistics"
+  ],
+  "volume": "7",
+  "issue": "1",
+  "page": "1-26",
+  "issued": {
+   "date-parts": [
+    [
+     1979,
+     1,
+     1
+    ]
+   ]
+  },
+  "publisher": "Institute of Mathematical Statistics",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1038/nature14539": {
+  "author": [
+   {
+    "given": "Yann",
+    "family": "LeCun",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Yoshua",
+    "family": "Bengio",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Geoffrey",
+    "family": "Hinton",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Deep learning"
+  ],
+  "container-title": [
+   "Nature"
+  ],
+  "volume": "521",
+  "issue": "7553",
+  "page": "436-444",
+  "issued": {
+   "date-parts": [
+    [
+     2015,
+     5,
+     27
+    ]
+   ]
+  },
+  "publisher": "Springer Science and Business Media LLC",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1016/j.media.2017.07.005": {
+  "author": [
+   {
+    "given": "Geert",
+    "family": "Litjens",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Thijs",
+    "family": "Kooi",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Babak Ehteshami",
+    "family": "Bejnordi",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Arnaud Arindra Adiyoso",
+    "family": "Setio",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Francesco",
+    "family": "Ciompi",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Mohsen",
+    "family": "Ghafoorian",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Jeroen A.W.M.",
+    "family": "van der Laak",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Bram",
+    "family": "van Ginneken",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Clara I.",
+    "family": "S\u00e1nchez",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "A survey on deep learning in medical image analysis"
+  ],
+  "container-title": [
+   "Medical Image Analysis"
+  ],
+  "volume": "42",
+  "issue": null,
+  "page": "60-88",
+  "issued": {
+   "date-parts": [
+    [
+     2017,
+     12
+    ]
+   ]
+  },
+  "publisher": "Elsevier BV",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1109/CVPR.2009.5206848": {
+  "author": [
+   {
+    "given": "Jia",
+    "family": "Deng",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Wei",
+    "family": "Dong",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Richard",
+    "family": "Socher",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Li-Jia",
+    "family": "Li",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "family": "Kai Li",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "family": "Li Fei-Fei",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "ImageNet: A large-scale hierarchical image database"
+  ],
+  "container-title": [
+   "2009 IEEE Conference on Computer Vision and Pattern Recognition"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "248-255",
+  "issued": {
+   "date-parts": [
+    [
+     2009,
+     6
+    ]
+   ]
+  },
+  "publisher": "IEEE",
+  "type": "proceedings-article",
+  "article-number": null,
+  "event": {
+   "name": "2009 IEEE Computer Society Conference on Computer Vision and Pattern Recognition Workshops (CVPR Workshops)",
+   "location": "Miami, FL",
+   "start": {
+    "date-parts": [
+     [
+      2009,
+      6,
+      20
+     ]
+    ]
+   },
+   "end": {
+    "date-parts": [
+     [
+      2009,
+      6,
+      25
+     ]
+    ]
+   }
+  }
+ },
+ "10.1038/s42256-020-00257-z": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0001-7698-3187",
+    "authenticated-orcid": false,
+    "given": "Robert",
+    "family": "Geirhos",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "J\u00f6rn-Henrik",
+    "family": "Jacobsen",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-9812-317X",
+    "authenticated-orcid": false,
+    "given": "Claudio",
+    "family": "Michaelis",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Richard",
+    "family": "Zemel",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Wieland",
+    "family": "Brendel",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Matthias",
+    "family": "Bethge",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-2592-634X",
+    "authenticated-orcid": false,
+    "given": "Felix A.",
+    "family": "Wichmann",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Shortcut learning in deep neural networks"
+  ],
+  "container-title": [
+   "Nature Machine Intelligence"
+  ],
+  "volume": "2",
+  "issue": "11",
+  "page": "665-673",
+  "issued": {
+   "date-parts": [
+    [
+     2020,
+     11,
+     10
+    ]
+   ]
+  },
+  "publisher": "Springer Science and Business Media LLC",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1371/journal.pmed.1002683": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0003-1317-8951",
+    "authenticated-orcid": true,
+    "given": "John R.",
+    "family": "Zech",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-8064-9050",
+    "authenticated-orcid": true,
+    "given": "Marcus A.",
+    "family": "Badgeley",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-0991-3741",
+    "authenticated-orcid": true,
+    "given": "Manway",
+    "family": "Liu",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-2202-6450",
+    "authenticated-orcid": true,
+    "given": "Anthony B.",
+    "family": "Costa",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Joseph J.",
+    "family": "Titano",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-1876-5963",
+    "authenticated-orcid": true,
+    "given": "Eric Karl",
+    "family": "Oermann",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Variable generalization performance of a deep learning model to detect pneumonia in chest radiographs: A cross-sectional study"
+  ],
+  "container-title": [
+   "PLOS Medicine"
+  ],
+  "volume": "15",
+  "issue": "11",
+  "page": "e1002683",
+  "issued": {
+   "date-parts": [
+    [
+     2018,
+     11,
+     6
+    ]
+   ]
+  },
+  "publisher": "Public Library of Science (PLoS)",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1093/neuonc/noab106": {
+  "author": [
+   {
+    "given": "David N",
+    "family": "Louis",
+    "sequence": "first",
+    "affiliation": [
+     {
+      "name": "Department of Pathology, Massachusetts General Hospital and Harvard Medical School, Boston, Massachusetts, USA"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Arie",
+    "family": "Perry",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Pathology, University of California San Francisco, San Francisco, California, USA"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-5453-5201",
+    "authenticated-orcid": false,
+    "given": "Pieter",
+    "family": "Wesseling",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Pathology, Amsterdam University Medical Centers/VUmc, Amsterdam, the Netherlands"
+     },
+     {
+      "name": "Laboratory for Childhood Cancer Pathology, Princess M\u00e1xima Center for Pediatric Oncology, Utrecht, the Netherlands"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-0633-6563",
+    "authenticated-orcid": false,
+    "given": "Daniel J",
+    "family": "Brat",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Pathology, Northwestern University Feinberg School of Medicine, Chicago, Illinois, USA"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Ian A",
+    "family": "Cree",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "International Agency for Research on Cancer, World Health Organization, Lyon, France"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Dominique",
+    "family": "Figarella-Branger",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Service d\u2019Anatomie Pathologique et de Neuropathologie, APHM, CNRS, Institut de Neurophysiopathologie, H\u00f4pital de la Timone, Aix-Marseille University, Marseille, France"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Cynthia",
+    "family": "Hawkins",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Paediatric Laboratory Medicine, The Hospital for Sick Children, University of Toronto, Toronto, ON, Canada"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "H K",
+    "family": "Ng",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Anatomical and Cellular Pathology, Chinese University of Hong Kong, Hong Kong, China"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Stefan M",
+    "family": "Pfister",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Hopp Children\u2019s Cancer Center at the NCT Heidelberg (KiTZ), Division of Pediatric Neurooncology, German Cancer Consortium (DKTK) and German Cancer Research Center (DKFZ), and Department of Pediatric Oncology, Hematology and Immunology, Heidelberg University Hospital, Heidelberg, Germany"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Guido",
+    "family": "Reifenberger",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Institute of Neuropathology, University Hospital D\u00fcsseldorf and Medical Faculty, Heinrich Heine University D\u00fcsseldorf, and German Cancer Consortium (DKTK) Partner Site Essen/D\u00fcsseldorf, D\u00fcsseldorf, Germany"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Riccardo",
+    "family": "Soffietti",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Neurology and Neuro-Oncology, University of Turin Medical School, Turin, Italy"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Andreas",
+    "family": "von Deimling",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Neuropathology, Institute of Pathology, Ruprecht-Karls-University, Heidelberg, Germany"
+     },
+     {
+      "name": "Clinical Cooperation Unit Neuropathology, German Cancer Research Center (DKFZ), and German Cancer Consortium (DKTK), Heidelberg, Germany"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "David W",
+    "family": "Ellison",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Pathology, St. Jude Children\u2019s Research Hospital, Memphis, Tennessee, USA"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "The 2021 WHO Classification of Tumors of the Central Nervous System: a summary"
+  ],
+  "container-title": [
+   "Neuro-Oncology"
+  ],
+  "volume": "23",
+  "issue": "8",
+  "page": "1231-1251",
+  "issued": {
+   "date-parts": [
+    [
+     2021,
+     6,
+     29
+    ]
+   ]
+  },
+  "publisher": "Oxford University Press (OUP)",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1016/j.inffus.2019.12.012": {
+  "author": [
+   {
+    "given": "Alejandro",
+    "family": "Barredo Arrieta",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Natalia",
+    "family": "D\u00edaz-Rodr\u00edguez",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Javier",
+    "family": "Del Ser",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Adrien",
+    "family": "Bennetot",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Siham",
+    "family": "Tabik",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Alberto",
+    "family": "Barbado",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Salvador",
+    "family": "Garcia",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Sergio",
+    "family": "Gil-Lopez",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Daniel",
+    "family": "Molina",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Richard",
+    "family": "Benjamins",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Raja",
+    "family": "Chatila",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Francisco",
+    "family": "Herrera",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Explainable Artificial Intelligence (XAI): Concepts, taxonomies, opportunities and challenges toward responsible AI"
+  ],
+  "container-title": [
+   "Information Fusion"
+  ],
+  "volume": "58",
+  "issue": null,
+  "page": "82-115",
+  "issued": {
+   "date-parts": [
+    [
+     2020,
+     6
+    ]
+   ]
+  },
+  "publisher": "Elsevier BV",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1016/j.media.2022.102470": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0003-3750-2824",
+    "authenticated-orcid": false,
+    "given": "Bas H.M.",
+    "family": "van der Velden",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-6997-9059",
+    "authenticated-orcid": false,
+    "given": "Hugo J.",
+    "family": "Kuijf",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0003-2087-8649",
+    "authenticated-orcid": false,
+    "given": "Kenneth G.A.",
+    "family": "Gilhuijs",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0003-2582-042X",
+    "authenticated-orcid": false,
+    "given": "Max A.",
+    "family": "Viergever",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Explainable artificial intelligence (XAI) in deep learning-based medical image analysis"
+  ],
+  "container-title": [
+   "Medical Image Analysis"
+  ],
+  "volume": "79",
+  "issue": null,
+  "page": "102470",
+  "issued": {
+   "date-parts": [
+    [
+     2022,
+     7
+    ]
+   ]
+  },
+  "publisher": "Elsevier BV",
+  "type": "journal-article",
+  "article-number": "102470",
+  "event": null
+ },
+ "10.1016/j.compbiomed.2021.105111": {
+  "author": [
+   {
+    "given": "Zohaib",
+    "family": "Salahuddin",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Henry C.",
+    "family": "Woodruff",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Avishek",
+    "family": "Chatterjee",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Philippe",
+    "family": "Lambin",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Transparency of deep neural networks for medical image analysis: A review of interpretability methods"
+  ],
+  "container-title": [
+   "Computers in Biology and Medicine"
+  ],
+  "volume": "140",
+  "issue": null,
+  "page": "105111",
+  "issued": {
+   "date-parts": [
+    [
+     2022,
+     1
+    ]
+   ]
+  },
+  "publisher": "Elsevier BV",
+  "type": "journal-article",
+  "article-number": "105111",
+  "event": null
+ },
+ "10.1109/TNNLS.2020.3027314": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0002-1599-1594",
+    "authenticated-orcid": false,
+    "given": "Erico",
+    "family": "Tjoa",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-0872-3276",
+    "authenticated-orcid": false,
+    "given": "Cuntai",
+    "family": "Guan",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "A Survey on Explainable Artificial Intelligence (XAI): Toward Medical XAI"
+  ],
+  "container-title": [
+   "IEEE Transactions on Neural Networks and Learning Systems"
+  ],
+  "volume": "32",
+  "issue": "11",
+  "page": "4793-4813",
+  "issued": {
+   "date-parts": [
+    [
+     2021,
+     11
+    ]
+   ]
+  },
+  "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1016/S2589-7500(21)00208-9": {
+  "author": [
+   {
+    "given": "Marzyeh",
+    "family": "Ghassemi",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Luke",
+    "family": "Oakden-Rayner",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Andrew L",
+    "family": "Beam",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "The false hope of current approaches to explainable artificial intelligence in health care"
+  ],
+  "container-title": [
+   "The Lancet Digital Health"
+  ],
+  "volume": "3",
+  "issue": "11",
+  "page": "e745-e750",
+  "issued": {
+   "date-parts": [
+    [
+     2021,
+     11
+    ]
+   ]
+  },
+  "publisher": "Elsevier BV",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1038/s42256-022-00536-x": {
+  "author": [
+   {
+    "given": "Adriel",
+    "family": "Saporta",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Xiaotong",
+    "family": "Gui",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0003-1301-2679",
+    "authenticated-orcid": false,
+    "given": "Ashwin",
+    "family": "Agrawal",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-1526-3685",
+    "authenticated-orcid": false,
+    "given": "Anuj",
+    "family": "Pareek",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Steven Q. H.",
+    "family": "Truong",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Chanh D. T.",
+    "family": "Nguyen",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Van-Doan",
+    "family": "Ngo",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Jayne",
+    "family": "Seekins",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Francis G.",
+    "family": "Blankenberg",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Andrew Y.",
+    "family": "Ng",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Matthew P.",
+    "family": "Lungren",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-8030-3727",
+    "authenticated-orcid": false,
+    "given": "Pranav",
+    "family": "Rajpurkar",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Benchmarking saliency methods for chest X-ray interpretation"
+  ],
+  "container-title": [
+   "Nature Machine Intelligence"
+  ],
+  "volume": "4",
+  "issue": "10",
+  "page": "867-878",
+  "issued": {
+   "date-parts": [
+    [
+     2022,
+     10,
+     10
+    ]
+   ]
+  },
+  "publisher": "Springer Science and Business Media LLC",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1148/ryai.2021200267": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0003-1424-4703",
+    "authenticated-orcid": false,
+    "given": "Nishanth",
+    "family": "Arun",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-7879-8946",
+    "authenticated-orcid": false,
+    "given": "Nathan",
+    "family": "Gaw",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-6641-2030",
+    "authenticated-orcid": false,
+    "given": "Praveer",
+    "family": "Singh",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-6956-5059",
+    "authenticated-orcid": false,
+    "given": "Ken",
+    "family": "Chang",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Mehak",
+    "family": "Aggarwal",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Bryan",
+    "family": "Chen",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-1881-7065",
+    "authenticated-orcid": false,
+    "given": "Katharina",
+    "family": "Hoebel",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0003-1848-9935",
+    "authenticated-orcid": false,
+    "given": "Sharut",
+    "family": "Gupta",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-8507-795X",
+    "authenticated-orcid": false,
+    "given": "Jay",
+    "family": "Patel",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-8477-2539",
+    "authenticated-orcid": false,
+    "given": "Mishka",
+    "family": "Gidwani",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Julius",
+    "family": "Adebayo",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-6207-4940",
+    "authenticated-orcid": false,
+    "given": "Matthew D.",
+    "family": "Li",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-8906-9618",
+    "authenticated-orcid": false,
+    "given": "Jayashree",
+    "family": "Kalpathy-Cramer",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Assessing the Trustworthiness of Saliency Maps for Localizing                     Abnormalities in Medical Imaging"
+  ],
+  "container-title": [
+   "Radiology: Artificial Intelligence"
+  ],
+  "volume": "3",
+  "issue": "6",
+  "page": null,
+  "issued": {
+   "date-parts": [
+    [
+     2021,
+     11,
+     1
+    ]
+   ]
+  },
+  "publisher": "Radiological Society of North America (RSNA)",
+  "type": "journal-article",
+  "article-number": "e200267",
+  "event": null
+ },
+ "10.1016/j.compmedimag.2019.05.001": {
+  "author": [
+   {
+    "given": "Zar Nawab Khan",
+    "family": "Swati",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Qinghua",
+    "family": "Zhao",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-2488-1653",
+    "authenticated-orcid": false,
+    "given": "Muhammad",
+    "family": "Kabir",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-0914-1577",
+    "authenticated-orcid": false,
+    "given": "Farman",
+    "family": "Ali",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Zakir",
+    "family": "Ali",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Saeed",
+    "family": "Ahmed",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-9190-507X",
+    "authenticated-orcid": false,
+    "given": "Jianfeng",
+    "family": "Lu",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Brain tumor classification for MR images using transfer learning and fine-tuning"
+  ],
+  "container-title": [
+   "Computerized Medical Imaging and Graphics"
+  ],
+  "volume": "75",
+  "issue": null,
+  "page": "34-46",
+  "issued": {
+   "date-parts": [
+    [
+     2019,
+     7
+    ]
+   ]
+  },
+  "publisher": "Elsevier BV",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1016/j.compbiomed.2019.103345": {
+  "author": [
+   {
+    "given": "S.",
+    "family": "Deepak",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "P.M.",
+    "family": "Ameer",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Brain tumor classification using deep CNN features via transfer learning"
+  ],
+  "container-title": [
+   "Computers in Biology and Medicine"
+  ],
+  "volume": "111",
+  "issue": null,
+  "page": "103345",
+  "issued": {
+   "date-parts": [
+    [
+     2019,
+     8
+    ]
+   ]
+  },
+  "publisher": "Elsevier BV",
+  "type": "journal-article",
+  "article-number": "103345",
+  "event": null
+ },
+ "10.1007/s00034-019-01246-3": {
+  "author": [
+   {
+    "given": "Arshia",
+    "family": "Rehman",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Saeeda",
+    "family": "Naz",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-3930-6600",
+    "authenticated-orcid": false,
+    "given": "Muhammad Imran",
+    "family": "Razzak",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Faiza",
+    "family": "Akram",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Muhammad",
+    "family": "Imran",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "A Deep Learning-Based Framework for Automatic Brain Tumors Classification Using Transfer Learning"
+  ],
+  "container-title": [
+   "Circuits, Systems, and Signal Processing"
+  ],
+  "volume": "39",
+  "issue": "2",
+  "page": "757-775",
+  "issued": {
+   "date-parts": [
+    [
+     2019,
+     9,
+     10
+    ]
+   ]
+  },
+  "publisher": "Springer Science and Business Media LLC",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.3390/app10061999": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0002-5856-2626",
+    "authenticated-orcid": false,
+    "given": "Milica M.",
+    "family": "Bad\u017ea",
+    "sequence": "first",
+    "affiliation": [
+     {
+      "name": "Innovation center, School of Electrical Engineering, University of Belgrade, Bulevar kralja Aleksandra 73, 11000 Belgrade, Serbia"
+     },
+     {
+      "name": "School of Electrical Engineering, University of Belgrade, Bulevar kralja Aleksandra 73, 11000 Belgrade, Serbia"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-6113-629X",
+    "authenticated-orcid": false,
+    "given": "Marko \u010c.",
+    "family": "Barjaktarovi\u0107",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "School of Electrical Engineering, University of Belgrade, Bulevar kralja Aleksandra 73, 11000 Belgrade, Serbia"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Classification of Brain Tumors from MRI Images Using a Convolutional Neural Network"
+  ],
+  "container-title": [
+   "Applied Sciences"
+  ],
+  "volume": "10",
+  "issue": "6",
+  "page": "1999",
+  "issued": {
+   "date-parts": [
+    [
+     2020,
+     3,
+     15
+    ]
+   ]
+  },
+  "publisher": "MDPI AG",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.3390/info15040182": {
+  "author": [
+   {
+    "given": "Wandile",
+    "family": "Nhlapho",
+    "sequence": "first",
+    "affiliation": [
+     {
+      "name": "Department of Mathematical and Computational Sciences, University of Venda, Thohoyandou 0950, South Africa"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-9020-3885",
+    "authenticated-orcid": false,
+    "given": "Marcellin",
+    "family": "Atemkeng",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Mathematics, Rhodes University, Grahamstown 6139, South Africa"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-9975-8676",
+    "authenticated-orcid": false,
+    "given": "Yusuf",
+    "family": "Brima",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Institute of Cognitive Science, Osnabr\u00fcck University, 49074 Osnabr\u00fcck, Germany"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Jean-Claude",
+    "family": "Ndogmo",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Mathematical and Computational Sciences, University of Venda, Thohoyandou 0950, South Africa"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Bridging the Gap: Exploring Interpretability in Deep Learning Models for Brain Tumor Detection and Diagnosis from MRI Images"
+  ],
+  "container-title": [
+   "Information"
+  ],
+  "volume": "15",
+  "issue": "4",
+  "page": "182",
+  "issued": {
+   "date-parts": [
+    [
+     2024,
+     3,
+     27
+    ]
+   ]
+  },
+  "publisher": "MDPI AG",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1007/s11548-022-02619-x": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0002-8630-9046",
+    "authenticated-orcid": false,
+    "given": "Ramy A.",
+    "family": "Zeineldin",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-0474-4723",
+    "authenticated-orcid": false,
+    "given": "Mohamed E.",
+    "family": "Karar",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0003-2643-5646",
+    "authenticated-orcid": false,
+    "given": "Ziad",
+    "family": "Elshaer",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-3677-8258",
+    "authenticated-orcid": false,
+    "given": "\u00b7Jan",
+    "family": "Coburger",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-8358-1813",
+    "authenticated-orcid": false,
+    "given": "Christian R.",
+    "family": "Wirtz",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-7118-4730",
+    "authenticated-orcid": false,
+    "given": "Oliver",
+    "family": "Burgert",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-5239-5305",
+    "authenticated-orcid": false,
+    "given": "Franziska",
+    "family": "Mathis-Ullrich",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Explainability of deep neural networks for MRI analysis of brain tumors"
+  ],
+  "container-title": [
+   "International Journal of Computer Assisted Radiology and Surgery"
+  ],
+  "volume": "17",
+  "issue": "9",
+  "page": "1673-1683",
+  "issued": {
+   "date-parts": [
+    [
+     2022,
+     4,
+     23
+    ]
+   ]
+  },
+  "publisher": "Springer Science and Business Media LLC",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.3390/jpm11111213": {
+  "author": [
+   {
+    "given": "Morteza",
+    "family": "Esmaeili",
+    "sequence": "first",
+    "affiliation": [
+     {
+      "name": "Department of Diagnostic Imaging, Akershus University Hospital, 1478 L\u00f8renskog, Norway"
+     },
+     {
+      "name": "Department of Electrical Engineering and Computer Science, Faculty of Science and Technology, University of Stavanger, 4021 Stavanger, Norway"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-2152-4933",
+    "authenticated-orcid": false,
+    "given": "Riyas",
+    "family": "Vettukattil",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Faculty of Medicine, Institute of Clinical Medicine, University of Oslo, 0315 Oslo, Norway"
+     },
+     {
+      "name": "Division of Paediatric and Adolescent Medicine, Oslo University Hospital, 0372 Oslo, Norway"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Hasan",
+    "family": "Banitalebi",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Diagnostic Imaging, Akershus University Hospital, 1478 L\u00f8renskog, Norway"
+     },
+     {
+      "name": "Faculty of Medicine, Institute of Clinical Medicine, University of Oslo, 0315 Oslo, Norway"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Nina R.",
+    "family": "Krogh",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Diagnostic Imaging, Akershus University Hospital, 1478 L\u00f8renskog, Norway"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0001-9259-1060",
+    "authenticated-orcid": false,
+    "given": "Jonn Terje",
+    "family": "Geitung",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Diagnostic Imaging, Akershus University Hospital, 1478 L\u00f8renskog, Norway"
+     },
+     {
+      "name": "Faculty of Medicine, Institute of Clinical Medicine, University of Oslo, 0315 Oslo, Norway"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Explainable Artificial Intelligence for Human-Machine Interaction in Brain Tumor Localization"
+  ],
+  "container-title": [
+   "Journal of Personalized Medicine"
+  ],
+  "volume": "11",
+  "issue": "11",
+  "page": "1213",
+  "issued": {
+   "date-parts": [
+    [
+     2021,
+     11,
+     16
+    ]
+   ]
+  },
+  "publisher": "MDPI AG",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1016/j.engappai.2022.105151": {
+  "author": [
+   {
+    "given": "M.A.",
+    "family": "Ganaie",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-3658-0890",
+    "authenticated-orcid": false,
+    "given": "Minghui",
+    "family": "Hu",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-0451-7547",
+    "authenticated-orcid": false,
+    "given": "A.K.",
+    "family": "Malik",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-5727-3697",
+    "authenticated-orcid": false,
+    "given": "M.",
+    "family": "Tanveer",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0003-0901-5105",
+    "authenticated-orcid": false,
+    "given": "P.N.",
+    "family": "Suganthan",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Ensemble deep learning: A review"
+  ],
+  "container-title": [
+   "Engineering Applications of Artificial Intelligence"
+  ],
+  "volume": "115",
+  "issue": null,
+  "page": "105151",
+  "issued": {
+   "date-parts": [
+    [
+     2022,
+     10
+    ]
+   ]
+  },
+  "publisher": "Elsevier BV",
+  "type": "journal-article",
+  "article-number": "105151",
+  "event": null
+ },
+ "10.3390/s21062222": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0003-1211-2678",
+    "authenticated-orcid": false,
+    "given": "Jaeyong",
+    "family": "Kang",
+    "sequence": "first",
+    "affiliation": [
+     {
+      "name": "Department of Software, Korea National University of Transportation, Chungju 27469, Korea"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Zahid",
+    "family": "Ullah",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Software, Korea National University of Transportation, Chungju 27469, Korea"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Jeonghwan",
+    "family": "Gwak",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Software, Korea National University of Transportation, Chungju 27469, Korea"
+     },
+     {
+      "name": "Department of Biomedical Engineering, Korea National University of Transportation, Chungju 27469, Korea"
+     },
+     {
+      "name": "Department of AI Robotics Engineering, Korea National University of Transportation, Chungju 27469, Korea"
+     },
+     {
+      "name": "Department of IT Convergence (Brain Korea PLUS 21), Korea National University of Transportation, Chungju 27469, Korea"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "MRI-Based Brain Tumor Classification Using Ensemble of Deep Features and Machine Learning Classifiers"
+  ],
+  "container-title": [
+   "Sensors"
+  ],
+  "volume": "21",
+  "issue": "6",
+  "page": "2222",
+  "issued": {
+   "date-parts": [
+    [
+     2021,
+     3,
+     22
+    ]
+   ]
+  },
+  "publisher": "MDPI AG",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1186/s12911-023-02114-6": {
+  "author": [
+   {
+    "given": "Soheila",
+    "family": "Saeedi",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Sorayya",
+    "family": "Rezayi",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Hamidreza",
+    "family": "Keshavarz",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Sharareh",
+    "family": "R. Niakan Kalhori",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "MRI-based brain tumor detection using convolutional deep learning methods and chosen machine learning techniques"
+  ],
+  "container-title": [
+   "BMC Medical Informatics and Decision Making"
+  ],
+  "volume": "23",
+  "issue": "1",
+  "page": null,
+  "issued": {
+   "date-parts": [
+    [
+     2023,
+     1,
+     23
+    ]
+   ]
+  },
+  "publisher": "Springer Science and Business Media LLC",
+  "type": "journal-article",
+  "article-number": "16",
+  "event": null
+ },
+ "10.1038/s41591-018-0300-7": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0002-1478-4729",
+    "authenticated-orcid": false,
+    "given": "Eric J.",
+    "family": "Topol",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "High-performance medicine: the convergence of human and artificial intelligence"
+  ],
+  "container-title": [
+   "Nature Medicine"
+  ],
+  "volume": "25",
+  "issue": "1",
+  "page": "44-56",
+  "issued": {
+   "date-parts": [
+    [
+     2019,
+     1
+    ]
+   ]
+  },
+  "publisher": "Springer Science and Business Media LLC",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1186/s12916-019-1426-2": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0000-0002-1246-844X",
+    "authenticated-orcid": false,
+    "given": "Christopher J.",
+    "family": "Kelly",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Alan",
+    "family": "Karthikesalingam",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Mustafa",
+    "family": "Suleyman",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Greg",
+    "family": "Corrado",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Dominic",
+    "family": "King",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Key challenges for delivering clinical impact with artificial intelligence"
+  ],
+  "container-title": [
+   "BMC Medicine"
+  ],
+  "volume": "17",
+  "issue": "1",
+  "page": null,
+  "issued": {
+   "date-parts": [
+    [
+     2019,
+     10,
+     29
+    ]
+   ]
+  },
+  "publisher": "Springer Science and Business Media LLC",
+  "type": "journal-article",
+  "article-number": "195",
+  "event": null
+ },
+ "10.1016/j.patcog.2016.11.008": {
+  "author": [
+   {
+    "given": "Gr\u00e9goire",
+    "family": "Montavon",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Sebastian",
+    "family": "Lapuschkin",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Alexander",
+    "family": "Binder",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Wojciech",
+    "family": "Samek",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Klaus-Robert",
+    "family": "M\u00fcller",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Explaining nonlinear classification decisions with deep Taylor decomposition"
+  ],
+  "container-title": [
+   "Pattern Recognition"
+  ],
+  "volume": "65",
+  "issue": null,
+  "page": "211-222",
+  "issued": {
+   "date-parts": [
+    [
+     2017,
+     5
+    ]
+   ]
+  },
+  "publisher": "Elsevier BV",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.1109/TMI.2016.2528162": {
+  "author": [
+   {
+    "given": "Hoo-Chang",
+    "family": "Shin",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Holger R.",
+    "family": "Roth",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Mingchen",
+    "family": "Gao",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Le",
+    "family": "Lu",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Ziyue",
+    "family": "Xu",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Isabella",
+    "family": "Nogues",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Jianhua",
+    "family": "Yao",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Daniel",
+    "family": "Mollura",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Ronald M.",
+    "family": "Summers",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Deep Convolutional Neural Networks for Computer-Aided Detection: CNN Architectures, Dataset Characteristics and Transfer Learning"
+  ],
+  "container-title": [
+   "IEEE Transactions on Medical Imaging"
+  ],
+  "volume": "35",
+  "issue": "5",
+  "page": "1285-1298",
+  "issued": {
+   "date-parts": [
+    [
+     2016,
+     5
+    ]
+   ]
+  },
+  "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.3390/cancers17172853": {
+  "author": [
+   {
+    "ORCID": "https://orcid.org/0009-0005-5548-9805",
+    "authenticated-orcid": false,
+    "given": "Shawon Chakrabarty",
+    "family": "Kakon",
+    "sequence": "first",
+    "affiliation": [
+     {
+      "name": "Department of Artificial Intelligence and Big Data, Woosong University, Daejeon 34606, Republic of Korea"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Zawad Al",
+    "family": "Sazid",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Artificial Intelligence and Big Data, Woosong University, Daejeon 34606, Republic of Korea"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Ismat Ara",
+    "family": "Begum",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Biomedical Sciences and Institute for Medical Science, Jeonbuk National University Medical School, Jeonju 54907, Republic of Korea"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0002-1990-6924",
+    "authenticated-orcid": false,
+    "given": "Md Abdus",
+    "family": "Samad",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Information and Communication Engineering, Yeungnam University, Gyeongsan 38541, Republic of Korea"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "ORCID": "https://orcid.org/0000-0003-0934-0995",
+    "authenticated-orcid": false,
+    "given": "A. S. M. Sanwar",
+    "family": "Hosen",
+    "sequence": "additional",
+    "affiliation": [
+     {
+      "name": "Department of Artificial Intelligence and Big Data, Woosong University, Daejeon 34606, Republic of Korea"
+     }
+    ],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Explainable Deep Ensemble Meta-Learning Framework for Brain Tumor Classification Using MRI Images"
+  ],
+  "container-title": [
+   "Cancers"
+  ],
+  "volume": "17",
+  "issue": "17",
+  "page": "2853",
+  "issued": {
+   "date-parts": [
+    [
+     2025,
+     8,
+     30
+    ]
+   ]
+  },
+  "publisher": "MDPI AG",
+  "type": "journal-article",
+  "article-number": null,
+  "event": null
+ },
+ "10.3389/fdata.2024.1366415": {
+  "author": [
+   {
+    "given": "Muhammad",
+    "family": "Aasem",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Muhammad",
+    "family": "Javed Iqbal",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Toward explainable AI in radiology: Ensemble-CAM for effective thoracic disease localization in chest X-ray images using weak supervised learning"
+  ],
+  "container-title": [
+   "Frontiers in Big Data"
+  ],
+  "volume": "7",
+  "issue": null,
+  "page": null,
+  "issued": {
+   "date-parts": [
+    [
+     2024,
+     5,
+     2
+    ]
+   ]
+  },
+  "publisher": "Frontiers Media SA",
+  "type": "journal-article",
+  "article-number": "1366415",
+  "event": null
+ },
+ "10.1007/978-981-13-9042-5_45": {
+  "author": [
+   {
+    "given": "Prasun Chandra",
+    "family": "Tripathi",
+    "sequence": "first",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   },
+   {
+    "given": "Soumen",
+    "family": "Bag",
+    "sequence": "additional",
+    "affiliation": [],
+    "role": [
+     {
+      "vocabulary": "crossref",
+      "role": "author"
+     }
+    ]
+   }
+  ],
+  "title": [
+   "Non-invasively Grading of Brain Tumor Through Noise Robust Textural and Intensity Based Features"
+  ],
+  "container-title": [
+   "Advances in Intelligent Systems and Computing",
+   "Computational Intelligence in Pattern Recognition"
+  ],
+  "volume": null,
+  "issue": null,
+  "page": "531-539",
+  "issued": {
+   "date-parts": [
+    [
+     2019,
+     8,
+     18
+    ]
+   ]
+  },
+  "publisher": "Springer Singapore",
+  "type": "book-chapter",
+  "article-number": null,
+  "event": null
+ }
+}

@@ -1,0 +1,67 @@
+{
+  "cam_method": "hirescam",
+  "n_images": 1600,
+  "n_misclassified": 124,
+  "mean_eaa_all": 0.0985,
+  "mean_eaa_correct": 0.1029,
+  "mean_eaa_misclassified": 0.0471,
+  "mean_eaa_by_true_class": {
+    "glioma": 0.0982,
+    "meningioma": 0.0683,
+    "notumor": 0.1453,
+    "pituitary": 0.0823
+  },
+  "auroc_low_eaa_predicts_error": 0.7525,
+  "mann_whitney_p_value": 4.304345094990224e-21,
+  "threshold_table": [
+    {
+      "threshold": 0.2,
+      "flagged_pct": 94.19,
+      "errors_caught_pct": 99.19,
+      "error_rate_in_flagged_pct": 8.16,
+      "error_rate_in_unflagged_pct": 1.08
+    },
+    {
+      "threshold": 0.3,
+      "flagged_pct": 100.0,
+      "errors_caught_pct": 100.0,
+      "error_rate_in_flagged_pct": 7.75,
+      "error_rate_in_unflagged_pct": null
+    },
+    {
+      "threshold": 0.4,
+      "flagged_pct": 100.0,
+      "errors_caught_pct": 100.0,
+      "error_rate_in_flagged_pct": 7.75,
+      "error_rate_in_unflagged_pct": null
+    },
+    {
+      "threshold": 0.5,
+      "flagged_pct": 100.0,
+      "errors_caught_pct": 100.0,
+      "error_rate_in_flagged_pct": 7.75,
+      "error_rate_in_unflagged_pct": null
+    },
+    {
+      "threshold": 0.6,
+      "flagged_pct": 100.0,
+      "errors_caught_pct": 100.0,
+      "error_rate_in_flagged_pct": 7.75,
+      "error_rate_in_unflagged_pct": null
+    },
+    {
+      "threshold": 0.65,
+      "flagged_pct": 100.0,
+      "errors_caught_pct": 100.0,
+      "error_rate_in_flagged_pct": 7.75,
+      "error_rate_in_unflagged_pct": null
+    },
+    {
+      "threshold": 0.7,
+      "flagged_pct": 100.0,
+      "errors_caught_pct": 100.0,
+      "error_rate_in_flagged_pct": 7.75,
+      "error_rate_in_unflagged_pct": null
+    }
+  ]
+}

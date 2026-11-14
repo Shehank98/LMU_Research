@@ -1,0 +1,19 @@
+{
+  "n_test": 1600,
+  "labels_match_log": true,
+  "CNN": {
+    "agreement_with_logged_predictions": 1.0,
+    "recomputed_accuracy": 0.905,
+    "max_abs_conf_diff": 0.0
+  },
+  "InceptionV3": {
+    "agreement_with_logged_predictions": 1.0,
+    "recomputed_accuracy": 0.8638,
+    "max_abs_conf_diff": 1e-05
+  },
+  "Xception": {
+    "agreement_with_logged_predictions": 1.0,
+    "recomputed_accuracy": 0.8775,
+    "max_abs_conf_diff": 0.0
+  }
+}

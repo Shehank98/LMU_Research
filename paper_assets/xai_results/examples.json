@@ -1,0 +1,123 @@
+{
+  "examples": [
+    {
+      "kind": "correct",
+      "idx": 315,
+      "true": 0,
+      "pred": 0,
+      "file": "glioma/Te-gl_383.jpg",
+      "ensemble_confidence": 0.9996,
+      "model_pred": {
+        "CNN": 0,
+        "Xception": 0,
+        "InceptionV3": 0
+      }
+    },
+    {
+      "kind": "correct",
+      "idx": 754,
+      "true": 1,
+      "pred": 1,
+      "file": "meningioma/Te-me_58.jpg",
+      "ensemble_confidence": 0.9954,
+      "model_pred": {
+        "CNN": 1,
+        "Xception": 1,
+        "InceptionV3": 1
+      }
+    },
+    {
+      "kind": "correct",
+      "idx": 1162,
+      "true": 2,
+      "pred": 2,
+      "file": "notumor/Te-no_65.jpg",
+      "ensemble_confidence": 0.9998,
+      "model_pred": {
+        "CNN": 2,
+        "Xception": 2,
+        "InceptionV3": 2
+      }
+    },
+    {
+      "kind": "correct",
+      "idx": 1572,
+      "true": 3,
+      "pred": 3,
+      "file": "pituitary/Te-pi_74.jpg",
+      "ensemble_confidence": 0.9987,
+      "model_pred": {
+        "CNN": 3,
+        "Xception": 3,
+        "InceptionV3": 3
+      }
+    },
+    {
+      "kind": "misclassified",
+      "idx": 8,
+      "true": 0,
+      "pred": 1,
+      "n_such_errors": 65,
+      "file": "glioma/Te-gl_106.jpg",
+      "ensemble_confidence": 0.9166,
+      "model_pred": {
+        "CNN": 1,
+        "Xception": 1,
+        "InceptionV3": 1
+      }
+    },
+    {
+      "kind": "misclassified",
+      "idx": 492,
+      "true": 1,
+      "pred": 3,
+      "n_such_errors": 10,
+      "file": "meningioma/Te-aug-me_9.jpg",
+      "ensemble_confidence": 0.7521,
+      "model_pred": {
+        "CNN": 3,
+        "Xception": 3,
+        "InceptionV3": 3
+      }
+    },
+    {
+      "kind": "misclassified",
+      "idx": 376,
+      "true": 0,
+      "pred": 2,
+      "n_such_errors": 23,
+      "file": "glioma/Te-gl_78.jpg",
+      "ensemble_confidence": 0.9955,
+      "model_pred": {
+        "CNN": 2,
+        "Xception": 2,
+        "InceptionV3": 2
+      }
+    },
+    {
+      "kind": "misclassified",
+      "idx": 1449,
+      "true": 3,
+      "pred": 1,
+      "n_such_errors": 10,
+      "file": "pituitary/Te-pi_323.jpg",
+      "ensemble_confidence": 0.9645,
+      "model_pred": {
+        "CNN": 1,
+        "Xception": 1,
+        "InceptionV3": 1
+      }
+    }
+  ],
+  "shap_implementation": "shap.GradientExplainer",
+  "shap_background": 50,
+  "lime_samples": {
+    "CNN": 600,
+    "Xception": 400
+  },
+  "occlusion": {
+    "patch": 32,
+    "stride": 16,
+    "fill": 0
+  }
+}
