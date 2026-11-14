@@ -37,4 +37,5 @@ out = {'rf_accuracy_recomputed_pct': round(100 * acc, 2), 'n_explained': int(len
        'dead_or_inactive_features': int(((F > 0).mean(0) == 0).sum()), 'mean_active_fraction': round(active, 4),
        'top5_units': [int(k) for k in top[:5]], 'top5_share_pct': round(100 * float(imp[top[:5]].sum() / imp.sum()), 2),
        'class_specific_top_unit': {LABELS[c]: int(np.argmax(imp[:, c])) for c in range(4)}}
+pd.DataFrame(imp, columns=LABELS).rename_axis('unit').to_csv(os.path.join(RES, 'shap_rf_importance.csv'))
 json.dump(out, open(os.path.join(RES, 'shap_rf.json'), 'w'), indent=1); print(out)
