@@ -1,0 +1,14 @@
+{
+  "Training": {
+    "glioma": 1400,
+    "meningioma": 1400,
+    "notumor": 1400,
+    "pituitary": 1400
+  },
+  "Testing": {
+    "glioma": 400,
+    "meningioma": 400,
+    "notumor": 400,
+    "pituitary": 400
+  }
+}
