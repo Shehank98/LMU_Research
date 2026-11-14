@@ -170,7 +170,7 @@ def appendices(V):
         B(['Trained models and logged results: Hugging Face repository shehank98/brain-tumor-mri-models (Kavishka, 2026), folders models/ and results_2026-10-22/.',
            'Copies of the logged results used in this report: metrics/, confusion/, history/ and logs/ in the project repository.',
            'Training code: final_code_set_2026-10-22/Brain_Tumor_Train_And_Log.ipynb (one notebook per model in individual_models/).',
-           'Analysis code for this report: paper_assets/scripts/01_verify_models.py to 09_rerun_final_ensemble.py; outputs in paper_assets/xai_results/; figures in paper_assets/figures/.',
+           'Analysis code for this report: paper_assets/scripts/01_verify_models.py to 11_excel_charts.py (03b_xai_summary_sanity.py completes the quantitative XAI stage); outputs in paper_assets/xai_results/; figures in paper_assets/figures/; editable charts in output/Paper_Charts_Editable.xlsx.',
            'Document build and checks: paper_assets/build/ (build_paper.py, check_paper.py); audit of the HND report: AUDIT.md.'], new=True),
     ]
 

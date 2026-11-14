@@ -27,7 +27,7 @@ def build(highlight, path):
     r = Renderer(doc, highlight, V)
     r.render(front + rest)
     doc.core_properties.title = ch_front.TITLE; doc.core_properties.author = ch_front.STUDENT
-    doc.save(path); return r
+    finalize(doc); doc.save(path); return r
 
 if __name__ == '__main__':
     build(True, os.path.join(OUT, 'Brain_Tumor_XAI_Research_Paper.docx'))

@@ -47,6 +47,6 @@ axs[1].set_title('Mean pairwise ρ (sample)')
 s = sc.groupby('model')[['outside', 'rim', 'outside_area', 'rim_area']].mean().loc[['CNN', 'Xception', 'InceptionV3']]
 xx = np.arange(3); axs[2].bar(xx - .2, 100 * (s.outside + s.rim), .4, color='#B5487F', label='Share of Grad-CAM mass')
 axs[2].bar(xx + .2, 100 * (s.outside_area + s.rim_area), .4, color='#C9C9C9', label='Share of image area')
-axs[2].set_xticks(xx, s.index); axs[2].set_ylabel('% outside head or in skull rim'); axs[2].legend(frameon=False, fontsize=6); axs[2].set_title('Attention outside the brain')
+axs[2].set_xticks(xx, ['CNN', 'Xception', 'IncV3']); axs[2].set_ylim(0, 75); axs[2].set_ylabel('% outside head or in skull rim'); axs[2].legend(frameon=False, fontsize=6, loc='upper center', ncol=1); axs[2].set_title('Attention outside the brain')
 f.tight_layout(); f.savefig(os.path.join(FIG, 'fig_consistency_shortcut.png')); plt.close(f)
 print('ok')

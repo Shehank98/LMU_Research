@@ -33,6 +33,7 @@ def load():
         for k, v in d.items():
             if isinstance(v, dict): flat(prefix + k + '.', v)
             elif isinstance(v, list): V[prefix + k] = '–'.join((f'{x:.2f}' if isinstance(x, float) else str(x)) for x in v)
+            elif isinstance(v, float) and k in ('acc', 'majority_acc_pct'): V[prefix + k] = f'{v:.2f}'
             else: V[prefix + k] = str(v)
     flat('st.', {k: v for k, v in st.items() if k not in ('mcnemar',)})
     for r in pd.read_csv(os.path.join(RES, 'mcnemar.csv')).to_dict('records'):
@@ -47,8 +48,14 @@ def load():
         for mdl, lst in j(q).get('sanity_check', {}).items():
             if isinstance(lst, list):
                 for i, d in enumerate(lst):
-                    V[f'san.{mdl}.{i}.layer'] = d['randomised_up_to']; V[f'san.{mdl}.{i}.rho'] = f"{d['spearman']:.3f}"; V[f'san.{mdl}.{i}.ssim'] = f"{d['ssim']:.3f}"
+                    V[f'san.{mdl}.{i}.layer'] = (d['randomised_up_to'].split('_')[0] + ' (all layers)') if d['randomised_up_to'].startswith('block') else d['randomised_up_to'] + (' (output layer)' if i == 0 else ''); V[f'san.{mdl}.{i}.rho'] = f"{d['spearman']:.3f}"; V[f'san.{mdl}.{i}.ssim'] = f"{d['ssim']:.3f}"
                 V[f'san.{mdl}.last.rho'] = f"{lst[-1]['spearman']:.3f}"; V[f'san.{mdl}.last.ssim'] = f"{lst[-1]['ssim']:.3f}"; V[f'san.{mdl}.first.rho'] = f"{lst[0]['spearman']:.3f}"
+    if 'xai_quantitative.consistency.mannwhitney_p_rho' in V: V['cons.p'] = fmt_p(float(V['xai_quantitative.consistency.mannwhitney_p_rho']))
+    for m in ['CNN', 'Xception', 'InceptionV3']:
+        k = f'xai_quantitative.shortcut.{m}.'
+        if k + 'mean_energy_in_rim_pct' in V:
+            V[f'sc.{m}.mass'] = f"{float(V[k + 'mean_energy_outside_head_pct']) + float(V[k + 'mean_energy_in_rim_pct']):.2f}"
+            V['sc.area'] = f"{float(V[k + 'mean_area_outside_head_pct']) + float(V[k + 'mean_area_rim_pct']):.2f}"
     p = os.path.join(RES, 'deletion_insertion.csv')
     if os.path.exists(p):
         for _, r in pd.read_csv(p).iterrows():

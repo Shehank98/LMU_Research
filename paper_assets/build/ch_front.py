@@ -59,8 +59,8 @@ def blocks():
           'applied Grad-CAM, Grad-CAM++, HiResCAM, LIME, SHAP and occlusion to the saved models and evaluated the explanations with '
           'deletion and insertion tests, a weight-randomisation sanity check, a cross-model agreement score (EAA-IoU) and a check for '
           'attention outside the brain. Explanations were more faithful than a random baseline and passed the sanity check, but the three '
-          'networks often attended to different regions, and agreement between them flagged errors less well than the ensemble’s own '
-          'confidence. The framework is a transparent research prototype for decision support, not a diagnostic device; clinical use would '
+          'networks often attended to different regions, the CNN placed about half of its attention outside the brain, and agreement '
+          'between the models flagged errors less well than the ensemble’s own confidence. The framework is a transparent research prototype for decision support, not a diagnostic device; clinical use would '
           'need external validation and radiologist review.', new=True),
         P('**Keywords:** brain tumour MRI; convolutional neural networks; transfer learning; ensemble learning; explainable AI; Grad-CAM; SHAP; LIME', new=True),
         RAW(lambda d, r: list_title(d, 'Table of Contents')), RAW(lambda d, r: toc(d, 'toc')),

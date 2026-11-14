@@ -99,6 +99,10 @@ and the training code in `final_code_set_2026-10-22/`.
 * The novelty claim is therefore kept modest. EAA-IoU is presented as an annotation-free agreement signal that is
   significantly associated with error, not as a replacement for confidence.
 
+## D2. Cross-check with the student's own Drive copies
+The result folders uploaded from Google Drive on 2026-11-14 (`confusion-20261114…`, `history-20261114…`, `metrics-20261114…`) are identical to the
+Hugging Face copies; the extra `final_probs.npz` reproduces 92.50% (majority) and 92.25% (confidence-weighted).
+
 ## E. Items the student must verify manually
 1. Module code, module leader and supervisor names on the title page and declaration. The template says
    Mr. Thepul Ginige; the interim report says Prof. Ruvan Abeysekara and Ms. Hiruni Wimalaweera.

@@ -6,6 +6,7 @@
 | `Brain_Tumor_XAI_Research_Paper.docx` | Full paper. New material is in **yellow highlight**, new headings end with **[NEW]**, and new figures and code listings have an orange left border. |
 | `Brain_Tumor_XAI_Research_Paper_clean.docx` | Same paper with no highlighting and no [NEW] tags. Submit this one. |
 | `Brain_Tumor_XAI_Research_Paper_clean.pdf` | PDF of the clean version, used for the visual layout check. |
+| `Paper_Charts_Editable.xlsx` | Every data chart of the paper as a native Excel chart, with its numbers in a table next to it. Blue cells are inputs you can change; black cells are formulas (normalised confusion matrices, Wilson intervals, McNemar p-values, AUC, EAA-IoU alert rate). Sheet names start with the paper's figure numbers. |
 | `check_report.txt` | Output of the automated cross-checks (numbers, figure/table references, citations, placeholders, word count). |
 
 The table of contents and the lists of figures, tables and listings are real Word fields. Word refreshes them when the
@@ -37,6 +38,11 @@ file is opened, because the file asks it to. Accept the "update fields" prompt, 
 * **References:** 62 Harvard entries. Every DOI was checked on Crossref (`paper_assets/references/crossref_metadata.json`).
   The remaining 9 entries (NeurIPS/BMVC/OSDI/JMLR/arXiv papers, the Kaggle dataset, the HF mirror and the HF model
   repository) were checked by web search or on Hugging Face.
+
+## Note on the uploaded result folders
+The folders `confusion-2026…/`, `history-2026…/` and `metrics-2026…/` that you uploaded from Google Drive are byte-for-byte identical to the
+Hugging Face copies used here (`confusion/`, `history/`, `metrics/`). Your extra `final_probs.npz` reproduces 92.50% / 92.25%.
+You can delete the duplicate upload folders if you wish.
 
 ## What was corrected
 See `AUDIT.md` and Appendix F (change log). The main corrections:
@@ -75,12 +81,14 @@ See `AUDIT.md` and Appendix F (change log). The main corrections:
 python paper_assets/scripts/01_verify_models.py          # needs the test images in $MRI_DATA and models in $MODEL_DIR
 python paper_assets/scripts/02_xai_examples.py
 python paper_assets/scripts/03_xai_quantitative.py
+python paper_assets/scripts/03b_xai_summary_sanity.py   # summaries + sanity check (split out to limit memory)
 python paper_assets/scripts/05_figures_stats.py
 python paper_assets/scripts/06_xai_example_figures.py
 python paper_assets/scripts/07_shap_rf.py
 python paper_assets/scripts/08_diagrams.py
 python paper_assets/scripts/09_rerun_final_ensemble.py
 python paper_assets/scripts/10_xai_quant_figures.py
+python paper_assets/scripts/11_excel_charts.py          # editable Excel charts
 python paper_assets/build/build_paper.py
 python paper_assets/build/check_paper.py output/Brain_Tumor_XAI_Research_Paper_clean.docx
 /usr/bin/python3 paper_assets/build/render_pdf.py output/Brain_Tumor_XAI_Research_Paper_clean.docx output/Brain_Tumor_XAI_Research_Paper_clean.pdf

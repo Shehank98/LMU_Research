@@ -125,7 +125,7 @@ class Renderer:
             k = m.group(1)
             if k not in self.values: raise KeyError('missing value ' + k)
             return str(self.values[k])
-        return re.sub(r'<<([\w.\-]+)>>', val, text)
+        return re.sub(r'<<([^<>]+)>>', val, text)
     def caption(self, kind, key, text, new, before=False):
         label = {'fig': 'Figure', 'tab': 'Table', 'lst': 'Listing'}[kind]
         p = self.doc.add_paragraph(style='Caption')
@@ -179,7 +179,7 @@ class Renderer:
         tr = t.rows[0]._tr; trPr = tr.get_or_add_trPr(); th = OxmlElement('w:tblHeader'); th.set(qn('w:val'), 'true'); trPr.append(th)
         if widths:
             t.autofit = False
-            tblPr = t._tbl.tblPr; lay = OxmlElement('w:tblLayout'); lay.set(qn('w:type'), 'fixed'); tblPr.append(lay)
+            tblPr = t._tbl.tblPr
             tw = OxmlElement('w:tblW'); tw.set(qn('w:w'), str(int(sum(widths) * 567))); tw.set(qn('w:type'), 'dxa')
             old = tblPr.find(qn('w:tblW'))
             if old is not None: tblPr.remove(old)
@@ -204,3 +204,39 @@ class Renderer:
             _shade(p, 'F2F2F2')
             if new and self.hl: _left_border(p)
         self.doc.add_paragraph().paragraph_format.space_after = Pt(2)
+
+# ---------------------------------------------------------------- schema-order clean-up before saving
+_ORDER = {
+ 'pPr': ['pStyle', 'keepNext', 'keepLines', 'pageBreakBefore', 'framePr', 'widowControl', 'numPr', 'suppressLineNumbers', 'pBdr', 'shd', 'tabs',
+         'suppressAutoHyphens', 'kinsoku', 'wordWrap', 'overflowPunct', 'topLinePunct', 'autoSpaceDE', 'autoSpaceDN', 'bidi', 'adjustRightInd',
+         'snapToGrid', 'spacing', 'ind', 'contextualSpacing', 'mirrorIndents', 'suppressOverlap', 'jc', 'textDirection', 'textAlignment',
+         'textboxTightWrap', 'outlineLvl', 'divId', 'cnfStyle', 'rPr', 'sectPr', 'pPrChange'],
+ 'tblPr': ['tblStyle', 'tblpPr', 'tblOverlap', 'bidiVisual', 'tblStyleRowBandSize', 'tblStyleColBandSize', 'tblW', 'jc', 'tblCellSpacing', 'tblInd',
+           'tblBorders', 'shd', 'tblLayout', 'tblCellMar', 'tblLook', 'tblCaption', 'tblDescription', 'tblPrChange'],
+ 'sectPr': ['headerReference', 'footerReference', 'footnotePr', 'endnotePr', 'type', 'pgSz', 'pgMar', 'paperSrc', 'pgBorders', 'lnNumType', 'pgNumType',
+            'cols', 'formProt', 'vAlign', 'noEndnote', 'titlePg', 'textDirection', 'bidi', 'rtlGutter', 'docGrid', 'printerSettings', 'sectPrChange'],
+ 'tcPr': ['cnfStyle', 'tcW', 'gridSpan', 'hMerge', 'vMerge', 'tcBorders', 'shd', 'noWrap', 'tcMar', 'textDirection', 'tcFitText', 'vAlign', 'hideMark'],
+}
+_SETTINGS_AFTER = ['hdrShapeDefaults', 'footnotePr', 'endnotePr', 'compat', 'docVars', 'rsids', 'mathPr', 'attachedSchema', 'themeFontLang',
+                   'clrSchemeMapping', 'doNotIncludeSubdocsInStats', 'doNotAutoCompressPictures', 'forceUpgrade', 'captions', 'readModeInkLockDown',
+                   'smartTagType', 'schemaLibrary', 'shapeDefaults', 'doNotEmbedSmartTags', 'decimalSymbol', 'listSeparator']
+def _local(el): return el.tag.split('}')[-1]
+def _reorder(el, order):
+    kids = list(el); idx = {n: i for i, n in enumerate(order)}
+    kids_sorted = sorted(kids, key=lambda k: idx.get(_local(k), len(order)))
+    if kids_sorted != kids:
+        for k in kids: el.remove(k)
+        for k in kids_sorted: el.append(k)
+def finalize(doc):
+    roots = [doc.element.body] + [s.footer._element for s in doc.sections] + [doc.styles.element]
+    for root in roots:
+        for name, order in _ORDER.items():
+            for el in root.iter(qn('w:' + name)): _reorder(el, order)
+    st = doc.settings.element; uf = st.find(qn('w:updateFields'))
+    z = st.find(qn('w:zoom'))
+    if z is not None and z.get(qn('w:percent')) is None: z.set(qn('w:percent'), '100')
+    if uf is not None:
+        st.remove(uf)
+        anchor = next((c for c in st if _local(c) in _SETTINGS_AFTER), None)
+        if anchor is not None: anchor.addprevious(uf)
+        else: st.append(uf)

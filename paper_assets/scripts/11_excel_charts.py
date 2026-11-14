@@ -234,4 +234,8 @@ ws0.cell(11, 1, 'Sheet').font = BOLD; ws0.cell(11, 2, 'Contents').font = BOLD
 for i, s in enumerate(wb.sheetnames[1:]): ws0.cell(12 + i, 1, s).font = BLACK; ws0.cell(12 + i, 2, wb[s]['A1'].value).font = BLACK
 ws0.column_dimensions['A'].width = 28; ws0.column_dimensions['B'].width = 90
 for s in wb.worksheets: s.sheet_view.showGridLines = True
+import re as _re
+def _k(ws): return (0, 0) if ws.title == 'README' else (2, 0) if ws.title.startswith('Table') else (1, int(_re.findall(r'\d+', ws.title)[0]))
+wb._sheets.sort(key=_k)
+for i, s_ in enumerate(wb.sheetnames[1:]): ws0.cell(12 + i, 1, s_); ws0.cell(12 + i, 2, wb[s_]['A1'].value)
 wb.save(OUT); print('saved', OUT, wb.sheetnames)
