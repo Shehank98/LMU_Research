@@ -1,4 +1,4 @@
-"""Build the highlighted and clean versions of the paper.  Run from the repository root:
+"""Build the report from the result files.  Run from the repository root:
 python paper_assets/build/build_paper.py
 """
 
@@ -6,7 +6,7 @@ import os, sys, re
 
 sys.path.insert(0, os.path.dirname(__file__))
 from engine import *
-import values, refs, ch_front, ch1_2, ch3, ch4, ch5, ch6_8, appendix
+import values, refs, ch_front, ch1_2, ch3, ch4, ch5, ch6, ch7_9, appendix
 
 ROOT = values.ROOT
 os.chdir(ROOT)
@@ -33,9 +33,10 @@ def body():
         + ch3.ch3()
         + ch4.ch4()
         + ch5.ch5()
-        + ch6_8.ch6()
-        + ch6_8.ch7()
-        + ch6_8.ch8()
+        + ch6.ch6()
+        + ch7_9.ch7()
+        + ch7_9.ch8()
+        + ch7_9.ch9()
     )
 
 
@@ -59,6 +60,5 @@ def build(highlight, path):
 
 
 if __name__ == "__main__":
-    build(True, os.path.join(OUT, "Brain_Tumor_XAI_Research_Paper.docx"))
-    build(False, os.path.join(OUT, "Brain_Tumor_XAI_Research_Paper_clean.docx"))
+    build(False, os.path.join(OUT, "Brain_Tumor_XAI_Research_Paper.docx"))
     print("built")

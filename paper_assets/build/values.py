@@ -152,6 +152,51 @@ def load():
         for _, r in pd.read_csv(p).iterrows():
             for k in ["deletion_auc", "insertion_auc", "deletion_sd", "insertion_sd"]:
                 V[f"di.{r.model}.{r.method}.{k}"] = f"{r[k]:.3f}"
+    # improved configuration: explainability results (paper_assets/xai_results_improved)
+    IRES = os.path.join(ROOT, "paper_assets", "xai_results_improved")
+
+    def iflat(prefix, d):
+        for k, v in d.items():
+            if isinstance(v, dict):
+                iflat(prefix + k + ".", v)
+            elif isinstance(v, list):
+                if v and isinstance(v[0], dict):
+                    for i, dd in enumerate(v):
+                        iflat(f"{prefix}{k}.{i}.", dd)
+                else:
+                    V[prefix + k] = "–".join((f"{x:.2f}" if isinstance(x, float) else str(x)) for x in v)
+            elif isinstance(v, float):
+                V[prefix + k] = f"{v:.4f}".rstrip("0").rstrip(".") if abs(v) < 1 else f"{v:.2f}"
+            else:
+                V[prefix + k] = str(v)
+
+    for f in ["xai_quantitative.json", "eaa_iou_summary.json", "shortcut_investigation.json", "shap_rf.json", "method_agreement_examples.json"]:
+        p = os.path.join(IRES, f)
+        if os.path.exists(p):
+            iflat("imp." + f.split(".")[0] + ".", j(p))
+    p = os.path.join(IRES, "eaa_iou_summary.json")
+    if os.path.exists(p) and "mann_whitney_p_value" in j(p):
+        V["imp.eaa.p"] = fmt_p(j(p)["mann_whitney_p_value"])
+    p = os.path.join(IRES, "xai_quantitative.json")
+    if os.path.exists(p):
+        q = j(p)
+        if "consistency" in q:
+            V["imp.cons.p"] = fmt_p(q["consistency"]["mannwhitney_p_rho"])
+        for m, d in q.get("shortcut", {}).items():
+            V[f"imp.sc.{m}.mass"] = f"{d['mean_energy_outside_head_pct'] + d['mean_energy_in_rim_pct']:.2f}"
+            V["imp.sc.area"] = f"{d['mean_area_outside_head_pct'] + d['mean_area_rim_pct']:.2f}"
+    p = os.path.join(IRES, "deletion_insertion.csv")
+    if os.path.exists(p):
+        for _, r in pd.read_csv(p).iterrows():
+            for k in ["deletion_auc", "insertion_auc", "deletion_sd", "insertion_sd"]:
+                V[f"imp.di.{r.model}.{r.method}.{k}"] = f"{r[k]:.3f}"
+    h = os.path.join(ROOT, "runs", "v2", "history")
+    if os.path.isdir(h):
+        for f in os.listdir(h):
+            d = pd.read_csv(os.path.join(h, f))
+            V[f"ihist.{f[:-4]}.epochs"] = str(len(d))
+            V[f"ihist.{f[:-4]}.best_val_acc"] = f"{d.val_accuracy.max():.4f}"
+            V[f"ihist.{f[:-4]}.final_train_acc"] = f"{d.accuracy.iloc[-1]:.4f}"
     return V
 
 
