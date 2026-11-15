@@ -14,7 +14,9 @@ SEED = 42
 VAL_FRACTION = 0.1
 BATCH = 32
 
-CNN_EPOCHS = 30
+CNN_EPOCHS = 45
+CNN_PATIENCE = 8         # the CNN's validation loss is noisy, so it gets more patience
+CNN_LR_PATIENCE = 4
 HEAD_EPOCHS = 3  # transfer models: train the new head first
 FINETUNE_EPOCHS = 12  # then unfreeze the top of the backbone
 PATIENCE = 5

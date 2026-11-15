@@ -25,13 +25,13 @@ def as_dataset(X, y, shuffle=False):
     return ds.batch(C.BATCH).map(lambda a, b: (tf.cast(a, tf.float32) / 255.0, b)).prefetch(tf.data.AUTOTUNE)
 
 
-def fit(model, train, val, epochs, lr, history, tag):
+def fit(model, train, val, epochs, lr, history, tag, patience=C.PATIENCE, lr_patience=2, min_lr=1e-6):
     model.compile(
         optimizer=tf.keras.optimizers.Adam(lr), loss="sparse_categorical_crossentropy", metrics=["accuracy"]
     )
     callbacks = [
-        tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=C.PATIENCE, restore_best_weights=True),
-        tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.3, patience=2, min_lr=1e-6),
+        tf.keras.callbacks.EarlyStopping(monitor="val_loss", patience=patience, restore_best_weights=True),
+        tf.keras.callbacks.ReduceLROnPlateau(monitor="val_loss", factor=0.3, patience=lr_patience, min_lr=min_lr),
     ]
     h = model.fit(train, validation_data=val, epochs=epochs, callbacks=callbacks, verbose=2)
     df = pd.DataFrame(h.history).assign(stage=tag)
@@ -47,7 +47,7 @@ def main(kind):
     history = pd.DataFrame()
     if kind == "cnn":
         model = build_cnn()
-        history = fit(model, train, val, C.CNN_EPOCHS, 1e-3, history, "train")
+        history = fit(model, train, val, C.CNN_EPOCHS, 1e-3, history, "train", C.CNN_PATIENCE, C.CNN_LR_PATIENCE, 1e-5)
     else:
         model = build_transfer(kind)
         history = fit(model, train, val, C.HEAD_EPOCHS, 1e-3, history, "head")  # 1. new head only
