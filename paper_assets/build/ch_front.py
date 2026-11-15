@@ -88,7 +88,7 @@ def blocks():
             "<<clean.improved.final_majority.full.acc>>% on the full test set and <<clean.improved.final_majority.clean.acc>>% on the "
             "duplicate-free subset, a statistically significant improvement over the baseline (<<clean.baseline.final_majority.clean.acc>>% "
             "on the same subset). Fine-tuned InceptionV3 and Xception outperformed the custom CNN, whose accuracy fell once the "
-            "background cue was removed. <<ABS_XAI>> Glioma remained the hardest class "
+            "background cue was removed. After cropping, the background no longer carried a usable class signal, and the fine-tuned networks were as accurate with only the head visible as with the whole image. Glioma remained the hardest class "
             "(85% recall). The work shows that explanation methods are most useful when their findings are tested and fed back "
             "into the design of the model. The system is a research prototype for decision support, not a diagnostic device."
         ),
@@ -105,6 +105,7 @@ def blocks():
         RAW(lambda d, r: list_title(d, "List of Listings")),
         RAW(lambda d, r: toc(d, "lst")),
         H(1, "List of Abbreviations"),
+        P("{tab:abbr} lists the abbreviations used in this report."),
         TAB(
             "abbr",
             "Abbreviations used in this report",
@@ -115,14 +116,14 @@ def blocks():
                 ["CI", "Confidence interval"],
                 ["CNN", "Convolutional neural network"],
                 ["DT", "Decision Tree"],
-                ["EAA-IoU", "Ensemble Attention Agreement – intersection over union"],
+                ["EAA-IoU", "Ensemble Attention Agreement - intersection over union"],
                 ["Grad-CAM", "Gradient-weighted class activation mapping"],
                 ["HiResCAM", "High-resolution class activation mapping"],
                 ["IoU", "Intersection over union"],
                 ["LIME", "Local Interpretable Model-agnostic Explanations"],
                 ["LR", "Logistic Regression"],
                 ["MRI", "Magnetic resonance imaging"],
-                ["PR", "Precision–recall"],
+                ["PR", "Precision-recall"],
                 ["RF", "Random Forest"],
                 ["RO / RQ / H", "Research objective / question / hypothesis"],
                 ["ROC", "Receiver operating characteristic"],

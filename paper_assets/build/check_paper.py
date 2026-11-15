@@ -149,9 +149,9 @@ numtext = (
     + "\n"
     + "\n".join(num_cells)
 )
-numtext = re.sub(r"(Section|Sections|Chapter|Ch\.|§)\s?\d+(\.\d+)*(–\d+(\.\d+)*)?", " ", numtext)
+numtext = re.sub(r"(Section|Sections|Chapter|Ch\.|§)\s?\d+(\.\d+)*(-\d+(\.\d+)*)?", " ", numtext)
 numtext = re.sub(
-    r"\b\d+\.\d+(\.\d+)?(, \d+\.\d+)*(–\d+\.\d+)?(?= \(|,| and)",
+    r"\b\d+\.\d+(\.\d+)?(, \d+\.\d+)*(-\d+\.\d+)?(?= \(|,| and)",
     lambda m: m.group(0) if "%" in m.group(0) else m.group(0),
     numtext,
 )
@@ -236,17 +236,24 @@ for u in sorted(unknown):
 for tok in ["TODO", "TBD", "XXX", "lorem", "<<", ">>", "{fig:", "{tab:", "{lst:", "stub", "[citation"]:
     if tok.lower() in alltext.lower():
         fail(f"placeholder text found: {tok}")
-print("[4] placeholders checked")
+for bad_char, label in [("\u2014", "em dash"), ("\u2013", "en dash")]:
+    n = alltext.count(bad_char)
+    if n:
+        fail(f"{n} x {label} found")
+for word in ["HND", "Unit 16", "Pearson"]:
+    if re.search(r"\b" + word + r"\b", alltext):
+        fail(f"text mentions {word}")
+print("[4] placeholders, dashes and wording checked")
 
 # ---------- 5. word count (Chapter 1 .. before References)
 start = [i for i, p in enumerate(paras) if p.startswith("Chapter 1")][0]
 end = [i for i, p in enumerate(paras) if p.strip() == "References"][-1]
 words = sum(len(p.split()) for p in paras[start:end] if not re.match(r"^(def |    |#|\s)", p))
 abstract = next(paras[i + 1] for i, p in enumerate(paras) if p.strip().startswith("Abstract"))
-print(f"[5] body words (Ch.1–8, excluding code and tables): {words}; abstract words: {len(abstract.split())}")
+print(f"[5] body words (Ch.1-8, excluding code and tables): {words}; abstract words: {len(abstract.split())}")
 if words < 6000:
     fail("body shorter than 6,000 words")
 if not 250 <= len(abstract.split()) <= 300:
-    fail("abstract not 250–300 words")
+    fail("abstract not 250-300 words")
 print("ALL CHECKS PASSED" if ok else "SOME CHECKS FAILED")
 sys.exit(0 if ok else 1)

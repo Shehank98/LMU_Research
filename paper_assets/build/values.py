@@ -65,7 +65,7 @@ def load():
             if isinstance(v, dict):
                 flat(prefix + k + ".", v)
             elif isinstance(v, list):
-                V[prefix + k] = "–".join((f"{x:.2f}" if isinstance(x, float) else str(x)) for x in v)
+                V[prefix + k] = "-".join((f"{x:.2f}" if isinstance(x, float) else str(x)) for x in v)
             elif isinstance(v, float) and k in ("acc", "majority_acc_pct"):
                 V[prefix + k] = f"{v:.2f}"
             else:
@@ -164,7 +164,7 @@ def load():
                     for i, dd in enumerate(v):
                         iflat(f"{prefix}{k}.{i}.", dd)
                 else:
-                    V[prefix + k] = "–".join((f"{x:.2f}" if isinstance(x, float) else str(x)) for x in v)
+                    V[prefix + k] = "-".join((f"{x:.2f}" if isinstance(x, float) else str(x)) for x in v)
             elif isinstance(v, float):
                 V[prefix + k] = f"{v:.4f}".rstrip("0").rstrip(".") if abs(v) < 1 else f"{v:.2f}"
             else:
@@ -190,6 +190,20 @@ def load():
         for _, r in pd.read_csv(p).iterrows():
             for k in ["deletion_auc", "insertion_auc", "deletion_sd", "insertion_sd"]:
                 V[f"imp.di.{r.model}.{r.method}.{k}"] = f"{r[k]:.3f}"
+    cdir = os.path.join(ROOT, "runs", "v2", "confusion")
+    if os.path.isdir(cdir):
+        for f in os.listdir(cdir):
+            cm = pd.read_csv(os.path.join(cdir, f), index_col=0)
+            for a in cm.index:
+                for b in cm.columns:
+                    V[f"icm.{f[:-4]}.{a}.{b}"] = str(int(cm.loc[a, b]))
+    pp = os.path.join(ROOT, "runs", "v2", "metrics", "per_image_predictions.csv")
+    if os.path.exists(pp):
+        import numpy as np
+
+        d = pd.read_csv(pp)
+        votes = np.stack([d[c] for c in d.columns if c.startswith("pred_") and c not in ("pred_majority", "pred_confidence_weighted")])
+        V["ioracle.none_correct_pct"] = f"{100 * (~(votes == d.true.values).any(0)).mean():.2f}"
     h = os.path.join(ROOT, "runs", "v2", "history")
     if os.path.isdir(h):
         for f in os.listdir(h):

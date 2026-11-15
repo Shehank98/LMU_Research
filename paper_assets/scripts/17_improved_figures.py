@@ -74,7 +74,7 @@ for a, subset, title in [(axs[0], "full", "Full test set (n = 1,600)"), (axs[1],
     a.set_ylim(70, 101)
     a.set_title(title)
 axs[0].set_ylabel("Accuracy (%)")
-axs[0].legend(fontsize=7.5, loc="lower left")
+fig.legend(*axs[0].get_legend_handles_labels(), loc="upper center", ncol=2, fontsize=8, bbox_to_anchor=(0.5, 1.06))
 fig.tight_layout()
 fig.savefig(os.path.join(FIG, "fig_baseline_vs_improved.png"))
 plt.close(fig)

@@ -1,95 +1,37 @@
-# Brain Tumour MRI Classification with Explainable AI: final paper package
+# Report package
 
-## Files in `output/`
 | File | What it is |
 |---|---|
-| `Brain_Tumor_XAI_Research_Paper.docx` | Full paper. New material is in **yellow highlight**, new headings end with **[NEW]**, and new figures and code listings have an orange left border. |
-| `Brain_Tumor_XAI_Research_Paper_clean.docx` | Same paper with no highlighting and no [NEW] tags. Submit this one. |
-| `Brain_Tumor_XAI_Research_Paper_clean.pdf` | PDF of the clean version, used for the visual layout check. |
-| `Paper_Charts_Editable.xlsx` | Every data chart of the paper as a native Excel chart, with its numbers in a table next to it. Blue cells are inputs you can change; black cells are formulas (normalised confusion matrices, Wilson intervals, McNemar p-values, AUC, EAA-IoU alert rate). Sheet names start with the paper's figure numbers. |
-| `check_report.txt` | Output of the automated cross-checks (numbers, figure/table references, citations, placeholders, word count). |
+| `Brain_Tumor_XAI_Research_Paper.docx` | The report (Word). Contents, figure and table lists are Word fields: accept "update fields" when Word asks, or press Ctrl+A then F9. |
+| `Brain_Tumor_XAI_Research_Paper.pdf` | PDF of the same report, for checking the layout. |
+| `Paper_Charts_Editable.xlsx` | Every data chart of the report as a native Excel chart with its numbers next to it. Blue cells are inputs you can change; black cells are formulas. Sheet names start with the figure number used in the report. |
+| `check_report.txt` | Output of the automatic checks: every number backed by a result file, every figure/table/listing referenced, every citation in the reference list, no placeholders, no em or en dashes. |
 
-The table of contents and the lists of figures, tables and listings are real Word fields. Word refreshes them when the
-file is opened, because the file asks it to. Accept the "update fields" prompt, or press Ctrl+A then F9.
+## Main results
+| | Full test set (1,600) | Duplicate-free test subset (1,264) |
+|---|---|---|
+| Baseline six-model majority vote | 92.50% | 90.66% |
+| Improved six-model majority vote (head cropping, augmentation, fine-tuning) | **95.62%** | **94.70%** |
 
-## What was added
-* **Re-run results (Ch. 4).** All 22 model configurations were re-evaluated on the **1,600 held-out test images**,
-  using the logged results of the 2026-10-26 Colab run. The chapter adds:
-  * Wilson and bootstrap 95% intervals.
-  * Exact McNemar tests with Holm correction.
-  * ROC/PR curves, learning curves and every confusion matrix.
-  * Reproducibility checks and an old-vs-new comparison.
-* **New Chapter 5 on explainable AI**, run on the real saved models from Hugging Face:
-  * Methods: Grad-CAM, Grad-CAM++, HiResCAM, LIME, SHAP (CNN and Random Forest stage) and occlusion.
-  * Examples: correct and misclassified images for every class.
-  * Faithfulness: deletion/insertion AUC compared with a random baseline.
-  * Weight-randomisation sanity check (Adebayo et al., 2018).
-  * Cross-model agreement: EAA-IoU on all 1,600 images, plus Spearman correlation and top-20% IoU.
-  * A check for attention outside the brain.
-  * Clinical trust and limitations.
-* **Other new sections:**
-  * Objectives RO5–RO6, RQ3 and H3.
-  * Scope, project management and feasibility.
-  * Hyperparameter table, reproducibility and the statistical protocol.
-  * Discussion chapter, covering Pearson criteria M2/D1/D2, with a literature comparison and a plain-language clinician summary.
-  * Reflection chapter (P6/P7/D3).
-  * 13 code listings.
-  * Appendices: criteria mapping, change log, figures index and reproducibility artefacts.
-* **References:** 62 Harvard entries. Every DOI was checked on Crossref (`paper_assets/references/crossref_metadata.json`).
-  The remaining 9 entries (NeurIPS/BMVC/OSDI/JMLR/arXiv papers, the Kaggle dataset, the HF mirror and the HF model
-  repository) were checked by web search or on Hugging Face.
+* The improvement is statistically significant (exact McNemar test, Holm-adjusted p below 10^-8).
+* The best single model is fine-tuned InceptionV3 (95.44%). In the improved set-up the ensemble is not significantly better than it.
+* Glioma is the weak class (85% recall). Most remaining errors are gliomas predicted as meningioma, and for 2.56% of test images all six models are wrong.
+* 98% was not reached on this test set. Part of the reason is that 21% of the official test images duplicate training images; figures above 98% reported on this dataset should be read with that in mind.
 
-## Note on the uploaded result folders
-The folders `confusion-2026…/`, `history-2026…/` and `metrics-2026…/` that you uploaded from Google Drive are byte-for-byte identical to the
-Hugging Face copies used here (`confusion/`, `history/`, `metrics/`). Your extra `final_probs.npz` reproduces 92.50% / 92.25%.
-You can delete the duplicate upload folders if you wish.
+## Where things come from
+* Baseline: `final_code_set_2026-10-22/` (Colab), results in `metrics/`, `confusion/`, `history/`.
+* Improved: `src/` (run `src/run_all.sh`), results in `runs/v2/`.
+* Analysis and figures: `paper_assets/scripts/` (set `MODEL_SET=improved` for the improved models).
+* Report build and checks: `paper_assets/build/build_paper.py`, `paper_assets/build/check_paper.py`.
+* Issues found in the code and how they were fixed: `CODE_REVIEW.md`.
 
-## What was corrected
-See `AUDIT.md` and Appendix F (change log). The main corrections:
-* The 98.20% figure was computed on the **training** images. The held-out result is **92.50%** (majority vote).
-* H1 (pretrained > CNN) is **rejected**: the CNN scored 90.44% vs Xception 87.62% and InceptionV3 86.62%.
-* "Fine-tuned" models are really **frozen-backbone** transfer learning.
-* The InceptionV3/Xception wording error is fixed.
-* Unsupported claims were removed: KNN, U-Net, Naive Bayes, SPSS, correlation/regression "analysis", interviews and
-  focus groups, cross-validation, and noise reduction/registration.
-* "PITIUTRY" and the 6,984 vs 6,985 count are explained, and the "Personnel" typo is fixed.
-* Every old reference was completed and corrected. For example, Cheng et al. reported 91.28%, not 94.68%.
-* The clinician questionnaire is now presented as a **proposed** instrument (Appendix D), not as collected data.
+## Web app
+* The alert threshold is EAA-IoU below 0.10 and "strong agreement" is 0.20 or above (`webapp/backend/xai_engine.py`).
+* To use the improved models, upload them once with `HF_TOKEN=<write token> python src/upload_to_hf.py`, then set `MODEL_SET=improved` on Railway.
+* With the improved models, agreement is higher overall, so 0.10 flags only about 3% of images (see report Section 6.5). Consider 0.20 if you want more cases sent for review.
 
-## Please verify manually
-1. **Title page and declaration.** Check the programme name ("BSc (Hons) Data Science (top-up)"), the module leader
-   (the template says Mr. Thepul Ginige; the interim report says Prof. Ruvan Abeysekara), the supervisor and the
-   submission date. Sign the declaration.
-2. **Dataset licence** on the Kaggle page. The Hugging Face mirror says CC BY 4.0; a secondary source says CC0. No
-   Kaggle DOI could be verified, so the dataset is cited by URL with "n.d.".
-3. **Template structure.** The London Met template lists project management, feasibility, design, implementation and
-   testing chapters. This paper follows the research-report structure you asked for, and the template items are folded in:
-   * Project management and feasibility → 3.3–3.4.
-   * Design and implementation → 3.7–3.11 and the listings.
-   * Testing and verification → 4.9 and `check_paper.py`.
-   Check that your module accepts this.
-4. **No GPU re-run is needed for any number in the paper.** Training-time figures come from the logged Colab run; all
-   XAI and verification work ran on CPU from the saved models. If you retrain anything, run
-   `paper_assets/build/build_paper.py` and `check_paper.py` again.
-5. **The web demonstrator's alert threshold** (`EAA_LOW = 0.40` in `webapp/backend/xai_engine.py`) flags almost every
-   image (see 5.7 and 7.3). Recalibrate it before showing the app to anyone.
-6. **The questionnaire (Appendix D)** needs ethics approval before use.
-
-## How to rebuild
-```bash
-# results are already in metrics/, confusion/, history/ ; models are downloaded from shehank98/brain-tumor-mri-models
-python paper_assets/scripts/01_verify_models.py          # needs the test images in $MRI_DATA and models in $MODEL_DIR
-python paper_assets/scripts/02_xai_examples.py
-python paper_assets/scripts/03_xai_quantitative.py
-python paper_assets/scripts/03b_xai_summary_sanity.py   # summaries + sanity check (split out to limit memory)
-python paper_assets/scripts/05_figures_stats.py
-python paper_assets/scripts/06_xai_example_figures.py
-python paper_assets/scripts/07_shap_rf.py
-python paper_assets/scripts/08_diagrams.py
-python paper_assets/scripts/09_rerun_final_ensemble.py
-python paper_assets/scripts/10_xai_quant_figures.py
-python paper_assets/scripts/11_excel_charts.py          # editable Excel charts
-python paper_assets/build/build_paper.py
-python paper_assets/build/check_paper.py output/Brain_Tumor_XAI_Research_Paper_clean.docx
-/usr/bin/python3 paper_assets/build/render_pdf.py output/Brain_Tumor_XAI_Research_Paper_clean.docx output/Brain_Tumor_XAI_Research_Paper_clean.pdf
-```
+## Please check before submitting
+1. Title page and declaration: programme name, module leader, supervisor, date, signature.
+2. The dataset licence on the Kaggle page.
+3. Your university's policy on declaring the use of AI tools. If a declaration is required, add it (for example in the acknowledgements).
+4. `AUDIT.md` and `CLAUDE.md` in the repository root describe earlier work and how the project was set up. Decide whether they should stay in the repository you show the panel.

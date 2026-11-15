@@ -1,8 +1,8 @@
-[1] numbers: 432 distinct decimals / thousands checked
-[2] Figures: 24 captions, 24 referenced in text
-[2] Tables: 25 captions, 25 referenced in text
-[2] Listings: 13 captions, 13 referenced in text
+[1] numbers: 576 distinct decimals / thousands checked
+[2] Figures: 30 captions, 30 referenced in text
+[2] Tables: 30 captions, 30 referenced in text
+[2] Listings: 14 captions, 14 referenced in text
 [3] references: 62 in list, 62 cited; unmatched citation-like strings: 0
-[4] placeholders checked
-[5] body words (Ch.1–8, excluding code and tables): 10674; abstract words: 285
+[4] placeholders, dashes and wording checked
+[5] body words (Ch.1-8, excluding code and tables): 12265; abstract words: 276
 ALL CHECKS PASSED

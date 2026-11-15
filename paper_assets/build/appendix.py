@@ -102,7 +102,7 @@ def appendices(V):
                     f"{r.f1_pituitary:.3f}",
                 ]
             )
-    thr = pd.read_csv(os.path.join(ROOT, "metrics", "eaa_iou_threshold_table.csv")).fillna("–")
+    thr = pd.read_csv(os.path.join(ROOT, "metrics", "eaa_iou_threshold_table.csv")).fillna("-")
     thr_rows = [
         [
             str(r.threshold),
@@ -126,11 +126,11 @@ def appendices(V):
         )
     thr_rows = sorted(thr_rows, key=lambda r: float(r[0]))
     q = [
-        "Section 1 – About you: role (radiologist, neurosurgeon, oncologist, trainee, other); years of experience (0–5, 6–10, 11–15, 16+); previous use of AI decision-support tools (yes / no).",
-        "Section 2 – Attitudes: familiarity with AI-based diagnostic tools (very familiar … not familiar); confidence in AI assistance for brain tumour MRI (very confident … not confident).",
-        "Section 3 – Case review (new): for 10 anonymised test images, record your own class, then the model’s suggestion with its confidence and heatmap; record whether you would change your answer.",
-        "Section 4 – Explanations (new): for each heatmap, rate “the highlighted region is clinically plausible” (5-point scale) and “the heatmap made me more / less / equally confident”.",
-        "Section 5 – Usefulness: expected effect on workflow (improve significantly … slow down); usefulness overall (very useful … not useful); open suggestions for improvement.",
+        "Section 1 - About you: role (radiologist, neurosurgeon, oncologist, trainee, other); years of experience (0-5, 6-10, 11-15, 16+); previous use of AI decision-support tools (yes / no).",
+        "Section 2 - Attitudes: familiarity with AI-based diagnostic tools (very familiar … not familiar); confidence in AI assistance for brain tumour MRI (very confident … not confident).",
+        "Section 3 - Case review (new): for 10 anonymised test images, record your own class, then the model’s suggestion with its confidence and heatmap; record whether you would change your answer.",
+        "Section 4 - Explanations (new): for each heatmap, rate “the highlighted region is clinically plausible” (5-point scale) and “the heatmap made me more / less / equally confident”.",
+        "Section 5 - Usefulness: expected effect on workflow (improve significantly … slow down); usefulness overall (very useful … not useful); open suggestions for improvement.",
     ]
     return [
         H(1, "Appendices"),

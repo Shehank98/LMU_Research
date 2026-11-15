@@ -1,0 +1,149 @@
+{
+  "n_sample": 160,
+  "n_errors_in_sample": 51,
+  "consistency": {
+    "pairwise_mean_rho": {
+      "rho_CNN_Xception": 0.0543,
+      "rho_CNN_InceptionV3": 0.0778,
+      "rho_Xception_InceptionV3": 0.5397
+    },
+    "pairwise_mean_iou20": {
+      "iou20_CNN_Xception": 0.1105,
+      "iou20_CNN_InceptionV3": 0.1434,
+      "iou20_Xception_InceptionV3": 0.3398
+    },
+    "by_true_class_mean_rho": {
+      "glioma": 0.2064,
+      "meningioma": 0.3026,
+      "notumor": 0.114,
+      "pituitary": 0.2792
+    },
+    "by_true_class_mean_iou20": {
+      "glioma": 0.2152,
+      "meningioma": 0.2416,
+      "notumor": 0.1226,
+      "pituitary": 0.1889
+    },
+    "correct_mean_rho": 0.2383,
+    "incorrect_mean_rho": 0.1933,
+    "correct_mean_iou20": 0.1897,
+    "incorrect_mean_iou20": 0.2154,
+    "mannwhitney_p_rho": 0.1177353267218435
+  },
+  "shortcut": {
+    "CNN": {
+      "mean_energy_outside_head_pct": 19.23,
+      "mean_area_outside_head_pct": 20.19,
+      "mean_energy_in_rim_pct": 24.73,
+      "mean_area_rim_pct": 21.11,
+      "images_with_over_50pct_outside_or_rim": 44,
+      "outside_or_rim_correct_pct": 42.48,
+      "outside_or_rim_incorrect_pct": 47.14
+    },
+    "InceptionV3": {
+      "mean_energy_outside_head_pct": 16.07,
+      "mean_area_outside_head_pct": 20.19,
+      "mean_energy_in_rim_pct": 18.64,
+      "mean_area_rim_pct": 21.11,
+      "images_with_over_50pct_outside_or_rim": 12,
+      "outside_or_rim_correct_pct": 32.23,
+      "outside_or_rim_incorrect_pct": 40.02
+    },
+    "Xception": {
+      "mean_energy_outside_head_pct": 7.67,
+      "mean_area_outside_head_pct": 20.19,
+      "mean_energy_in_rim_pct": 13.2,
+      "mean_area_rim_pct": 21.11,
+      "images_with_over_50pct_outside_or_rim": 2,
+      "outside_or_rim_correct_pct": 18.6,
+      "outside_or_rim_incorrect_pct": 25.72
+    }
+  },
+  "sanity_check": {
+    "n_images": 40,
+    "CNN": [
+      {
+        "randomised_up_to": "predictions",
+        "spearman": -0.0907,
+        "ssim": 0.2166
+      },
+      {
+        "randomised_up_to": "features",
+        "spearman": 0.201,
+        "ssim": 0.269
+      },
+      {
+        "randomised_up_to": "batch_normalization_3",
+        "spearman": 0.0,
+        "ssim": 0.0998
+      },
+      {
+        "randomised_up_to": "conv2d_3",
+        "spearman": 0.0,
+        "ssim": 0.0998
+      },
+      {
+        "randomised_up_to": "batch_normalization_2",
+        "spearman": 0.0,
+        "ssim": 0.0998
+      },
+      {
+        "randomised_up_to": "conv2d_2",
+        "spearman": 0.0,
+        "ssim": 0.0998
+      },
+      {
+        "randomised_up_to": "batch_normalization_1",
+        "spearman": 0.0,
+        "ssim": 0.0998
+      },
+      {
+        "randomised_up_to": "conv2d_1",
+        "spearman": 0.0,
+        "ssim": 0.0998
+      },
+      {
+        "randomised_up_to": "batch_normalization",
+        "spearman": 0.0,
+        "ssim": 0.0998
+      },
+      {
+        "randomised_up_to": "conv2d",
+        "spearman": 0.0,
+        "ssim": 0.0998
+      }
+    ],
+    "Xception": [
+      {
+        "randomised_up_to": "predictions",
+        "spearman": -0.1451,
+        "ssim": 0.0824
+      },
+      {
+        "randomised_up_to": "features",
+        "spearman": 0.1128,
+        "ssim": 0.2877
+      },
+      {
+        "randomised_up_to": "block14_sepconv1",
+        "spearman": 0.0,
+        "ssim": 0.0711
+      },
+      {
+        "randomised_up_to": "block13_sepconv1",
+        "spearman": 0.0,
+        "ssim": 0.0711
+      },
+      {
+        "randomised_up_to": "block12_sepconv1",
+        "spearman": 0.0,
+        "ssim": 0.0711
+      },
+      {
+        "randomised_up_to": "block11_sepconv1",
+        "spearman": 0.0,
+        "ssim": 0.0711
+      }
+    ]
+  }
+}

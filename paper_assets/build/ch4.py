@@ -264,9 +264,9 @@ def ch4():
             "Row-normalised confusion matrices of the classical classifiers on raw pixels",
             width=6.3,
         ),
-        H(2, "4.8 ROC and precision–recall analysis"),
+        H(2, "4.8 ROC and precision-recall analysis"),
         P(
-            "The ROC and precision–recall curves of the three deep classifiers are in {fig:roc} and the areas in {tab:auc}. Ranking quality is "
+            "The ROC and precision-recall curves of the three deep classifiers are in {fig:roc} and the areas in {tab:auc}. Ranking quality is "
             "high for all three (macro ROC AUC between <<st.auc.Xception.macro_roc_auc>> and <<st.auc.InceptionV3.macro_roc_auc>>). Interestingly, "
             "InceptionV3 has the best macro ROC AUC even though it has the lowest accuracy. Its probabilities rank cases well, but its default "
             "decision rule (argmax) places the boundaries less well. Glioma has the lowest areas for every model; the CNN’s glioma ROC AUC "
@@ -275,7 +275,7 @@ def ch4():
         FIG(
             "roc",
             "paper_assets/figures/fig_roc_pr.png",
-            "One-vs-rest ROC (top) and precision–recall (bottom) curves of the three deep classifiers",
+            "One-vs-rest ROC (top) and precision-recall (bottom) curves of the three deep classifiers",
             width=6.3,
         ),
         TAB(

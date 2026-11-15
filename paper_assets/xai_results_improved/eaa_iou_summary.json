@@ -1,0 +1,33 @@
+{
+  "n_images": 1600,
+  "n_misclassified": 73,
+  "mean_eaa_all": 0.2207,
+  "mean_eaa_correct": 0.2217,
+  "mean_eaa_misclassified": 0.1996,
+  "mean_eaa_by_true_class": {
+    "glioma": 0.2618,
+    "meningioma": 0.2358,
+    "notumor": 0.2007,
+    "pituitary": 0.1844
+  },
+  "pair_means": {
+    "iou_cnn_xcp": 0.0842,
+    "iou_cnn_inc": 0.1214,
+    "iou_xcp_inc": 0.4564
+  },
+  "auroc_low_eaa_predicts_error": 0.6059,
+  "mann_whitney_p_value": 0.0010992196694102555,
+  "confidence_auroc": 0.8923,
+  "threshold_0.05": {
+    "flagged_pct": 0.44,
+    "errors_caught_pct": 2.74
+  },
+  "threshold_0.1": {
+    "flagged_pct": 3.12,
+    "errors_caught_pct": 17.81
+  },
+  "threshold_0.2": {
+    "flagged_pct": 45.31,
+    "errors_caught_pct": 57.53
+  }
+}

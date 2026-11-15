@@ -30,7 +30,9 @@ versions kept for reference. They are not used for any number in the report.
 | 9 | Web app | For cropped models, heatmaps were drawn on the uncropped upload. | Heatmap and image would not line up. | Heatmaps are drawn on the cropped image when `MODEL_SET=improved`. |
 | 10 | Baseline notebook (first run) | Two layers were given the same name (`dense`). | The first training attempt stopped with an error (see `logs/run_log.txt`). | Layer names made unique; the logged results come from the corrected run. |
 | 11 | XAI analysis | The quantitative XAI script ran out of memory during the sanity check. | Summary file not written. | Split into `03_xai_quantitative.py` and `03b_xai_summary_sanity.py`. |
-| 12 | All Python code | Inconsistent formatting. | Harder to read. | Formatted with `black` (line length 110). |
+| 12 | Web app | Grad-CAM failed for the fine-tuned networks because their backbone is a model nested inside the classifier. | No heatmaps or agreement score for the improved models. | `xai_engine.py` runs the nested backbone layer by layer; tested on test images with `MODEL_SET=improved`. |
+| 13 | Improved CNN (first run) | The learning rate was cut after two epochs without improvement, and the noisy validation loss triggered this repeatedly. | Training stopped at 87% training accuracy (under-fitting). | Re-run with more patience (`CNN_PATIENCE`, `CNN_LR_PATIENCE` in `src/config.py`); the first run is kept in `runs/v2/first_cnn_attempt/`. |
+| 14 | All Python code | Inconsistent formatting. | Harder to read. | Formatted with `black` (line length 110). |
 
 ## How to reproduce
 ```bash

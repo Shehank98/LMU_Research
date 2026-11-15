@@ -1,0 +1,67 @@
+{
+  "size_by_class": {
+    "glioma": {
+      "median_w": 512,
+      "median_h": 512,
+      "share_512x512_pct": 81.0,
+      "n_distinct_sizes": 62,
+      "mean_dark_frac": 0.497
+    },
+    "meningioma": {
+      "median_w": 512,
+      "median_h": 512,
+      "share_512x512_pct": 70.8,
+      "n_distinct_sizes": 99,
+      "mean_dark_frac": 0.461
+    },
+    "notumor": {
+      "median_w": 227,
+      "median_h": 234,
+      "share_512x512_pct": 0.8,
+      "n_distinct_sizes": 55,
+      "mean_dark_frac": 0.444
+    },
+    "pituitary": {
+      "median_w": 512,
+      "median_h": 512,
+      "share_512x512_pct": 98.0,
+      "n_distinct_sizes": 2,
+      "mean_dark_frac": 0.367
+    }
+  },
+  "metadata_rf_cv_accuracy_pct": 78.38,
+  "size_only_rf_cv_accuracy_pct": 55.56,
+  "CNN": {
+    "full_image": 79.31,
+    "head_only": 73.81,
+    "outside_head_only": 25.19,
+    "outside_only_recall_by_class": {
+      "glioma": 100.0,
+      "meningioma": 0.0,
+      "notumor": 0.8,
+      "pituitary": 0.0
+    }
+  },
+  "Xception": {
+    "full_image": 94.94,
+    "head_only": 94.69,
+    "outside_head_only": 21.56,
+    "outside_only_recall_by_class": {
+      "glioma": 42.0,
+      "meningioma": 0.0,
+      "notumor": 44.2,
+      "pituitary": 0.0
+    }
+  },
+  "InceptionV3": {
+    "full_image": 95.44,
+    "head_only": 95.5,
+    "outside_head_only": 23.56,
+    "outside_only_recall_by_class": {
+      "glioma": 62.3,
+      "meningioma": 0.2,
+      "notumor": 30.0,
+      "pituitary": 1.8
+    }
+  }
+}

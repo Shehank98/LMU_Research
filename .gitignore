@@ -9,3 +9,5 @@ runs/v2/models/
 runs/v2/probs/
 __pycache__/
 *.pyc
+paper_assets/xai_results_improved/sample_maps.npz
+paper_assets/xai_results_improved/example_maps.npz

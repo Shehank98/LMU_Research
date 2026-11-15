@@ -1,0 +1,13 @@
+model,method,deletion_auc,deletion_sd,insertion_auc,insertion_sd
+CNN,gradcam,0.3309,0.2454,0.718,0.2721
+CNN,gradcampp,0.3431,0.2462,0.7034,0.2694
+CNN,hirescam,0.3309,0.2454,0.718,0.2721
+CNN,random,0.475,0.2546,0.5187,0.301
+Xception,gradcam,0.3791,0.3058,0.7762,0.2179
+Xception,gradcampp,0.3815,0.3117,0.7522,0.2439
+Xception,hirescam,0.3791,0.3058,0.7762,0.2179
+Xception,random,0.516,0.3144,0.6,0.245
+InceptionV3,gradcam,0.326,0.2825,0.7972,0.2
+InceptionV3,gradcampp,0.3321,0.3014,0.7586,0.2399
+InceptionV3,hirescam,0.326,0.2825,0.7972,0.2
+InceptionV3,random,0.4403,0.2252,0.5562,0.2577

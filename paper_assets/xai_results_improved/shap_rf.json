@@ -1,0 +1,21 @@
+{
+ "rf_accuracy_recomputed_pct": 88.81,
+ "n_explained": 200,
+ "features_for_80pct": 66,
+ "dead_or_inactive_features": 101,
+ "mean_active_fraction": 0.2367,
+ "top5_units": [
+  63,
+  159,
+  64,
+  77,
+  42
+ ],
+ "top5_share_pct": 12.54,
+ "class_specific_top_unit": {
+  "Glioma": 164,
+  "Meningioma": 171,
+  "No tumour": 63,
+  "Pituitary": 154
+ }
+}

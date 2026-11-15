@@ -108,6 +108,14 @@ def _last_spatial_layer(model):
     raise ValueError(f"no spatial layer in {model.name}")
 
 
+def _nested_backbone(model):
+    """The pretrained backbone when it is nested inside the classifier (improved models), else None."""
+    for layer in model.layers:
+        if isinstance(layer, Model) and layer.name != "augment":
+            return layer
+    return None
+
+
 def _final_dense(model):
     last = model.layers[-1]
     return last if isinstance(last, tf.keras.layers.Dense) else None
@@ -136,6 +144,26 @@ def gradcam(model, image, class_idx):
                     tape.watch(conv)
             scores = _logits(dense, out) if dense is not None else out
             score = scores[:, class_idx]
+        grads = tape.gradient(score, conv)
+    elif _nested_backbone(model) is not None:
+        # improved models: the pretrained backbone is a model inside the model, so run the layers by hand
+        base = _nested_backbone(model)
+        key = id(model)
+        if key not in _grad_models:
+            _grad_models[key] = Model(
+                base.inputs, [base.get_layer(_last_spatial_layer(base)).output, base.output]
+            )
+        i = model.layers.index(base)
+        with tf.GradientTape() as tape:
+            h = x
+            for layer in model.layers[1:i]:
+                if layer.name != "augment":
+                    h = layer(h, training=False)
+            conv, h = _grad_models[key](h, training=False)
+            tape.watch(conv)
+            for layer in model.layers[i + 1 : -1]:
+                h = layer(h, training=False)
+            score = _logits(dense, h)[:, class_idx]
         grads = tape.gradient(score, conv)
     else:
         key = id(model)

@@ -46,13 +46,13 @@ def from_doi(doi, title_case=None, container=None):
         if iss:
             s += f"({iss})"
         if pg and "-" in pg:
-            s += f", pp. {pg.replace('-', '–')}"
+            s += f", pp. {pg.replace('-', '-')}"
         elif pg or art:
             s += f", {pg or art}"
     else:
         s += f"in <i>{cont}</i>"
         if pg:
-            s += f", pp. {pg.replace('-', '–')}"
+            s += f", pp. {pg.replace('-', '-')}"
     return s + f". doi:{doi}.", m, y
 
 
@@ -96,7 +96,7 @@ DOIS = {
     "Rudin2019": ("10.1038/s42256-019-0048-x", None),
     "Zeiler2014": (
         "10.1007/978-3-319-10590-1_53",
-        "Computer Vision – ECCV 2014, Lecture Notes in Computer Science, vol. 8689",
+        "Computer Vision - ECCV 2014, Lecture Notes in Computer Science, vol. 8689",
     ),
     "Breiman2001": ("10.1023/A:1010933404324", None),
     "Quinlan1986": ("10.1007/BF00116251", None),
@@ -144,7 +144,7 @@ for key, (doi, cont) in DOIS.items():
         y = 2020
         text = (
             text.replace("(2019)", "(2020)").replace(
-                "Systems, and Signal Processing</i>", "Systems, and Signal Processing</i>, 39(2), pp. 757–775"
+                "Systems, and Signal Processing</i>", "Systems, and Signal Processing</i>, 39(2), pp. 757-775"
             )
             if "39" not in text
             else text.replace("(2019)", "(2020)")
@@ -161,7 +161,7 @@ add(
     "Lundberg2017",
     "Lundberg",
     2017,
-    "Lundberg, S.M. and Lee, S.-I. (2017) 'A unified approach to interpreting model predictions', in <i>Advances in Neural Information Processing Systems 30 (NIPS 2017)</i>, pp. 4765–4774. Available at: https://papers.nips.cc/paper/7062 (Accessed: "
+    "Lundberg, S.M. and Lee, S.-I. (2017) 'A unified approach to interpreting model predictions', in <i>Advances in Neural Information Processing Systems 30 (NIPS 2017)</i>, pp. 4765-4774. Available at: https://papers.nips.cc/paper/7062 (Accessed: "
     + ACCESSED
     + ").",
 )
@@ -169,7 +169,7 @@ add(
     "Adebayo2018",
     "Adebayo",
     2018,
-    "Adebayo, J., Gilmer, J., Muelly, M., Goodfellow, I., Hardt, M. and Kim, B. (2018) 'Sanity checks for saliency maps', in <i>Advances in Neural Information Processing Systems 31 (NeurIPS 2018)</i>, pp. 9505–9515. Available at: https://papers.nips.cc/paper/8160-sanity-checks-for-saliency-maps (Accessed: "
+    "Adebayo, J., Gilmer, J., Muelly, M., Goodfellow, I., Hardt, M. and Kim, B. (2018) 'Sanity checks for saliency maps', in <i>Advances in Neural Information Processing Systems 31 (NeurIPS 2018)</i>, pp. 9505-9515. Available at: https://papers.nips.cc/paper/8160-sanity-checks-for-saliency-maps (Accessed: "
     + ACCESSED
     + ").",
 )
@@ -193,7 +193,7 @@ add(
     "Pedregosa2011",
     "Pedregosa",
     2011,
-    "Pedregosa, F. et al. (2011) 'Scikit-learn: machine learning in Python', <i>Journal of Machine Learning Research</i>, 12(85), pp. 2825–2830. Available at: https://jmlr.org/papers/v12/pedregosa11a.html (Accessed: "
+    "Pedregosa, F. et al. (2011) 'Scikit-learn: machine learning in Python', <i>Journal of Machine Learning Research</i>, 12(85), pp. 2825-2830. Available at: https://jmlr.org/papers/v12/pedregosa11a.html (Accessed: "
     + ACCESSED
     + ").",
 )
@@ -201,7 +201,7 @@ add(
     "Abadi2016",
     "Abadi",
     2016,
-    "Abadi, M. et al. (2016) 'TensorFlow: a system for large-scale machine learning', in <i>12th USENIX Symposium on Operating Systems Design and Implementation (OSDI 16)</i>. Savannah, GA: USENIX Association, pp. 265–283. Available at: https://www.usenix.org/conference/osdi16/technical-sessions/presentation/abadi (Accessed: "
+    "Abadi, M. et al. (2016) 'TensorFlow: a system for large-scale machine learning', in <i>12th USENIX Symposium on Operating Systems Design and Implementation (OSDI 16)</i>. Savannah, GA: USENIX Association, pp. 265-283. Available at: https://www.usenix.org/conference/osdi16/technical-sessions/presentation/abadi (Accessed: "
     + ACCESSED
     + ").",
 )

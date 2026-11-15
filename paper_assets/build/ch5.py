@@ -264,13 +264,13 @@ def ch5():
         P(
             "The EAA-IoU score was computed for all 1,600 test images during the training run (eaa_iou_summary.json). Agreement is low overall: "
             "mean EAA-IoU is <<eaa.mean_eaa_all>>. Images the ensemble classified correctly have higher agreement (<<eaa.mean_eaa_correct>>) "
-            "than misclassified ones (<<eaa.mean_eaa_misclassified>>; one-sided Mann–Whitney p = <<eaa.p>>), and low EAA-IoU identifies "
+            "than misclassified ones (<<eaa.mean_eaa_misclassified>>; one-sided Mann-Whitney p = <<eaa.p>>), and low EAA-IoU identifies "
             "misclassified images with an AUROC of <<eaa.auroc_low_eaa_predicts_error>> ({fig:eaa}). This supports the hypothesis that attention "
             "disagreement is associated with error."
         ),
         P(
             "Three caveats limit its value. First, the score is driven almost entirely by the two pretrained networks. The mean IoU of the "
-            "Xception–InceptionV3 pair is <<st.eaa_recomputed.pair_means.iou_xcp_inc>>, whereas any pair that includes the CNN averages about "
+            "Xception-InceptionV3 pair is <<st.eaa_recomputed.pair_means.iou_xcp_inc>>, whereas any pair that includes the CNN averages about "
             "0.005, because the CNN’s maps are sharp and scattered while the others are smooth ({tab:cons}). Second, the agreement levels proposed at the start of the project (0.40 for an alert and 0.65 for strong agreement) are far too high: every "
             "image falls below 0.40. Thresholds taken from the observed distribution work better. At 0.10, <<st.eaa_recomputed.threshold_0.1.flagged_pct>>% of images are flagged and "
             "<<st.eaa_recomputed.threshold_0.1.errors_caught_pct>>% of errors are caught; at 0.05, "
@@ -301,7 +301,7 @@ def ch5():
         ),
         H(2, "5.9 Why is glioma recall lowest?"),
         P(
-            '{tab:glioma} brings the evidence together by class. Glioma has the lowest recall, but it does not have the lowest attention agreement. Mean EAA-IoU is lowest for meningioma (<<eaa.class.meningioma>>) and pituitary (<<eaa.class.pituitary>>), and the rank correlation between maps is lowest for pituitary (<<xai_quantitative.consistency.by_true_class_mean_rho.pituitary>>). Only no tumour stands out, with clearly higher agreement on both measures. The expectation from the proposal, that glioma would show the most disagreement, is therefore not supported. Agreement does track correctness within the sample, with a mean rank correlation of <<xai_quantitative.consistency.correct_mean_rho>> for correct and <<xai_quantitative.consistency.incorrect_mean_rho>> for misclassified images (Mann–Whitney p = <<cons.p>>), matching the EAA-IoU result on the full test set. The examples in Section 5.2 suggest a better explanation for the glioma problem. In the most common error the models agree and do look at the lesion, but read a well-defined, bright lesion as meningioma. In the most dangerous error they miss a subtle, infiltrative lesion and base a "no tumour" decision on the normal hemisphere. Neither failure can be detected by disagreement, which explains why EAA-IoU catches some errors but not all.'
+            '{tab:glioma} brings the evidence together by class. Glioma has the lowest recall, but it does not have the lowest attention agreement. Mean EAA-IoU is lowest for meningioma (<<eaa.class.meningioma>>) and pituitary (<<eaa.class.pituitary>>), and the rank correlation between maps is lowest for pituitary (<<xai_quantitative.consistency.by_true_class_mean_rho.pituitary>>). Only no tumour stands out, with clearly higher agreement on both measures. The expectation from the proposal, that glioma would show the most disagreement, is therefore not supported. Agreement does track correctness within the sample, with a mean rank correlation of <<xai_quantitative.consistency.correct_mean_rho>> for correct and <<xai_quantitative.consistency.incorrect_mean_rho>> for misclassified images (Mann-Whitney p = <<cons.p>>), matching the EAA-IoU result on the full test set. The examples in Section 5.2 suggest a better explanation for the glioma problem. In the most common error the models agree and do look at the lesion, but read a well-defined, bright lesion as meningioma. In the most dangerous error they miss a subtle, infiltrative lesion and base a "no tumour" decision on the normal hemisphere. Neither failure can be detected by disagreement, which explains why EAA-IoU catches some errors but not all.'
         ),
         TAB(
             "glioma",

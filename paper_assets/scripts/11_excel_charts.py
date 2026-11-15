@@ -95,7 +95,7 @@ def widths(ws, w):
 cnt = json.load(open(os.path.join(M, "dataset_counts.json")))
 ws = sheet(
     fname("dist") + "_Dataset",
-    "Figure %d –" % FN["dist"] + " Images per class",
+    "Figure %d: " % FN["dist"] + "Images per class",
     "Source: metrics/dataset_counts.json. Edit the blue counts; totals and the chart update.",
 )
 end = table(
@@ -118,12 +118,12 @@ widths(ws, [16, 12, 12])
 for sname, fig, names in [
     (
         fname("train_sa") + "_Training",
-        "Figure %d –" % FN["train_sa"] + " Training curves of the standalone deep models",
+        "Figure %d: " % FN["train_sa"] + "Training curves of the standalone deep models",
         ["cnn_model", "inceptionv3_model", "xception_model"],
     ),
     (
         fname("train_ext") + "_Training_Extractors",
-        "Figure %d –" % FN["train_ext"] + " Training curves of the 128 px feature extractors",
+        "Figure %d: " % FN["train_ext"] + "Training curves of the 128 px feature extractors",
         ["cnn_ext", "inceptionv3_ext", "xception_ext"],
     ),
 ]:
@@ -160,7 +160,7 @@ for sname, fig, names in [
             )
             ch.set_categories(Reference(ws, min_col=col, min_row=6, max_row=end))
             ws.add_chart(
-                tidy(ch, f"{nm} – {which}", "Epoch", yt, w=12, h=7),
+                tidy(ch, f"{nm}: {which}", "Epoch", yt, w=12, h=7),
                 f'{L(col)}{28 if which == "accuracy" else 43}',
             )
         col += 7
@@ -170,7 +170,7 @@ for sname, fig, names in [
 # 3 confusion matrices (counts are inputs; row-normalised matrix is formulas + colour scale)
 ws = sheet(
     fname("cm_deep", "cm_feat", "cm_raw") + "_Confusion",
-    "Figures %d, %d, %d –" % (FN["cm_deep"], FN["cm_feat"], FN["cm_raw"])
+    "Figures %d, %d, %d:" % (FN["cm_deep"], FN["cm_feat"], FN["cm_raw"])
     + " Confusion matrices (counts and row-normalised)",
     "Source: confusion/*.csv. Edit the blue counts; the normalised block (formulas) and its colours update.",
 )
@@ -237,7 +237,7 @@ widths(ws, [24, 11, 12, 11, 11, 3, 12, 11, 12, 11, 11])
 master = pd.read_csv(os.path.join(M, "results_master.csv")).sort_values("accuracy")
 ws = sheet(
     fname("acc_all") + "_Accuracy",
-    "Figure %d –" % FN["acc_all"] + " Test accuracy of all configurations with Wilson 95% CI",
+    "Figure %d: " % FN["acc_all"] + "Test accuracy of all configurations with Wilson 95% CI",
     "Source: metrics/results_master.csv. Edit Accuracy or n; the CI columns are formulas (Wilson score interval, z = 1.96).",
 )
 ws["H4"] = "z"
@@ -281,7 +281,7 @@ widths(ws, [34, 10, 8, 10, 10, 9, 9, 3, 6])
 # 5 F1 heatmap
 ws = sheet(
     fname("f1") + "_F1_Heatmap",
-    "Figure %d –" % FN["f1"] + " Per-class F1-score of every configuration",
+    "Figure %d: " % FN["f1"] + "Per-class F1-score of every configuration",
     "Source: metrics/results_master.csv. Edit values; the colour scale updates.",
 )
 m2 = pd.read_csv(os.path.join(M, "results_master.csv"))
@@ -324,7 +324,7 @@ P = np.load(os.path.join(RES, "standalone_test_probs.npz"))
 yt = P["y"]
 ws = sheet(
     fname("roc") + "_ROC_PR",
-    "Figure %d –" % FN["roc"] + " ROC and precision–recall curves (one-vs-rest)",
+    "Figure %d: " % FN["roc"] + "ROC and precision-recall curves (one-vs-rest)",
     "Computed from the saved models’ test probabilities (paper_assets/xai_results/standalone_test_probs.npz). Curves are thinned to ≤ 120 points for Excel.",
 )
 col = 1
@@ -368,46 +368,55 @@ for k, (nm, rc, pc) in enumerate(anchors):
     ws.add_chart(
         tidy(rc, f"{nm} ROC", "False positive rate", "True positive rate", w=11, h=8), f"A{130 + 17 * k}"
     )
-    ws.add_chart(tidy(pc, f"{nm} precision–recall", "Recall", "Precision", w=11, h=8), f"J{130 + 17 * k}")
+    ws.add_chart(tidy(pc, f"{nm} precision-recall", "Recall", "Precision", w=11, h=8), f"J{130 + 17 * k}")
 
-# 7 old vs new
+# 7 baseline vs improved (full test set and duplicate-free subset)
+res = json.load(open(os.path.join(ROOT, "metrics", "clean_subset_results.json")))
 ws = sheet(
-    fname("oldnew") + "_Old_vs_New",
-    "Figure %d –" % FN["oldnew"] + " HND (2024) accuracies vs standardised re-run",
-    "HND values from Final_Research_Report.pdf (the 98.20% was on training images); re-run values from results_master.csv.",
+    fname("bvi") + "_Baseline_vs_Improved",
+    "Figure %d: accuracy of the baseline and improved configurations" % FN["bvi"],
+    "Source: metrics/clean_subset_results.json. Edit the blue values; the change columns and the charts update.",
 )
-on = [
-    ["Custom CNN", 0.94, 0.9044],
-    ["Xception", 0.8691, 0.8762],
-    ["InceptionV3", 0.8463, 0.8662],
-    ["CNN feat. ens.", 0.8371, 0.8931],
-    ["Xception feat. ens.", 0.7028, 0.8831],
-    ["InceptionV3 feat. ens.", 0.712, 0.8612],
-    ["Raw-pixel ens.", 0.83, 0.8406],
-    ["Final ensemble", 0.982, 0.925],
-]
-end = table(
-    ws,
-    4,
-    1,
-    ["Model", "HND report (2024)", "Re-run (2026), held-out", "Change (formula)"],
-    [r_ + [f"=C{5 + i}-B{5 + i}"] for i, r_ in enumerate(on)],
-    fmt={1: "0.00%", 2: "0.00%", 3: "+0.00%;-0.00%"},
-)
-ch = BarChart()
-ch.add_data(Reference(ws, min_col=2, max_col=3, min_row=4, max_row=end), titles_from_data=True)
-ch.set_categories(Reference(ws, min_col=1, min_row=5, max_row=end))
-ch.y_axis.scaling.min = 0.6
-ch.y_axis.number_format = "0%"
-ws.add_chart(tidy(ch, "HND vs re-run accuracy", None, "Accuracy", w=18), "F4")
-widths(ws, [24, 16, 20, 14])
+keys = ["CNN", "InceptionV3", "Xception", "CNN_features", "InceptionV3_features", "Xception_features", "final_majority", "final_confidence_weighted"]
+rows = []
+for i, k in enumerate(keys):
+    r_ = 5 + i
+    rows.append([k, res["baseline"][k]["full"]["acc"] / 100, res["improved"][k]["full"]["acc"] / 100, res["baseline"][k]["clean"]["acc"] / 100,
+                 res["improved"][k]["clean"]["acc"] / 100, f"=C{r_}-B{r_}", f"=E{r_}-D{r_}"])
+end = table(ws, 4, 1, ["Predictor", "Baseline, full", "Improved, full", "Baseline, clean", "Improved, clean", "Change, full", "Change, clean"], rows,
+            fmt={1: "0.00%", 2: "0.00%", 3: "0.00%", 4: "0.00%", 5: "+0.00%;-0.00%", 6: "+0.00%;-0.00%"})
+for cols, title, anchor in [((2, 3), "Full test set", "I4"), ((4, 5), "Duplicate-free subset", "I22")]:
+    ch = BarChart()
+    ch.add_data(Reference(ws, min_col=cols[0], max_col=cols[1], min_row=4, max_row=end), titles_from_data=True)
+    ch.set_categories(Reference(ws, min_col=1, min_row=5, max_row=end))
+    ch.y_axis.scaling.min = 0.7
+    ch.y_axis.number_format = "0%"
+    ws.add_chart(tidy(ch, title, None, "Accuracy", w=16), anchor)
+widths(ws, [26, 13, 13, 13, 13, 12, 12])
+
+# 7b training curves of the improved run
+ws = sheet(fname("train_imp") + "_Training_Improved", "Figure %d: training curves of the improved models" % FN["train_imp"],
+           "Source: runs/v2/history/<model>.csv. Each block holds one model.")
+col = 1
+for nm in ["cnn", "inceptionv3", "xception"]:
+    h = pd.read_csv(os.path.join(ROOT, "runs", "v2", "history", nm + ".csv"))
+    ws.cell(4, col, nm).font = TITLE
+    end = table(ws, 5, col, ["Epoch", "Train acc", "Val acc", "Train loss", "Val loss"],
+                [[i + 1, round(r.accuracy, 4), round(r.val_accuracy, 4), round(r.loss, 4), round(r.val_loss, 4)] for i, (_, r) in enumerate(h.iterrows())],
+                fmt={1: "0.000", 2: "0.000", 3: "0.000", 4: "0.000"})
+    for which, (a_, b_), yt, anchor_row in [("accuracy", (1, 2), "Accuracy", 30), ("loss", (3, 4), "Loss", 45)]:
+        ch = LineChart()
+        ch.add_data(Reference(ws, min_col=col + a_, max_col=col + b_, min_row=5, max_row=end), titles_from_data=True)
+        ch.set_categories(Reference(ws, min_col=col, min_row=6, max_row=end))
+        ws.add_chart(tidy(ch, f"{nm}: {which}", "Epoch", yt, w=12, h=7), f"{L(col)}{anchor_row}")
+    col += 7
 
 # 8 EAA-IoU (raw data + formulas)
 e = pd.read_csv(os.path.join(M, "eaa_iou_per_image.csv")).drop_duplicates("idx")
 ws = sheet(
     fname("eaa") + "_EAA_IoU",
-    "Figure %d –" % FN["eaa"] + " EAA-IoU on all 1,600 test images",
-    "Source: metrics/eaa_iou_per_image.csv (columns A–H). Summary cells are formulas; edit the threshold in K15 to test an alert rule.",
+    "Figure %d: " % FN["eaa"] + "EAA-IoU on all 1,600 test images",
+    "Source: metrics/eaa_iou_per_image.csv (columns A-H). Summary cells are formulas; edit the threshold in K15 to test an alert rule.",
 )
 table(ws, 4, 1, list(e.columns), e.values.tolist(), inputs=False)
 ws["J4"] = "Summary by true class"
@@ -455,7 +464,7 @@ widths(ws, [6, 6, 9, 8, 10, 10, 10, 9, 2, 18, 13, 10, 8])
 sh = json.load(open(os.path.join(RES, "shap_rf.json")))
 ws = sheet(
     fname("shap_rf") + "_SHAP_RF",
-    "Figure %d –" % FN["shap_rf"] + " TreeSHAP for the Random Forest on CNN features",
+    "Figure %d: " % FN["shap_rf"] + "TreeSHAP for the Random Forest on CNN features",
     "Top-15 units as reported in paper_assets/xai_results/shap_rf.json and fig_shap_rf.png; rerun 07_shap_rf.py for all 256 units.",
 )
 ws["A4"] = "Features carrying 80% of attribution"
@@ -513,7 +522,7 @@ if os.path.exists(qpath):
     cur = np.load(os.path.join(RES, "deletion_insertion_curves.npz"))
     ws = sheet(
         fname("di") + "_Deletion_Insertion",
-        "Figure %d –" % FN["di"] + " Deletion and insertion curves",
+        "Figure %d: " % FN["di"] + "Deletion and insertion curves",
         "Source: deletion_insertion_curves.npz. AUC row = trapezoid rule formula over the 21 points (step 0.05).",
     )
     col = 1
@@ -549,7 +558,7 @@ if os.path.exists(qpath):
             col += 7
     ws = sheet(
         fname("san") + "_Sanity_Check",
-        "Figure %d –" % FN["san"] + " Cascading weight randomisation",
+        "Figure %d: " % FN["san"] + "Cascading weight randomisation",
         "Source: xai_quantitative.json → sanity_check.",
     )
     r0 = 4
@@ -574,7 +583,7 @@ if os.path.exists(qpath):
     widths(ws, [30, 13, 10])
     ws = sheet(
         fname("cons") + "_Consistency",
-        "Figure %d –" % FN["cons"] + " Cross-model agreement and attention outside the brain",
+        "Figure %d: " % FN["cons"] + "Cross-model agreement and attention outside the brain",
         "Source: xai_quantitative.json.",
     )
     cs = q["consistency"]

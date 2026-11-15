@@ -325,7 +325,7 @@ def ch3():
         H(3, "3.7.1 Custom CNN"),
         P(
             "The baseline CNN ({fig:cnn}, {lst:base}) has four convolution and pooling blocks, a 256-unit dense layer, dropout and a softmax output, "
-            "and is trained from scratch. The improved CNN ({lst:cnn2}) adds batch normalisation, augmentation and global average pooling."
+            "and is trained from scratch. The improved CNN ({fig:cnn_imp}, {lst:cnn2}) adds batch normalisation, augmentation and global average pooling."
         ),
         FIG(
             "cnn",
@@ -334,6 +334,7 @@ def ch3():
             width=6.2,
         ),
         CODE("base", "Baseline CNN and frozen pretrained backbone", L_BASE),
+        FIG("cnn_imp", "paper_assets/figures/fig_arch_cnn_improved.png", "Architecture of the improved custom CNN", width=6.2),
         CODE("cnn2", "Improved CNN (src/models.py)", L_CNN2),
         H(3, "3.7.2 InceptionV3 and Xception"),
         P(
