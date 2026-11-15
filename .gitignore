@@ -7,3 +7,5 @@ paper_assets/scripts/__pycache__/
 runs/v2/cache/
 runs/v2/models/
 runs/v2/probs/
+__pycache__/
+*.pyc
