@@ -1,5 +1,7 @@
 """Look up every DOI on Crossref and store the authoritative metadata used for the reference list."""
+
 import json, urllib.request, urllib.parse, sys, os, time
+
 DOIS = """10.1007/978-981-10-9035-6_33
 10.1371/journal.pone.0140381
 10.1007/BF00994018
@@ -55,12 +57,44 @@ DOIS = """10.1007/978-981-10-9035-6_33
 out = {}
 for d in DOIS:
     try:
-        with urllib.request.urlopen('https://api.crossref.org/works/' + urllib.parse.quote(d), timeout=30) as r:
-            m = json.load(r)['message']
-        out[d] = {k: m.get(k) for k in ['author', 'title', 'container-title', 'volume', 'issue', 'page', 'issued', 'publisher', 'type', 'article-number', 'event']}
-        a = m.get('author') or []
-        print('OK ', d, '|', (a[0].get('family') if a else m.get('publisher')), m['issued']['date-parts'][0][0], '|', (m.get('title') or [''])[0][:90], '|', (m.get('container-title') or [''])[0][:60])
+        with urllib.request.urlopen(
+            "https://api.crossref.org/works/" + urllib.parse.quote(d), timeout=30
+        ) as r:
+            m = json.load(r)["message"]
+        out[d] = {
+            k: m.get(k)
+            for k in [
+                "author",
+                "title",
+                "container-title",
+                "volume",
+                "issue",
+                "page",
+                "issued",
+                "publisher",
+                "type",
+                "article-number",
+                "event",
+            ]
+        }
+        a = m.get("author") or []
+        print(
+            "OK ",
+            d,
+            "|",
+            (a[0].get("family") if a else m.get("publisher")),
+            m["issued"]["date-parts"][0][0],
+            "|",
+            (m.get("title") or [""])[0][:90],
+            "|",
+            (m.get("container-title") or [""])[0][:60],
+        )
     except Exception as e:
-        out[d] = None; print('ERR', d, e)
+        out[d] = None
+        print("ERR", d, e)
     time.sleep(0.2)
-json.dump(out, open(os.path.join(os.path.dirname(__file__), '..', 'references', 'crossref_metadata.json'), 'w'), indent=1)
+json.dump(
+    out,
+    open(os.path.join(os.path.dirname(__file__), "..", "references", "crossref_metadata.json"), "w"),
+    indent=1,
+)

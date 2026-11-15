@@ -3,3 +3,7 @@ paper_assets/xai_results/sample_maps.npz
 paper_assets/xai_results/example_maps.npz
 paper_assets/build/__pycache__/
 paper_assets/scripts/__pycache__/
+# improved run: keep metrics/confusion/history, not the large arrays and model files
+runs/v2/cache/
+runs/v2/models/
+runs/v2/probs/

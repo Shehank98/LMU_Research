@@ -1,0 +1,13 @@
+{
+  "threshold": 0.02,
+  "n_test": 1600,
+  "n_duplicates": 336,
+  "n_clean": 1264,
+  "by_class": {
+    "glioma": 10,
+    "meningioma": 101,
+    "notumor": 225,
+    "pituitary": 0
+  },
+  "label_conflicts": 2
+}

@@ -6,6 +6,7 @@ explain()       builds Grad-CAM maps for CNN, Xception and InceptionV3, the cons
                 and the Ensemble Attention Agreement score (EAA-IoU = mean pairwise IoU).
 The Grad-CAM code is the same as in the Colab notebook, so the app and the report agree.
 """
+
 import logging
 
 import cv2
@@ -14,23 +15,47 @@ import tensorflow as tf
 from PIL import Image
 from tensorflow.keras.models import Model
 
-from model_loader import ensemble_proba, input_size
+from model_loader import MODEL_SET, ensemble_proba, input_size
 
 log = logging.getLogger(__name__)
 
-CLASS_NAMES = ['Glioma', 'Meningioma', 'No Tumor', 'Pituitary']
+CLASS_NAMES = ["Glioma", "Meningioma", "No Tumor", "Pituitary"]
 MAP_SIZE = 256
 IOU_THRESHOLD = 0.5
-EAA_HIGH, EAA_LOW = 0.65, 0.40          # >= high: agree; < low: flag for radiologist review
-CAM_METHOD = 'hirescam'                  # 'hirescam' (default) or 'gradcam'; must match the notebook
+EAA_HIGH, EAA_LOW = (
+    0.20,
+    0.10,
+)  # calibrated on the 1,600 test images: < 0.10 flags about half of the cases and catches 82% of errors
+CAM_METHOD = "hirescam"  # 'hirescam' (default) or 'gradcam'; must match the notebook
 
-DEEP_MODELS = [('cnn', 'CNN'), ('xception', 'Xception'), ('inception', 'InceptionV3')]
-FEATURE_MODELS = [('cnn', 'CNN + Ensemble'), ('inception', 'InceptionV3 + Ensemble'),
-                  ('xception', 'Xception + Ensemble')]
+DEEP_MODELS = [("cnn", "CNN"), ("xception", "Xception"), ("inception", "InceptionV3")]
+FEATURE_MODELS = [
+    ("cnn", "CNN + Ensemble"),
+    ("inception", "InceptionV3 + Ensemble"),
+    ("xception", "Xception + Ensemble"),
+]
+
+
+def crop_head(rgb, margin=4):
+    """Crop to the bounding box of the head (same rule as src/data.py, used by the improved models)."""
+    grey = cv2.GaussianBlur(cv2.cvtColor(rgb, cv2.COLOR_RGB2GRAY), (5, 5), 0)
+    _, mask = cv2.threshold(grey, 45, 255, cv2.THRESH_BINARY)
+    mask = cv2.dilate(cv2.erode(mask, None, iterations=2), None, iterations=2)
+    contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if not contours:
+        return rgb
+    x, y, w, h = cv2.boundingRect(max(contours, key=cv2.contourArea))
+    if w < 0.2 * rgb.shape[1] or h < 0.2 * rgb.shape[0]:
+        return rgb
+    return rgb[max(y - margin, 0) : y + h + margin, max(x - margin, 0) : x + w + margin]
 
 
 def preprocess(pil_image, size):
-    img = pil_image.convert('RGB').resize((size, size), Image.BILINEAR)
+    if MODEL_SET == "improved":
+        rgb = crop_head(np.asarray(pil_image.convert("RGB")))
+        img = cv2.resize(rgb, (size, size), interpolation=cv2.INTER_AREA)
+    else:
+        img = np.asarray(pil_image.convert("RGB").resize((size, size), Image.BILINEAR))
     return (np.asarray(img, dtype=np.float32) / 255.0)[None, ...]
 
 
@@ -42,19 +67,19 @@ def _input_size(model):
 def predict_all(pil_image, models, extractors):
     """Returns (final_idx, confidence, per_model[(name, family, probs)], fused_probs)."""
     per_model = []
-    for key, name in [('cnn', 'CNN'), ('inception', 'InceptionV3'), ('xception', 'Xception')]:
+    for key, name in [("cnn", "CNN"), ("inception", "InceptionV3"), ("xception", "Xception")]:
         m = models.get(key)
         if m is not None:
             probs = m.predict(preprocess(pil_image, _input_size(m)), verbose=0)[0]
-            per_model.append((name, 'Deep model', np.asarray(probs, dtype=float)))
+            per_model.append((name, "Deep model", np.asarray(probs, dtype=float)))
     for family, name in FEATURE_MODELS:
-        ext, ens = extractors.get(family), models.get(f'{family}_ens')
+        ext, ens = extractors.get(family), models.get(f"{family}_ens")
         if ext is None or ens is None:
             continue
         feats = ext.predict(preprocess(pil_image, ext.input_size))
-        per_model.append((name, 'Feature ensemble', np.asarray(ensemble_proba(ens, feats)[0], dtype=float)))
+        per_model.append((name, "Feature ensemble", np.asarray(ensemble_proba(ens, feats)[0], dtype=float)))
     if not per_model:
-        raise RuntimeError('no models available')
+        raise RuntimeError("no models available")
     fused = np.sum([p for _, _, p in per_model], axis=0)
     final = int(np.argmax(fused))
     confidence = float(fused[final] / fused.sum())
@@ -80,7 +105,7 @@ def _last_spatial_layer(model):
                 return layer.name
         except Exception:
             continue
-    raise ValueError(f'no spatial layer in {model.name}')
+    raise ValueError(f"no spatial layer in {model.name}")
 
 
 def _final_dense(model):
@@ -116,15 +141,16 @@ def gradcam(model, image, class_idx):
         key = id(model)
         if key not in _grad_models:
             head_input = dense.input if dense is not None else model.output
-            _grad_models[key] = Model(model.inputs,
-                                      [model.get_layer(_last_spatial_layer(model)).output, head_input])
+            _grad_models[key] = Model(
+                model.inputs, [model.get_layer(_last_spatial_layer(model)).output, head_input]
+            )
         with tf.GradientTape() as tape:
             conv, h = _grad_models[key](x, training=False)
             scores = _logits(dense, h) if dense is not None else h
             score = scores[:, class_idx]
         grads = tape.gradient(score, conv)
-    if CAM_METHOD == 'gradcam':
-        cam = tf.einsum('bhwc,bc->bhw', conv, tf.reduce_mean(grads, axis=(1, 2)))
+    if CAM_METHOD == "gradcam":
+        cam = tf.einsum("bhwc,bc->bhw", conv, tf.reduce_mean(grads, axis=(1, 2)))
     else:
         # HiResCAM: element-wise gradient x activation keeps spatial detail. It equals Grad-CAM for
         # Global-Average-Pooling heads (InceptionV3, Xception) and stays correct for the CNN's
@@ -142,7 +168,7 @@ def iou(a, b, t=IOU_THRESHOLD):
 
 
 def overlay(pil_image, heatmap, alpha=0.45):
-    base = np.asarray(pil_image.convert('RGB').resize((MAP_SIZE, MAP_SIZE)))
+    base = np.asarray(pil_image.convert("RGB").resize((MAP_SIZE, MAP_SIZE)))
     colour = cv2.cvtColor(cv2.applyColorMap(np.uint8(255 * heatmap), cv2.COLORMAP_JET), cv2.COLOR_BGR2RGB)
     return Image.fromarray(cv2.addWeighted(base, 1 - alpha, colour, alpha, 0))
 
@@ -150,7 +176,7 @@ def overlay(pil_image, heatmap, alpha=0.45):
 def agreement_level(eaa):
     if eaa is None:
         return None
-    return 'high' if eaa >= EAA_HIGH else 'moderate' if eaa >= EAA_LOW else 'low'
+    return "high" if eaa >= EAA_HIGH else "moderate" if eaa >= EAA_LOW else "low"
 
 
 def explain(pil_image, models, class_idx, per_model):
@@ -164,21 +190,30 @@ def explain(pil_image, models, class_idx, per_model):
         try:
             maps[name] = gradcam(m, preprocess(pil_image, _input_size(m)), class_idx)
         except Exception as exc:
-            log.warning('Grad-CAM failed for %s: %s', name, exc)
+            log.warning("Grad-CAM failed for %s: %s", name, exc)
     names = list(maps)
-    pairs = [{'pair': f'{names[i]} vs {names[j]}', 'iou': iou(maps[names[i]], maps[names[j]])}
-             for i in range(len(names)) for j in range(i + 1, len(names))]
-    eaa = float(np.mean([p['iou'] for p in pairs])) if pairs else None
+    pairs = [
+        {"pair": f"{names[i]} vs {names[j]}", "iou": iou(maps[names[i]], maps[names[j]])}
+        for i in range(len(names))
+        for j in range(i + 1, len(names))
+    ]
+    eaa = float(np.mean([p["iou"] for p in pairs])) if pairs else None
     consensus = None
     if maps:
         w = [conf.get(n, 1.0) for n in names]
         consensus = sum(maps[n] * wi for n, wi in zip(names, w)) / (sum(w) or 1.0)
         consensus = consensus / consensus.max() if consensus.max() > 0 else consensus
+    # heatmaps are drawn on the image the models actually saw (cropped to the head for the improved set)
+    display = (
+        Image.fromarray(crop_head(np.asarray(pil_image.convert("RGB"))))
+        if MODEL_SET == "improved"
+        else pil_image
+    )
     return {
-        'maps': {n: overlay(pil_image, maps[n]) for n in names},
-        'consensus': overlay(pil_image, consensus) if consensus is not None else None,
-        'pairwise_iou': pairs,
-        'eaa_iou': eaa,
-        'agreement_level': agreement_level(eaa),
-        'alert': eaa is not None and eaa < EAA_LOW,
+        "maps": {n: overlay(display, maps[n]) for n in names},
+        "consensus": overlay(display, consensus) if consensus is not None else None,
+        "pairwise_iou": pairs,
+        "eaa_iou": eaa,
+        "agreement_level": agreement_level(eaa),
+        "alert": eaa is not None and eaa < EAA_LOW,
     }

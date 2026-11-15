@@ -1,0 +1,244 @@
+{
+ "baseline": {
+  "CNN": {
+   "full": {
+    "acc": 90.5,
+    "ci95": [
+     89.12,
+     91.81
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 76.5,
+     "meningioma": 92.25,
+     "notumor": 99.5,
+     "pituitary": 93.75
+    }
+   },
+   "clean": {
+    "acc": 88.37,
+    "ci95": [
+     86.55,
+     90.03
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 76.41,
+     "meningioma": 90.64,
+     "notumor": 98.86,
+     "pituitary": 93.75
+    }
+   }
+  },
+  "InceptionV3": {
+   "full": {
+    "acc": 86.38,
+    "ci95": [
+     84.69,
+     88.06
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 70.5,
+     "meningioma": 79.5,
+     "notumor": 99.5,
+     "pituitary": 96.0
+    }
+   },
+   "clean": {
+    "acc": 85.6,
+    "ci95": [
+     83.7,
+     87.42
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 70.26,
+     "meningioma": 83.28,
+     "notumor": 100.0,
+     "pituitary": 96.0
+    }
+   }
+  },
+  "Xception": {
+   "full": {
+    "acc": 87.75,
+    "ci95": [
+     86.19,
+     89.31
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 69.5,
+     "meningioma": 88.75,
+     "notumor": 99.0,
+     "pituitary": 93.75
+    }
+   },
+   "clean": {
+    "acc": 86.0,
+    "ci95": [
+     84.02,
+     87.97
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 69.23,
+     "meningioma": 89.3,
+     "notumor": 100.0,
+     "pituitary": 93.75
+    }
+   }
+  },
+  "CNN_features": {
+   "full": {
+    "acc": 89.31,
+    "ci95": [
+     87.75,
+     90.81
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 77.25,
+     "meningioma": 88.25,
+     "notumor": 99.5,
+     "pituitary": 92.25
+    }
+   },
+   "clean": {
+    "acc": 86.63,
+    "ci95": [
+     84.73,
+     88.45
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 77.18,
+     "meningioma": 84.28,
+     "notumor": 98.86,
+     "pituitary": 92.25
+    }
+   }
+  },
+  "InceptionV3_features": {
+   "full": {
+    "acc": 86.12,
+    "ci95": [
+     84.44,
+     87.88
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 68.75,
+     "meningioma": 85.5,
+     "notumor": 98.0,
+     "pituitary": 92.25
+    }
+   },
+   "clean": {
+    "acc": 82.75,
+    "ci95": [
+     80.78,
+     84.81
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 68.46,
+     "meningioma": 80.6,
+     "notumor": 96.57,
+     "pituitary": 92.25
+    }
+   }
+  },
+  "Xception_features": {
+   "full": {
+    "acc": 88.31,
+    "ci95": [
+     86.75,
+     89.88
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 72.5,
+     "meningioma": 89.75,
+     "notumor": 99.0,
+     "pituitary": 92.0
+    }
+   },
+   "clean": {
+    "acc": 85.44,
+    "ci95": [
+     83.46,
+     87.34
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 72.31,
+     "meningioma": 86.29,
+     "notumor": 98.29,
+     "pituitary": 92.0
+    }
+   }
+  },
+  "final_majority": {
+   "full": {
+    "acc": 92.5,
+    "ci95": [
+     91.25,
+     93.75
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 77.5,
+     "meningioma": 95.5,
+     "notumor": 100.0,
+     "pituitary": 97.0
+    }
+   },
+   "clean": {
+    "acc": 90.66,
+    "ci95": [
+     89.0,
+     92.25
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 77.44,
+     "meningioma": 93.98,
+     "notumor": 100.0,
+     "pituitary": 97.0
+    }
+   }
+  },
+  "final_confidence_weighted": {
+   "full": {
+    "acc": 92.25,
+    "ci95": [
+     90.88,
+     93.56
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 76.25,
+     "meningioma": 95.25,
+     "notumor": 100.0,
+     "pituitary": 97.5
+    }
+   },
+   "clean": {
+    "acc": 90.43,
+    "ci95": [
+     88.69,
+     92.01
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 76.15,
+     "meningioma": 93.98,
+     "notumor": 100.0,
+     "pituitary": 97.5
+    }
+   }
+  }
+ }
+}

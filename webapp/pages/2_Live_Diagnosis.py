@@ -3,6 +3,7 @@ Page 2 — Live MRI Diagnosis
 Upload an MRI image → ensemble prediction, GRAD-CAM, IoU, per-model breakdown.
 Falls back gracefully when model files are missing.
 """
+EAA_HIGH, EAA_LOW = 0.20, 0.10   # same calibrated thresholds as the API (backend/xai_engine.py)
 import streamlit as st
 import numpy as np
 import plotly.graph_objects as go
@@ -211,9 +212,9 @@ if heatmaps:
             c_overlay = overlay_heatmap(pil_image, consensus)
             st.image(c_overlay, use_container_width=True)
 
-            if iou >= 0.65:
+            if iou >= EAA_HIGH:
                 st.caption(f'EAA-IoU: **{iou:.3f}** — Strong agreement')
-            elif iou >= 0.40:
+            elif iou >= EAA_LOW:
                 st.caption(f'EAA-IoU: **{iou:.3f}** — Moderate agreement')
             else:
                 st.caption(f'EAA-IoU: **{iou:.3f}** — Low agreement ⚠')
@@ -228,7 +229,7 @@ if heatmaps:
         iou_cols = st.columns(len(pairs))
         for col, (a, b) in zip(iou_cols, pairs):
             score = iou_score(heatmaps[a], heatmaps[b])
-            level = 'Strong' if score >= 0.65 else ('Moderate' if score >= 0.40 else 'Low')
+            level = 'Strong' if score >= EAA_HIGH else ('Moderate' if score >= EAA_LOW else 'Low')
             col.metric(f'{a} vs {b}', f'{score:.3f}', delta=level)
 
 else:

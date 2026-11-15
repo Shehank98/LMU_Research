@@ -2,6 +2,7 @@
 Page 3 — XAI Analysis
 GRAD-CAM methodology, EAA-IoU novelty explanation, live XAI when models are available.
 """
+EAA_HIGH, EAA_LOW = 0.20, 0.10   # same calibrated thresholds as the API (backend/xai_engine.py)
 import streamlit as st
 import numpy as np
 import plotly.graph_objects as go
@@ -132,13 +133,13 @@ with col1:
 with col2:
     section_header('IoU Threshold Interpretation', '')
     thresholds = [
-        ('≥ 0.65', 'Strong Agreement',   '#27ae60',
+        ('≥ 0.20', 'Strong Agreement',   '#27ae60',
          'Models focus on the same tumour region. High confidence in spatial localisation. '
          'Prediction is reliable for clinical review.'),
-        ('0.40 – 0.65', 'Moderate Agreement', '#f39c12',
+        ('0.10 to 0.20', 'Moderate Agreement', '#f39c12',
          'Partial overlap. Models agree on the general area but differ on boundaries. '
          'Radiologist review is recommended.'),
-        ('< 0.40', 'Low Agreement ⚠',    '#e74c3c',
+        ('< 0.10', 'Low Agreement ⚠',    '#e74c3c',
          'Models attend to different regions. High uncertainty. '
          'Escalation to expert review is required regardless of class confidence.'),
     ]
@@ -260,7 +261,7 @@ class_info = {
         'desc': 'Extra-axial mass, typically spherical with clear boundaries. '
                 'Models tend to agree on the outer margin but differ on internal texture. '
                 'Confusion with glioma occurs when tumour is near the cortex.',
-        'expected_iou': 'Moderate (0.45–0.65)',
+        'expected_iou': 'Moderate (0.10 to 0.20)',
         'recall': '0.96 (Final Ensemble) · 0.87 (CNN+Classical)',
     },
     'No Tumor': {
@@ -277,7 +278,7 @@ class_info = {
                 'sits in a fixed anatomical position, so all models learn to attend to '
                 'the same region. This produces the highest EAA-IoU scores and '
                 'near-perfect recall across all models.',
-        'expected_iou': 'High (0.65–0.85)',
+        'expected_iou': 'High (0.20 or above)',
         'recall': '1.00 (Final Ensemble) · 0.93 (CNN+Classical)',
     },
 }
@@ -391,8 +392,8 @@ if heatmaps:
         with cam_cols[len(heatmaps)]:
             st.markdown('**Consensus Map**')
             st.image(overlay_heatmap(pil_image, consensus), use_container_width=True)
-            iou_color = '#27ae60' if iou >= 0.65 else ('#f39c12' if iou >= 0.40 else '#e74c3c')
-            iou_label = 'Strong' if iou >= 0.65 else ('Moderate' if iou >= 0.40 else 'Low ⚠')
+            iou_color = '#27ae60' if iou >= EAA_HIGH else ('#f39c12' if iou >= EAA_LOW else '#e74c3c')
+            iou_label = 'Strong' if iou >= EAA_HIGH else ('Moderate' if iou >= EAA_LOW else 'Low ⚠')
             st.markdown(
                 f'<span style="color:{iou_color};font-weight:700">'
                 f'EAA-IoU: {iou:.3f} — {iou_label}</span>',
@@ -407,7 +408,7 @@ if heatmaps:
         iou_cols = st.columns(max(len(pairs), 1))
         for col, (a, b) in zip(iou_cols, pairs):
             score = iou_score(heatmaps[a], heatmaps[b])
-            level = 'Strong' if score >= 0.65 else ('Moderate' if score >= 0.40 else 'Low')
+            level = 'Strong' if score >= EAA_HIGH else ('Moderate' if score >= EAA_LOW else 'Low')
             col.metric(f'{a} vs {b}', f'{score:.3f}', delta=level)
 
 st.divider()
