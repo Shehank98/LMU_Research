@@ -63,7 +63,7 @@ def ch7():
         H(2, "7.6 Summary for clinical stakeholders"),
         P("The following summary is written for radiologists, neurosurgeons and hospital managers."),
         B(["What it does. The system reads one MRI slice and suggests one of four labels: glioma, meningioma, pituitary tumour or no tumour. It also shows heatmaps of the image regions that most influenced the suggestion.",
-           "<<CLIN_PERF_TEXT>>",
+           "How well it works. On 1,600 images it had never seen, the improved system was right <<clean.improved.final_majority.full.acc>>% of the time, and <<clean.improved.final_majority.clean.acc>>% on the images that have no copy in its training data. It recognised every no-tumour image and about 99% of meningiomas and pituitary tumours. It was weakest on gliomas: about 15 in 100 were mislabelled, usually as meningioma, and 19 of 400 were wrongly called "no tumour".",
            "When to trust it less. Be cautious when its confidence is low or when the six internal models disagree; most of its mistakes happen in these cases. The demonstrator raises an alert when the models' heatmaps overlap very little.",
            "What the heatmaps mean. A heatmap shows where a model looked, not where the tumour is. A heatmap that does not overlap the visible lesion, or that sits on the skull or background, is a warning sign.",
            "What it is not. It is a research prototype. It has not been tested on images from your hospital, does not use clinical history and cannot grade tumours. It must not be used for diagnosis without radiologist review and proper clinical validation."]),
@@ -74,10 +74,10 @@ def ch7():
 
 
 def ch8():
-    ro = [["RO1 Custom CNN", "Met", "<<RO1_TEXT>>"],
-          ["RO2 Pretrained networks", "Met", "<<RO2_TEXT>>"],
+    ro = [["RO1 Custom CNN", "Met", "Baseline CNN <<acc.CNN_standalone>>%, but part of this came from the background; on cropped images the CNN reached <<clean.improved.CNN.full.acc>>%."],
+          ["RO2 Pretrained networks", "Met", "Frozen: <<acc.Xception_standalone>>% (Xception), <<acc.InceptionV3_standalone>>% (InceptionV3). Fine-tuned: <<clean.improved.Xception.full.acc>>% and <<clean.improved.InceptionV3.full.acc>>%."],
           ["RO3 Classical classifiers", "Met", "Deep features improve every classical classifier (baseline SVM <<acc.raw_svm>>% on pixels, <<acc.cnn_feat_svm>>% on CNN features)."],
-          ["RO4 Ensemble", "Met", "<<RO4_TEXT>>"],
+          ["RO4 Ensemble", "Met", "Majority vote <<clean.baseline.final_majority.full.acc>>% (baseline) and <<clean.improved.final_majority.full.acc>>% (improved); <<clean.improved.final_majority.clean.acc>>% on the duplicate-free subset."],
           ["RO5 Explanations", "Met", "Six methods applied to correct and misclassified cases of every class, for both configurations."],
           ["RO6 Evaluating and using explanations", "Met", "Faithfulness, sanity, agreement and background checks; the background cue led to the improved configuration."],
           ["Clinician feedback (proposal)", "Not met", "No responses collected; questionnaire kept as a proposed instrument (Appendix D)."]]
@@ -88,8 +88,8 @@ def ch8():
         P("{tab:ro} summarises, objective by objective, how far the outcomes meet the objectives set in Section 1.4."),
         TAB("ro", "Achievement of the research objectives", ["Objective", "Status", "Evidence"], ro, widths=[4.0, 2.2, 9.2], font=9),
         H(2, "8.2 Answers to the research questions"),
-        P("<<RQ1_TEXT>>"),
-        P("<<RQ2_TEXT>>"),
+        P("RQ1. It depends on fine-tuning. Used as frozen feature extractors, InceptionV3 and Xception were significantly less accurate than the custom CNN. Fine-tuned on cropped images they became the strongest models (<<clean.improved.InceptionV3.full.acc>>% and <<clean.improved.Xception.full.acc>>%), while the CNN, deprived of the background cue, fell to <<clean.improved.CNN.full.acc>>%."),
+        P("RQ2. In the baseline, yes: the six-model majority vote (<<clean.baseline.final_majority.full.acc>>%) was significantly better than every member. In the improved configuration the ensemble (<<clean.improved.final_majority.full.acc>>%) is the most accurate predictor but is not significantly better than fine-tuned InceptionV3 alone. Confidence weighting did not improve accuracy in either configuration, but it provides a per-image confidence score that flags errors well."),
         P("RQ3. Partly. The explanations are more faithful than random maps and depend on the model weights, so they reflect real model "
           "behaviour. They differ markedly between architectures, and agreement between them is a weaker error signal than ensemble "
           "confidence. Their most useful result was diagnostic: they revealed that the baseline relied on the image background."),

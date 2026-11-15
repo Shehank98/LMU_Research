@@ -72,25 +72,25 @@ def blocks():
             "results critically. I am also grateful to the module team at ESOFT Metro Campus and London Metropolitan University, and to the "
             "researchers who made the public MRI data and the open-source libraries used in this work available."
         ),
-        H(1, "Abstract", new=True),
+        H(1, "Abstract"),
         P(
-            "Brain tumour type affects treatment, yet reading MRI scans is slow and varies between readers. This project builds and tests an "
-            "integrated framework that compares three families of models for four-class brain MRI classification (glioma, meningioma, "
-            "pituitary tumour and no tumour): a custom convolutional neural network (CNN), two ImageNet-pretrained networks (InceptionV3 and "
-            "Xception) used with frozen backbones, and classical classifiers (Random Forest, Decision Tree, Support Vector Machine) trained on "
-            "raw pixels or on deep features. Six predictors are combined by majority and confidence-weighted voting. The work extends an "
-            "earlier HND study whose headline 98.20% accuracy was found, on audit, to have been measured on training images. All models were "
-            "therefore retrained under one standardised protocol and evaluated on 1,600 held-out test images. The six-model majority vote "
-            "reached 92.50% accuracy (95% bootstrap interval 91.25–93.69%) and was significantly better than every single model. The custom "
-            "CNN (90.44%) outperformed both pretrained networks, so the hypothesis that pretrained models would extract better features was "
-            "not supported. Glioma remained the hardest class (77.50% recall), mostly confused with meningioma. A new explainability layer "
-            "applied Grad-CAM, Grad-CAM++, HiResCAM, LIME, SHAP and occlusion to the saved models and evaluated the explanations with "
-            "deletion and insertion tests, a weight-randomisation sanity check, a cross-model agreement score (EAA-IoU) and a check for "
-            "attention outside the brain. Explanations were more faithful than a random baseline and passed the sanity check, but the three "
-            "networks often attended to different regions, the CNN placed about half of its attention outside the brain, and agreement "
-            "between the models flagged errors less well than the ensemble’s own confidence. The framework is a transparent research prototype for decision support, not a diagnostic device; clinical use would "
-            "need external validation and radiologist review.",
-            new=True,
+            "Brain tumour type affects treatment, yet reading MRI scans is slow and varies between readers. This project builds and "
+            "tests an integrated framework for four-class brain MRI classification (glioma, meningioma, pituitary tumour and no "
+            "tumour) that compares a custom convolutional neural network (CNN), two ImageNet-pretrained networks (InceptionV3 and "
+            "Xception) and classical classifiers (Random Forest, Decision Tree and Support Vector Machine) trained on deep features, "
+            "and combines six predictors by majority and confidence-weighted voting. A baseline configuration reached "
+            "<<clean.baseline.final_majority.full.acc>>% accuracy on 1,600 held-out test images. Explainable AI methods (Grad-CAM, "
+            "Grad-CAM++, HiResCAM, LIME, SHAP and occlusion), tested for faithfulness and with a weight-randomisation sanity check, "
+            "showed that the models paid much attention to the image background. Further experiments explained why: the classes come "
+            "from different source collections, simple image statistics predict the class with <<sinv.metadata_rf_cv_accuracy_pct>>% "
+            "accuracy, and 21% of the test images duplicate training images. An improved configuration therefore cropped every image "
+            "to the head, added augmentation and fine-tuned the pretrained networks. Its majority vote reached "
+            "<<clean.improved.final_majority.full.acc>>% on the full test set and <<clean.improved.final_majority.clean.acc>>% on the "
+            "duplicate-free subset, a statistically significant improvement over the baseline (<<clean.baseline.final_majority.clean.acc>>% "
+            "on the same subset). Fine-tuned InceptionV3 and Xception outperformed the custom CNN, whose accuracy fell once the "
+            "background cue was removed. <<ABS_XAI>> Glioma remained the hardest class "
+            "(85% recall). The work shows that explanation methods are most useful when their findings are tested and fed back "
+            "into the design of the model. The system is a research prototype for decision support, not a diagnostic device."
         ),
         P(
             "**Keywords:** brain tumour MRI; convolutional neural networks; transfer learning; ensemble learning; explainable AI; Grad-CAM; SHAP; LIME",

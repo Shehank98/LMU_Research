@@ -240,5 +240,305 @@
     }
    }
   }
- }
+ },
+ "improved": {
+  "CNN": {
+   "full": {
+    "acc": 79.31,
+    "ci95": [
+     77.38,
+     81.19
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 60.25,
+     "meningioma": 86.5,
+     "notumor": 94.0,
+     "pituitary": 76.5
+    }
+   },
+   "clean": {
+    "acc": 78.01,
+    "ci95": [
+     75.71,
+     80.22
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 60.26,
+     "meningioma": 93.98,
+     "notumor": 93.71,
+     "pituitary": 76.5
+    }
+   }
+  },
+  "InceptionV3": {
+   "full": {
+    "acc": 95.44,
+    "ci95": [
+     94.44,
+     96.38
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 87.0,
+     "meningioma": 96.0,
+     "notumor": 100.0,
+     "pituitary": 98.75
+    }
+   },
+   "clean": {
+    "acc": 94.54,
+    "ci95": [
+     93.28,
+     95.81
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 87.18,
+     "meningioma": 95.32,
+     "notumor": 100.0,
+     "pituitary": 98.75
+    }
+   }
+  },
+  "Xception": {
+   "full": {
+    "acc": 94.94,
+    "ci95": [
+     93.81,
+     96.0
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 85.5,
+     "meningioma": 94.5,
+     "notumor": 100.0,
+     "pituitary": 99.75
+    }
+   },
+   "clean": {
+    "acc": 93.99,
+    "ci95": [
+     92.64,
+     95.17
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 85.64,
+     "meningioma": 93.65,
+     "notumor": 100.0,
+     "pituitary": 99.75
+    }
+   }
+  },
+  "CNN_features": {
+   "full": {
+    "acc": 88.06,
+    "ci95": [
+     86.44,
+     89.62
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 68.5,
+     "meningioma": 87.75,
+     "notumor": 100.0,
+     "pituitary": 96.0
+    }
+   },
+   "clean": {
+    "acc": 85.6,
+    "ci95": [
+     83.54,
+     87.5
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 68.21,
+     "meningioma": 85.95,
+     "notumor": 100.0,
+     "pituitary": 96.0
+    }
+   }
+  },
+  "InceptionV3_features": {
+   "full": {
+    "acc": 94.94,
+    "ci95": [
+     93.81,
+     95.94
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 84.0,
+     "meningioma": 97.25,
+     "notumor": 100.0,
+     "pituitary": 98.5
+    }
+   },
+   "clean": {
+    "acc": 93.83,
+    "ci95": [
+     92.56,
+     95.09
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 84.1,
+     "meningioma": 96.66,
+     "notumor": 100.0,
+     "pituitary": 98.5
+    }
+   }
+  },
+  "Xception_features": {
+   "full": {
+    "acc": 95.31,
+    "ci95": [
+     94.31,
+     96.31
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 84.0,
+     "meningioma": 98.0,
+     "notumor": 100.0,
+     "pituitary": 99.25
+    }
+   },
+   "clean": {
+    "acc": 94.38,
+    "ci95": [
+     93.12,
+     95.57
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 84.1,
+     "meningioma": 97.99,
+     "notumor": 100.0,
+     "pituitary": 99.25
+    }
+   }
+  },
+  "final_majority": {
+   "full": {
+    "acc": 95.62,
+    "ci95": [
+     94.56,
+     96.56
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 85.0,
+     "meningioma": 98.25,
+     "notumor": 100.0,
+     "pituitary": 99.25
+    }
+   },
+   "clean": {
+    "acc": 94.7,
+    "ci95": [
+     93.43,
+     95.89
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 85.13,
+     "meningioma": 97.99,
+     "notumor": 100.0,
+     "pituitary": 99.25
+    }
+   }
+  },
+  "final_confidence_weighted": {
+   "full": {
+    "acc": 95.44,
+    "ci95": [
+     94.38,
+     96.44
+    ],
+    "n": 1600,
+    "recall": {
+     "glioma": 83.5,
+     "meningioma": 98.75,
+     "notumor": 100.0,
+     "pituitary": 99.5
+    }
+   },
+   "clean": {
+    "acc": 94.46,
+    "ci95": [
+     93.2,
+     95.73
+    ],
+    "n": 1264,
+    "recall": {
+     "glioma": 83.59,
+     "meningioma": 98.66,
+     "notumor": 100.0,
+     "pituitary": 99.5
+    }
+   }
+  }
+ },
+ "mcnemar_improved": [
+  {
+   "test": "improved vs baseline majority (full)",
+   "n01": 60,
+   "n10": 10,
+   "p": 8.004823399455647e-10,
+   "p_holm": 4.0024116997278234e-09
+  },
+  {
+   "test": "improved vs baseline majority (clean)",
+   "n01": 60,
+   "n10": 9,
+   "p": 2.2444496451277593e-10,
+   "p_holm": 1.3466697870766556e-09
+  },
+  {
+   "test": "improved majority vs improved CNN (full)",
+   "n01": 270,
+   "n10": 9,
+   "p": 5.27630621757e-68,
+   "p_holm": 4.221044974056e-67
+  },
+  {
+   "test": "improved majority vs improved InceptionV3 (full)",
+   "n01": 15,
+   "n10": 12,
+   "p": 0.7011080384254456,
+   "p_holm": 0.71856689453125
+  },
+  {
+   "test": "improved majority vs improved Xception (full)",
+   "n01": 21,
+   "n10": 10,
+   "p": 0.07075554598122835,
+   "p_holm": 0.24571338295936584
+  },
+  {
+   "test": "improved majority vs improved CNN_features (full)",
+   "n01": 125,
+   "n10": 4,
+   "p": 3.340539241823565e-32,
+   "p_holm": 2.3383774692764956e-31
+  },
+  {
+   "test": "improved majority vs improved InceptionV3_features (full)",
+   "n01": 20,
+   "n10": 9,
+   "p": 0.06142834573984146,
+   "p_holm": 0.24571338295936584
+  },
+  {
+   "test": "improved majority vs improved Xception_features (full)",
+   "n01": 12,
+   "n10": 7,
+   "p": 0.359283447265625,
+   "p_holm": 0.71856689453125
+  }
+ ]
 }

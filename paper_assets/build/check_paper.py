@@ -61,6 +61,11 @@ for f in (
     + glob.glob(os.path.join(values.ROOT, "history", "*"))
     + glob.glob(os.path.join(values.RES, "*.json"))
     + glob.glob(os.path.join(values.RES, "*.csv"))
+    + glob.glob(os.path.join(values.ROOT, "runs", "v2", "*", "*.csv"))
+    + glob.glob(os.path.join(values.ROOT, "runs", "v2", "*", "*.json"))
+    + glob.glob(os.path.join(values.ROOT, "runs", "v2", "first_cnn_attempt", "*.csv"))
+    + glob.glob(os.path.join(values.ROOT, "paper_assets", "xai_results_improved", "*.json"))
+    + glob.glob(os.path.join(values.ROOT, "paper_assets", "xai_results_improved", "*.csv"))
 ):
     for tok in re.findall(r"-?\d+\.\d+(?:e-?\d+)?|\b\d+\b", open(f, errors="ignore").read()):
         add_num(tok)
@@ -109,6 +114,8 @@ LITERATURE = [
     "94.68",
 ]  # values stated in the cited papers (Cheng 2015 91.28; Deepak 98; Rehman 98.69)
 DERIVED = {
+    "0.92": "95.62 - 94.70", "1.84": "92.50 - 90.66", "2.7": "1 - 0.9731 (no member correct)", "0.90": "training accuracy bound",
+    "0.87": "first CNN run training accuracy", "21": "336 / 1600", "0.0001": "fine-tuning learning rate", "224": "input size",
     "5.70": "98.20 - 92.50",
     "7.44": "89.69 - 82.25",
     "2.06": "92.50 - 90.44",

@@ -10,9 +10,8 @@ import tensorflow as tf
 tf.random.set_seed(42)
 np.random.seed(42)
 pred = pd.read_csv(PRED_CSV)
-d = np.load(os.path.join(RES, "standalone_test_probs.npz"))
-files = d["files"]
-X, y, _ = load_numpy("Testing", IMG)
+X, y, files = load_numpy("Testing", IMG)
+files = np.array(files)
 cm = pd.read_csv(
     FINAL_CM, index_col=0
 ).values
