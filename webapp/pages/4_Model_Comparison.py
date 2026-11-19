@@ -45,7 +45,7 @@ def highlight_this_work(val):
     return 'background-color: #fff3cd; font-weight: bold' if '**' in str(val) else ''
 
 st.dataframe(
-    df_lit.style.applymap(highlight_this_work),
+    df_lit.style.map(highlight_this_work),
     use_container_width=True,
     hide_index=True,
 )
@@ -100,15 +100,15 @@ fig_build.update_layout(
         tickangle=-25,
         title='Models included',
     ),
-    yaxis=dict(range=[85, 101], title='Test Accuracy (%)'),
+    yaxis=dict(range=[85, 95], title='Test Accuracy (%)'),
     margin=dict(l=10, r=10, t=20, b=100),
     height=380,
     plot_bgcolor='white',
     paper_bgcolor='white',
     showlegend=False,
 )
-fig_build.add_hline(y=98.20, line_dash='dash', line_color='#f39c12',
-                    annotation_text='Final 98.20%',
+fig_build.add_hline(y=92.50, line_dash='dash', line_color='#f39c12',
+                    annotation_text='Majority vote 92.50%',
                     annotation_position='bottom right')
 
 st.plotly_chart(fig_build, use_container_width=True)
@@ -275,8 +275,8 @@ for fam, col in FAMILY_COLORS.items():
 
 st.plotly_chart(fig_scatter, use_container_width=True)
 st.caption(
-    'CNN has ~0.9M parameters but achieves 91.18% — the best efficiency ratio. '
-    'Xception and InceptionV3 use 22–23M parameters for 84–87% standalone accuracy. '
+    'The custom CNN has 3.31M parameters and achieves 90.44%, the best efficiency ratio. '
+    'Xception and InceptionV3 have about 21M parameters (only 8,196 trainable, backbone frozen) for 86.62 to 87.62%. '
     'The 6-model ensemble combines them all but the combined parameter count is not additive '
     'in inference (models run in parallel).'
 )
@@ -286,7 +286,7 @@ st.divider()
 # ─────────────────────────────────────────────────────────────────────────────
 # 6. Full model accuracy comparison — horizontal bar
 # ─────────────────────────────────────────────────────────────────────────────
-section_header('Complete Accuracy Ranking', 'All model configurations on 2,063 test images')
+section_header('Complete Accuracy Ranking', 'All model configurations on 1,600 test images')
 
 models_sorted = sorted(MODEL_ACCURACY.items(), key=lambda x: x[1])
 fig_rank = go.Figure(go.Bar(
@@ -305,8 +305,8 @@ fig_rank.update_layout(
     paper_bgcolor='white',
     showlegend=False,
 )
-fig_rank.add_vline(x=98.20, line_dash='dash', line_color='#f39c12',
-                   annotation_text='98.20%', annotation_position='top right')
+fig_rank.add_vline(x=92.50, line_dash='dash', line_color='#f39c12',
+                   annotation_text='92.50%', annotation_position='top right')
 st.plotly_chart(fig_rank, use_container_width=True)
 
 leg_cols = st.columns(len(FAMILY_COLORS))

@@ -52,11 +52,11 @@ st.markdown(
 # ── KPI row ───────────────────────────────────────────────────────────────────
 k1, k2, k3, k4, k5 = st.columns(5)
 cards = [
-    (k1, '98.20%', 'Final Ensemble Accuracy', '', ''),
-    (k2, '9,047',  'MRI Scans',               'Kaggle dataset', ''),
+    (k1, '92.50%', 'Final Ensemble Accuracy', '1,600 test images', ''),
+    (k2, '7,200',  'MRI Scans',               'Kaggle dataset', ''),
     (k3, '4',      'Tumor Classes',            '', ''),
     (k4, '6',      'Combined Models',          '', 'accent'),
-    (k5, '0.98',   'Weighted F1-Score',        '', 'success'),
+    (k5, '0.924',  'Macro F1-Score',           '', 'success'),
 ]
 for col, val, label, sub, variant in cards:
     col.markdown(kpi_card(label, val, sub, variant), unsafe_allow_html=True)
@@ -70,13 +70,13 @@ with st.expander('📄 Research Abstract', expanded=False):
         '<b>Title:</b> A Comparative Analysis of Ensemble Learning, Fine-Tuned Models '
         'and CNNs for Multi-Class Disease Prediction in Medical Imaging: An Integrated '
         'Framework with Systematic Optimization.<br><br>'
-        'This study examines how well fine-tuned models perform in feature extraction '
-        'compared to ordinary CNNs and how their integration with ensemble techniques '
-        'affects the precision and dependability of identifying brain tumors from MRI '
-        'images. The purpose is to assess the performance of SVM, RF, DT, Xception, '
-        'and InceptionV3 classifiers using a mixed-methods approach. '
-        'The final ensemble model, composed of six saved models, outperformed the CNN\'s '
-        'highest individual accuracy of 94% with a final accuracy of <b>98.20%</b>.'
+        'This study compares a custom CNN, ImageNet-pretrained InceptionV3 and Xception '
+        'networks and classical classifiers (RF, DT, SVM) on raw pixels and on deep features, '
+        'under one standardised pipeline, for four-class brain tumour MRI classification. '
+        'On 1,600 held-out test images the custom CNN was the best single model (90.44%), and '
+        'the six-predictor majority vote reached <b>92.50%</b>. Grad-CAM heatmaps of the three '
+        'deep networks are compared with the Ensemble Attention Agreement score (EAA-IoU), '
+        'which flags images where the networks look at different regions.'
         '</div>',
         unsafe_allow_html=True,
     )
@@ -119,7 +119,7 @@ with col_tbl:
 st.divider()
 
 # ── Accuracy bar chart ────────────────────────────────────────────────────────
-section_header('Model Accuracy Comparison', 'All configurations on 2,063 test images')
+section_header('Model Accuracy Comparison', 'All configurations on 1,600 test images')
 
 models_sorted = sorted(MODEL_ACCURACY.items(), key=lambda x: x[1])
 labels  = [m[0] for m in models_sorted]
@@ -133,15 +133,15 @@ fig_acc = go.Figure(go.Bar(
     textposition='outside',
 ))
 fig_acc.update_layout(
-    xaxis=dict(range=[60, 104], title='Test Accuracy (%)'),
+    xaxis=dict(range=[70, 100], title='Test Accuracy (%)'),
     margin=dict(l=10, r=70, t=10, b=10),
     height=380,
     plot_bgcolor='white',
     paper_bgcolor='white',
     showlegend=False,
 )
-fig_acc.add_vline(x=98.20, line_dash='dash', line_color='#f39c12',
-                  annotation_text='Final 98.20%',
+fig_acc.add_vline(x=92.50, line_dash='dash', line_color='#f39c12',
+                  annotation_text='Final 92.50%',
                   annotation_position='top right')
 st.plotly_chart(fig_acc, use_container_width=True)
 
@@ -189,7 +189,7 @@ st.plotly_chart(fig_build, use_container_width=True)
 st.divider()
 
 # ── Dataset distribution ──────────────────────────────────────────────────────
-section_header('Dataset Distribution', 'Kaggle Brain Tumor MRI Dataset — 9,047 scans')
+section_header('Dataset Distribution', 'Kaggle Brain Tumor MRI Dataset · 7,200 scans')
 
 d_col1, d_col2 = st.columns(2)
 for col, split in zip([d_col1, d_col2], ['Training', 'Testing']):

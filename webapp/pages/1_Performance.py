@@ -30,7 +30,7 @@ with st.sidebar:
 st.markdown('<h2 style="color:#0d1b2a">📊 Model Performance Dashboard</h2>',
             unsafe_allow_html=True)
 st.markdown('<p style="color:#6b7c93">Pre-computed results from the full research study '
-            '(2,063 test images, 4 classes)</p>', unsafe_allow_html=True)
+            '(1,600 test images, 4 classes)</p>', unsafe_allow_html=True)
 st.divider()
 
 # ─────────────────────────────────────────────────────────────────────────────

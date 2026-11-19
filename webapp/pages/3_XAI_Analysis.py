@@ -222,7 +222,7 @@ def highlight_this_work(val):
     return ''
 
 st.dataframe(
-    df_nov.style.applymap(highlight_this_work),
+    df_nov.style.map(highlight_this_work),
     use_container_width=True,
 )
 
@@ -250,36 +250,35 @@ class_info = {
     'Glioma': {
         'color': '#e74c3c',
         'desc': 'Diffuse infiltration pattern. GRAD-CAM typically highlights irregular, '
-                'heterogeneous regions spread across the white matter. Models often disagree '
-                'on exact tumour margins due to ill-defined boundaries — leading to the '
-                'lowest EAA-IoU scores and highest misclassification rate among all classes.',
-        'expected_iou': 'Low–Moderate (0.35–0.55)',
-        'recall': '0.97 (Final Ensemble) · 0.56 (CNN+Classical)',
+                'heterogeneous regions. It has the lowest recall: most errors are gliomas '
+                'predicted as meningioma, often with the networks agreeing on the lesion.',
+        'expected_iou': '0.0982 (observed mean, 400 test images)',
+        'recall': '0.775 (Final majority vote) · 0.772 (CNN features + classical)',
     },
     'Meningioma': {
         'color': '#e67e22',
         'desc': 'Extra-axial mass, typically spherical with clear boundaries. '
                 'Models tend to agree on the outer margin but differ on internal texture. '
-                'Confusion with glioma occurs when tumour is near the cortex.',
-        'expected_iou': 'Moderate (0.10 to 0.20)',
-        'recall': '0.96 (Final Ensemble) · 0.87 (CNN+Classical)',
+                'It has the lowest mean agreement of the four classes.',
+        'expected_iou': '0.0683 (observed mean, 400 test images)',
+        'recall': '0.955 (Final majority vote) · 0.882 (CNN features + classical)',
     },
     'No Tumor': {
         'color': '#27ae60',
         'desc': 'Healthy brain scan. GRAD-CAM heatmaps are diffuse with no focal hotspot. '
                 'All three models tend to attend to similar anatomical landmarks '
                 '(ventricles, sulci), producing higher inter-model agreement.',
-        'expected_iou': 'High (0.60–0.80)',
-        'recall': '0.99 (Final Ensemble) · 0.98 (CNN+Classical)',
+        'expected_iou': '0.1453 (observed mean, highest of the four classes)',
+        'recall': '1.000 (Final majority vote) · 0.995 (CNN features + classical)',
     },
     'Pituitary': {
         'color': '#2980b9',
         'desc': 'Sellar region mass with very consistent location. The pituitary gland '
                 'sits in a fixed anatomical position, so all models learn to attend to '
-                'the same region. This produces the highest EAA-IoU scores and '
-                'near-perfect recall across all models.',
-        'expected_iou': 'High (0.20 or above)',
-        'recall': '1.00 (Final Ensemble) · 0.93 (CNN+Classical)',
+                'the same region, yet the observed agreement is below average because the '
+                'CNN highlights small, scattered areas.',
+        'expected_iou': '0.0823 (observed mean, 400 test images)',
+        'recall': '0.970 (Final majority vote) · 0.922 (CNN features + classical)',
     },
 }
 
@@ -290,7 +289,7 @@ for col, (cls_name, info) in zip(cls_cols, class_info.items()):
             f'<div class="clinical-card" style="border-top:4px solid {info["color"]}">'
             f'<b style="color:{info["color"]};font-size:1rem">{cls_name}</b><br><br>'
             f'<span style="font-size:.82rem;color:#2c3e50">{info["desc"]}</span><br><br>'
-            f'<b style="font-size:.78rem;color:#6b7c93">Expected EAA-IoU:</b><br>'
+            f'<b style="font-size:.78rem;color:#6b7c93">Mean EAA-IoU:</b><br>'
             f'<span style="font-size:.82rem">{info["expected_iou"]}</span><br><br>'
             f'<b style="font-size:.78rem;color:#6b7c93">Ensemble Recall:</b><br>'
             f'<span style="font-size:.82rem">{info["recall"]}</span>'
