@@ -1,0 +1,179 @@
+{
+  "examples": [
+    {
+      "kind": "correct",
+      "idx": 315,
+      "true": 0,
+      "pred": 0,
+      "file": "glioma/Te-gl_383.jpg",
+      "ensemble_confidence": 0.9996
+    },
+    {
+      "kind": "correct",
+      "idx": 754,
+      "true": 1,
+      "pred": 1,
+      "file": "meningioma/Te-me_58.jpg",
+      "ensemble_confidence": 0.9954
+    },
+    {
+      "kind": "correct",
+      "idx": 1162,
+      "true": 2,
+      "pred": 2,
+      "file": "notumor/Te-no_65.jpg",
+      "ensemble_confidence": 0.9998
+    },
+    {
+      "kind": "correct",
+      "idx": 1572,
+      "true": 3,
+      "pred": 3,
+      "file": "pituitary/Te-pi_74.jpg",
+      "ensemble_confidence": 0.9987
+    },
+    {
+      "kind": "misclassified",
+      "idx": 8,
+      "true": 0,
+      "pred": 1,
+      "n_such_errors": 65,
+      "file": "glioma/Te-gl_106.jpg",
+      "ensemble_confidence": 0.9166
+    },
+    {
+      "kind": "misclassified",
+      "idx": 492,
+      "true": 1,
+      "pred": 3,
+      "n_such_errors": 10,
+      "file": "meningioma/Te-aug-me_9.jpg",
+      "ensemble_confidence": 0.7521
+    },
+    {
+      "kind": "misclassified",
+      "idx": 376,
+      "true": 0,
+      "pred": 2,
+      "n_such_errors": 23,
+      "file": "glioma/Te-gl_78.jpg",
+      "ensemble_confidence": 0.9955
+    },
+    {
+      "kind": "misclassified",
+      "idx": 1449,
+      "true": 3,
+      "pred": 1,
+      "n_such_errors": 10,
+      "file": "pituitary/Te-pi_323.jpg",
+      "ensemble_confidence": 0.9645
+    }
+  ],
+  "eaa_worked_example": [
+    {
+      "idx": 163,
+      "title": "High agreement",
+      "file": "glioma/Te-gl_246.jpg",
+      "true": "Glioma",
+      "pred": "Glioma",
+      "ensemble_confidence_pct": 92.04,
+      "mask_area_pct": {
+        "CNN": 1.01,
+        "InceptionV3": 29.1,
+        "Xception": 34.65
+      },
+      "pairs": [
+        {
+          "pair": "CNN / Xception",
+          "intersection_px": 570,
+          "union_px": 22798,
+          "iou": 0.025
+        },
+        {
+          "pair": "CNN / InceptionV3",
+          "intersection_px": 528,
+          "union_px": 19201,
+          "iou": 0.0275
+        },
+        {
+          "pair": "Xception / InceptionV3",
+          "intersection_px": 18678,
+          "union_px": 23097,
+          "iou": 0.8087
+        }
+      ],
+      "eaa_iou": 0.2871,
+      "eaa_iou_logged": 0.2871
+    },
+    {
+      "idx": 1214,
+      "title": "Moderate agreement",
+      "file": "pituitary/Te-pi_111.jpg",
+      "true": "Pituitary",
+      "pred": "Pituitary",
+      "ensemble_confidence_pct": 99.14,
+      "mask_area_pct": {
+        "CNN": 0.32,
+        "InceptionV3": 29.87,
+        "Xception": 32.45
+      },
+      "pairs": [
+        {
+          "pair": "CNN / Xception",
+          "intersection_px": 111,
+          "union_px": 21360,
+          "iou": 0.0052
+        },
+        {
+          "pair": "CNN / InceptionV3",
+          "intersection_px": 165,
+          "union_px": 19616,
+          "iou": 0.0084
+        },
+        {
+          "pair": "Xception / InceptionV3",
+          "intersection_px": 12251,
+          "union_px": 28587,
+          "iou": 0.4286
+        }
+      ],
+      "eaa_iou": 0.1474,
+      "eaa_iou_logged": 0.1474
+    },
+    {
+      "idx": 0,
+      "title": "Low agreement (flagged)",
+      "file": "glioma/Te-gl_1.jpg",
+      "true": "Glioma",
+      "pred": "Meningioma",
+      "ensemble_confidence_pct": 40.05,
+      "mask_area_pct": {
+        "CNN": 0.31,
+        "InceptionV3": 2.22,
+        "Xception": 8.89
+      },
+      "pairs": [
+        {
+          "pair": "CNN / Xception",
+          "intersection_px": 0,
+          "union_px": 6027,
+          "iou": 0.0
+        },
+        {
+          "pair": "CNN / InceptionV3",
+          "intersection_px": 0,
+          "union_px": 1659,
+          "iou": 0.0
+        },
+        {
+          "pair": "Xception / InceptionV3",
+          "intersection_px": 0,
+          "union_px": 7280,
+          "iou": 0.0
+        }
+      ],
+      "eaa_iou": 0.0,
+      "eaa_iou_logged": 0.0
+    }
+  ]
+}

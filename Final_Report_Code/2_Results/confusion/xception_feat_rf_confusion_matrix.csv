@@ -1,0 +1,5 @@
+actual_vs_predicted,glioma,meningioma,notumor,pituitary
+glioma,284,87,24,5
+meningioma,13,361,6,20
+notumor,0,4,396,0
+pituitary,7,19,1,373

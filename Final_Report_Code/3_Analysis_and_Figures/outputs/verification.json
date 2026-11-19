@@ -1,0 +1,16 @@
+{
+  "n_test": 1600,
+  "labels_match_log": true,
+  "CNN": {
+    "agreement_with_logged_predictions": 1.0,
+    "accuracy": 0.905
+  },
+  "InceptionV3": {
+    "agreement_with_logged_predictions": 1.0,
+    "accuracy": 0.8638
+  },
+  "Xception": {
+    "agreement_with_logged_predictions": 1.0,
+    "accuracy": 0.8775
+  }
+}
