@@ -19,6 +19,7 @@
 * 98% was not reached on this test set. Part of the reason is that 21% of the official test images duplicate training images; figures above 98% reported on this dataset should be read with that in mind.
 
 ## Where things come from
+* **Code to show:** `Project_Code/` has everything organised by step, with a README that maps each file to the report section.
 * Baseline: `final_code_set_2026-10-22/` (Colab), results in `metrics/`, `confusion/`, `history/`.
 * Improved: `src/` (run `src/run_all.sh`), results in `runs/v2/`.
 * Analysis and figures: `paper_assets/scripts/` (set `MODEL_SET=improved` for the improved models). The EAA-IoU worked example (Figure 8, Table 8) and the band table in Section 5.8 come from `18_eaa_worked_example.py`.

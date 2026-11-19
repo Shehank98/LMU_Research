@@ -280,6 +280,7 @@ def appendices(V):
                 "Improved configuration: package src/ (config.py, data.py, models.py, train.py, classical.py, ensemble.py, metrics.py; run with run_all.sh); results in runs/v2/.",
                 "Analysis code for this report: paper_assets/scripts/01_verify_models.py to 11_excel_charts.py (03b_xai_summary_sanity.py completes the quantitative XAI stage); outputs in paper_assets/xai_results/; figures in paper_assets/figures/; editable charts in output/Paper_Charts_Editable.xlsx.",
                 "Document build and checks: paper_assets/build/ (build_paper.py, check_paper.py).",
+                "Organised copy for reading: Project_Code/ contains the same code arranged by step (baseline models, improved models, model verification, data-quality checks, explainable AI, statistics and figures, web application) with descriptive file names; its README.md maps every file to the report section it supports.",
             ]
         ),
     ]

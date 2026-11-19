@@ -1,0 +1,153 @@
+[2026-10-25 07:58:00] ERROR in CNN_standalone: ValueError("All layers added to a Sequential model should have unique names. Name 'dense' is already the name of a layer in this model. Update the `name` argument to pass a unique name.")
+Traceback (most recent call last):
+  File "/tmp/ipykernel_6881/2034651351.py", line 40, in stage
+    fn(); mark(name, 'done'); log('DONE ' + name)
+    ~~^^
+  File "/tmp/ipykernel_6881/3832403618.py", line 41, in run_cnn
+    m = resumable_fit('cnn_model', lambda: build_cnn(SIZE_STD, 'dense'), tr, va, EPOCHS_CNN)
+  File "/tmp/ipykernel_6881/2363588225.py", line 20, in resumable_fit
+    model = build_fn()
+  File "/tmp/ipykernel_6881/3832403618.py", line 41, in <lambda>
+    m = resumable_fit('cnn_model', lambda: build_cnn(SIZE_STD, 'dense'), tr, va, EPOCHS_CNN)
+                                           ~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ipykernel_6881/2186034385.py", line 3, in build_cnn
+    m = models.Sequential([
+        layers.Conv2D(32, (3,3), activation='relu', input_shape=(size, size, 3)),
+    ...<7 lines>...
+        layers.Dense(N_CLASSES, activation='softmax'),
+    ])
+  File "/usr/local/lib/python3.13/dist-packages/keras/src/models/sequential.py", line 75, in __init__
+    self.add(layer, rebuild=False)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/keras/src/models/sequential.py", line 103, in add
+    raise ValueError(
+    ...<4 lines>...
+    )
+ValueError: All layers added to a Sequential model should have unique names. Name 'dense' is already the name of a layer in this model. Update the `name` argument to pass a unique name.
+
+[2026-10-26 04:50:52] cnn_model: resuming from epoch 11
+[2026-10-26 06:10:20] cnn_model: resuming from epoch 15
+[2026-10-26 06:39:53] CNN_standalone: accuracy=90.44%   macro-F1=0.903
+[2026-10-26 06:39:53] DONE CNN_standalone
+[2026-10-26 06:44:02] InceptionV3_standalone: accuracy=86.62%   macro-F1=0.863
+[2026-10-26 06:44:02] DONE InceptionV3_standalone
+[2026-10-26 06:50:21] Xception_standalone: accuracy=87.62%   macro-F1=0.874
+[2026-10-26 06:50:21] DONE Xception_standalone
+[2026-10-26 06:50:21] ERROR in CNN_feature_ensemble: ValueError("All layers added to a Sequential model should have unique names. Name 'dense' is already the name of a layer in this model. Update the `name` argument to pass a unique name.")
+Traceback (most recent call last):
+  File "/tmp/ipykernel_1953/2034651351.py", line 40, in stage
+    fn(); mark(name, 'done'); log('DONE ' + name)
+    ~~^^
+  File "/tmp/ipykernel_1953/3832403618.py", line 68, in run_cnn_ensemble
+    _run_feature_ensemble('cnn_ext', lambda: build_cnn(SIZE_EXT, 'dense'), 'dense', 'cnn_feat')
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ipykernel_1953/3832403618.py", line 59, in _run_feature_ensemble
+    ext = resumable_fit(ext_name, build_ext, tr, va, EPOCHS_EXTRACTOR)
+  File "/tmp/ipykernel_1953/2363588225.py", line 20, in resumable_fit
+    model = build_fn()
+  File "/tmp/ipykernel_1953/3832403618.py", line 68, in <lambda>
+    _run_feature_ensemble('cnn_ext', lambda: build_cnn(SIZE_EXT, 'dense'), 'dense', 'cnn_feat')
+                                             ~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "/tmp/ipykernel_1953/2186034385.py", line 3, in build_cnn
+    m = models.Sequential([
+        layers.Conv2D(32, (3,3), activation='relu', input_shape=(size, size, 3)),
+    ...<7 lines>...
+        layers.Dense(N_CLASSES, activation='softmax'),
+    ])
+  File "/usr/local/lib/python3.13/dist-packages/keras/src/models/sequential.py", line 75, in __init__
+    self.add(layer, rebuild=False)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/dist-packages/keras/src/models/sequential.py", line 103, in add
+    raise ValueError(
+    ...<4 lines>...
+    )
+ValueError: All layers added to a Sequential model should have unique names. Name 'dense' is already the name of a layer in this model. Update the `name` argument to pass a unique name.
+
+[2026-10-26 06:54:26] inceptionv3_feat_rf: training ...
+[2026-10-26 06:54:27] inceptionv3_feat_rf: accuracy=86.75%   macro-F1=0.864
+[2026-10-26 06:54:27] inceptionv3_feat_dt: training ...
+[2026-10-26 06:54:27] inceptionv3_feat_dt: accuracy=83.69%   macro-F1=0.835
+[2026-10-26 06:54:27] inceptionv3_feat_svm: training ...
+[2026-10-26 06:54:31] inceptionv3_feat_svm: accuracy=85.38%   macro-F1=0.851
+[2026-10-26 06:54:31] inceptionv3_feat_softvote_ensemble: accuracy=86.12%   macro-F1=0.859
+[2026-10-26 06:54:31] DONE InceptionV3_feature_ensemble
+[2026-10-26 06:58:39] xception_feat_rf: training ...
+[2026-10-26 06:58:40] xception_feat_rf: accuracy=88.38%   macro-F1=0.882
+[2026-10-26 06:58:40] xception_feat_dt: training ...
+[2026-10-26 06:58:40] xception_feat_dt: accuracy=86.00%   macro-F1=0.859
+[2026-10-26 06:58:40] xception_feat_svm: training ...
+[2026-10-26 06:58:43] xception_feat_svm: accuracy=87.69%   macro-F1=0.875
+[2026-10-26 06:58:44] xception_feat_softvote_ensemble: accuracy=88.31%   macro-F1=0.882
+[2026-10-26 06:58:44] DONE Xception_feature_ensemble
+[2026-10-26 06:59:08] raw_rf: training ...
+[2026-10-26 07:00:10] raw_rf: accuracy=87.00%   macro-F1=0.866
+[2026-10-26 07:00:10] raw_dt: training ...
+[2026-10-26 07:05:50] raw_dt: accuracy=77.88%   macro-F1=0.777
+[2026-10-26 07:05:50] raw_svm: training ...
+[2026-10-26 07:55:25] SKIP CNN_standalone (already done)
+[2026-10-26 07:55:45] HF: uploading 2 model files and 34 result files (large models take a few minutes) ...
+[2026-10-26 07:55:56] HF: uploaded 2 model files and 34 result files to https://huggingface.co/shehank98/brain-tumor-mri-models
+[2026-10-26 07:57:22] SKIP CNN_standalone (already done)
+[2026-10-26 07:57:23] HF: uploading 2 model files and 34 result files (large models take a few minutes) ...
+[2026-10-26 07:57:25] HF: uploaded 2 model files and 34 result files to https://huggingface.co/shehank98/brain-tumor-mri-models
+[2026-10-26 08:00:47] SKIP InceptionV3_standalone (already done)
+[2026-10-26 08:01:02] HF: uploading 2 model files and 34 result files (large models take a few minutes) ...
+[2026-10-26 08:01:08] HF: uploaded 2 model files and 34 result files to https://huggingface.co/shehank98/brain-tumor-mri-models
+[2026-10-26 08:04:53] SKIP Xception_standalone (already done)
+[2026-10-26 08:05:09] HF: uploading 2 model files and 34 result files (large models take a few minutes) ...
+[2026-10-26 08:05:15] HF: uploaded 2 model files and 34 result files to https://huggingface.co/shehank98/brain-tumor-mri-models
+[2026-10-26 08:10:50] cnn_feat_rf: training ...
+[2026-10-26 08:10:54] cnn_feat_rf: accuracy=89.94%   macro-F1=0.898
+[2026-10-26 08:10:54] cnn_feat_dt: training ...
+[2026-10-26 08:10:56] cnn_feat_dt: accuracy=86.50%   macro-F1=0.864
+[2026-10-26 08:10:56] cnn_feat_svm: training ...
+[2026-10-26 08:10:58] cnn_feat_svm: accuracy=89.69%   macro-F1=0.895
+[2026-10-26 08:10:59] cnn_feat_softvote_ensemble: accuracy=89.31%   macro-F1=0.892
+[2026-10-26 08:10:59] DONE CNN_feature_ensemble
+[2026-10-26 08:11:19] HF: uploading 6 model files and 43 result files (large models take a few minutes) ...
+[2026-10-26 08:11:23] HF: uploaded 6 model files and 43 result files to https://huggingface.co/shehank98/brain-tumor-mri-models
+[2026-10-26 08:17:05] SKIP InceptionV3_feature_ensemble (already done)
+[2026-10-26 08:17:33] HF: uploading 6 model files and 43 result files (large models take a few minutes) ...
+[2026-10-26 08:17:47] HF: uploaded 6 model files and 43 result files to https://huggingface.co/shehank98/brain-tumor-mri-models
+[2026-10-26 08:21:27] SKIP Xception_feature_ensemble (already done)
+[2026-10-26 08:21:44] HF: uploading 6 model files and 43 result files (large models take a few minutes) ...
+[2026-10-26 08:21:51] HF: uploaded 6 model files and 43 result files to https://huggingface.co/shehank98/brain-tumor-mri-models
+[2026-10-26 09:26:55] raw_rf: loaded (skip)
+[2026-10-26 09:26:56] raw_dt: loaded (skip)
+[2026-10-26 09:26:56] raw_svm: training ...
+[2026-10-26 09:55:45] raw_rf: loaded (skip)
+[2026-10-26 09:55:45] raw_dt: loaded (skip)
+[2026-10-26 09:55:45] raw_svm: training ...
+[2026-10-26 11:18:16] raw_rf: loaded (skip)
+[2026-10-26 11:18:17] raw_dt: loaded (skip)
+[2026-10-26 11:18:17] raw_svm: training ...
+[2026-10-26 12:55:10] raw_svm: accuracy=82.25%   macro-F1=0.818
+[2026-10-26 12:55:10] raw_lr: training ...
+[2026-10-26 13:03:35] raw_lr: accuracy=79.88%   macro-F1=0.796
+[2026-10-26 13:13:01] raw_softvote_ensemble: accuracy=84.06%   macro-F1=0.837
+[2026-10-26 13:13:01] DONE Traditional_raw_pixels
+[2026-10-26 13:13:17] HF: uploading 5 model files and 49 result files (large models take a few minutes) ...
+[2026-10-26 13:13:41] HF: uploaded 5 model files and 49 result files to https://huggingface.co/shehank98/brain-tumor-mri-models
+[2026-10-26 13:55:15] final: used cnn_model.h5
+[2026-10-26 13:59:54] final: used inceptionv3_model.h5
+[2026-10-26 14:08:26] final: used xception_model.h5
+[2026-10-26 14:08:52] final: used cnn_ext.h5 + cnn_feat
+[2026-10-26 14:10:01] final: used inceptionv3_ext.h5 + inceptionv3_feat
+[2026-10-26 14:12:13] final: used xception_ext.h5 + xception_feat
+[2026-10-26 14:12:14] FINAL_confidence_weighted: accuracy=92.25%   macro-F1=0.921
+[2026-10-26 14:12:14] FINAL_majority_vote: accuracy=92.50%   macro-F1=0.924
+[2026-10-26 14:12:14] final: per-image predictions saved
+[2026-10-26 14:12:14] DONE FINAL_ensemble
+[2026-10-26 14:12:36] HF: uploading 0 model files and 54 result files (large models take a few minutes) ...
+[2026-10-26 14:12:38] HF: uploaded 0 model files and 54 result files to https://huggingface.co/shehank98/brain-tumor-mri-models
+[2026-10-27 05:03:50] EAA-IoU: 16/1600 images
+[2026-10-27 05:14:40] EAA-IoU: 336/1600 images
+[2026-10-27 05:25:33] EAA-IoU: 656/1600 images
+[2026-10-27 05:36:33] EAA-IoU: 976/1600 images
+[2026-10-27 05:47:26] EAA-IoU: 1296/1600 images
+[2026-10-27 05:57:36] EAA-IoU summary: {"cam_method": "hirescam", "n_images": 1600, "n_misclassified": 124, "mean_eaa_all": 0.0985, "mean_eaa_correct": 0.1029, "mean_eaa_misclassified": 0.0471, "mean_eaa_by_true_class": {"glioma": 0.0982, "meningioma": 0.0683, "notumor": 0.1453, "pituitary": 0.0823}, "auroc_low_eaa_predicts_error": 0.7525, "mann_whitney_p_value": 4.304345094990224e-21}
+[2026-10-27 05:57:36] DONE EAA_IoU_analysis
+[2026-10-27 06:09:49] SKIP EAA_IoU_analysis (already done)
+[2026-10-27 06:10:33] HF: uploading 0 model files and 57 result files (large models take a few minutes) ...
+[2026-10-27 06:10:35] HF: uploaded 0 model files and 57 result files to https://huggingface.co/shehank98/brain-tumor-mri-models
+[2026-10-27 06:15:26] HF: uploading 23 model files and 57 result files (large models take a few minutes) ...

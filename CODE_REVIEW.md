@@ -6,6 +6,7 @@ This note lists the problems found in the project code and what was done about e
 
 | Folder | What it contains |
 |---|---|
+| `Project_Code/` | **Start here.** The code behind every result, organised by step with descriptive file names (same code as `src/` and `paper_assets/scripts/`). `Project_Code/README.md` maps each file to the report section. |
 | `src/` | Improved pipeline. One module per step: `config.py`, `data.py` (loading, head cropping, split), `models.py`, `train.py`, `classical.py`, `ensemble.py`, `metrics.py`; `run_all.sh` runs everything and skips finished steps. |
 | `final_code_set_2026-10-22/` | Baseline pipeline (Colab notebook and one notebook per model). |
 | `paper_assets/scripts/` | Analysis behind the report: model verification, explainability, statistics, figures, the editable Excel charts. Set `MODEL_SET=improved` to run them on the improved models. |
