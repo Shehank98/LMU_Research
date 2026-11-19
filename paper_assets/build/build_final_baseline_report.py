@@ -126,6 +126,7 @@ for p in doc.paragraphs:
     if p.style.name == "Source Code":
         p.paragraph_format.line_spacing = 1.0
         p.alignment = WD_ALIGN_PARAGRAPH.LEFT
+        p.paragraph_format.keep_together = True
         for r in p.runs:
             r.font.size = Pt(8.5)
             r.font.name = "Consolas"

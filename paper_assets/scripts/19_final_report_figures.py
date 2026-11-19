@@ -1,6 +1,6 @@
 """Figures for the final report (baseline configuration only).
 
-1. fig_framework_final.png      conceptual framework (models, ensemble, Grad-CAM, EAA-IoU, Streamlit app)
+1. fig_framework_final.png      conceptual framework (models, ensemble, Grad-CAM, EAA-IoU, NeuroScan web app)
 2. fig_accuracy_bars.png        test accuracy of every configuration
 3. fig_gradcam_correct.png      Grad-CAM of CNN, InceptionV3 and Xception for the most confident correct image per class
 4. fig_gradcam_errors.png       the same for the most frequent error of each class
@@ -74,7 +74,7 @@ for y in (4.4, 3.35, 2.3, 1.0):
     arrow(ax, 5.5, y, 6.0, 2.6)
 box(ax, 8.0, 3.2, 1.9, 1.2, "Evaluation\naccuracy, P, R, F1\nconfusion, ROC/PR", "#E2F0D9")
 box(ax, 8.0, 1.6, 1.9, 1.2, "Grad-CAM on the\n3 deep networks\nEAA-IoU agreement", "#E2F0D9")
-box(ax, 8.0, 0.1, 1.9, 1.1, "Streamlit clinical\ndecision-support app", "#FCE4D6")
+box(ax, 8.0, 0.1, 1.9, 1.1, "NeuroScan web app\n(React + FastAPI)", "#FCE4D6")
 arrow(ax, 7.5, 2.6, 8.0, 3.8)
 arrow(ax, 7.5, 2.6, 8.0, 2.2)
 arrow(ax, 8.95, 1.6, 8.95, 1.2)

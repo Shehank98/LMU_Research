@@ -208,6 +208,26 @@ def _load_results():
             eaa = json.loads(_hf_text(f"{RESULTS_PREFIX}/metrics/eaa_iou_summary.json"))
         except Exception:
             pass
+        try:  # threshold table around the calibrated alert level (the run itself only logged 0.2 to 0.7)
+            rows_eaa = {
+                r["idx"]: r
+                for r in csv.DictReader(
+                    io.StringIO(_hf_text(f"{RESULTS_PREFIX}/metrics/eaa_iou_per_image.csv"))
+                )
+            }
+            vals = [(float(r["eaa_iou"]), r["correct"] == "1") for r in rows_eaa.values()]
+            n_err = sum(not ok for _, ok in vals) or 1
+            if eaa is not None and vals:
+                eaa["threshold_table"] = [
+                    {
+                        "threshold": t,
+                        "flagged_pct": round(100 * sum(v < t for v, _ in vals) / len(vals), 2),
+                        "errors_caught_pct": round(100 * sum(v < t and not ok for v, ok in vals) / n_err, 2),
+                    }
+                    for t in (0.05, 0.10, 0.15, 0.20, 0.30)
+                ]
+        except Exception:
+            pass
         dataset = DATASET
         try:  # real image counts from the run
             raw = json.loads(_hf_text(f"{RESULTS_PREFIX}/metrics/dataset_counts.json"))
