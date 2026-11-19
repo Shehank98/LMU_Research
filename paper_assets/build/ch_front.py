@@ -28,7 +28,7 @@ def title_page(doc, r):
     for line in [
         f"Name: {STUDENT}",
         f"London Met ID / Student ID: {SID}",
-        "Programme: BSc (Hons) Data Science (top-up), delivered at ESOFT Metro Campus",
+        "Programme: BSc (Hons) Data Science (top-up), ESOFT Metro Campus",
         "First supervisor: Ms. Hiruni Wimalaweera",
         "Module leader: Mr. Thepul Ginige",
         "Submission: November 2026",

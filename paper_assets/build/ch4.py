@@ -99,7 +99,8 @@ def ch4():
         P(
             "{tab:deep} gives the test results. The custom CNN is the most accurate single model (<<acc.CNN_standalone>>%), ahead of Xception "
             "(<<acc.Xception_standalone>>%) and InceptionV3 (<<acc.InceptionV3_standalone>>%). The difference between the CNN and each pretrained "
-            "network is statistically significant, but the difference between the two pretrained networks is not (Section 4.6)."
+            "network is statistically significant, but the difference between the two pretrained networks is not (Section 4.6). {tab:measures} in "
+            "Section 3.9.1 explains what each column shows."
         ),
         TAB(
             "deep",
@@ -202,7 +203,7 @@ def ch4():
         H(2, "4.6 Statistical comparison of models"),
         P(
             "{tab:mcnemar} lists the exact McNemar tests. The columns n01 and n10 count the images that only model A, or only model B, classifies "
-            "correctly. The majority vote is significantly better than every one of its six members after Holm correction. The CNN is "
+            "correctly; Section 3.9.2 explains every column with a worked example. The majority vote is significantly better than every one of its six members after Holm correction. The CNN is "
             "significantly better than both Xception and InceptionV3, while Xception and InceptionV3 are not significantly different. "
             "{tab:boot} gives bootstrap 95% intervals, and {fig:acc_all} places all 22 configurations on one chart with Wilson intervals."
         ),

@@ -132,6 +132,8 @@ DOIS = {
     "Shin2016": ("10.1109/TMI.2016.2528162", None),
     "Kakon2025": ("10.3390/cancers17172853", None),
     "Aasem2024": ("10.3389/fdata.2024.1366415", None),
+    "Wilson1927": ("10.1080/01621459.1927.10502953", None),
+    "Brown2001": ("10.1214/ss/1009213286", None),
 }
 for key, (doi, cont) in DOIS.items():
     text, m, y = from_doi(doi, container=cont)
@@ -157,6 +159,14 @@ for key, (doi, cont) in DOIS.items():
         "R. Niakan Kalhori, S.", "Niakan Kalhori, S.R."
     )
     add(key, fam, y, text)
+add(
+    "Holm1979",
+    "Holm",
+    1979,
+    "Holm, S. (1979) 'A simple sequentially rejective multiple test procedure', <i>Scandinavian Journal of Statistics</i>, 6(2), pp. 65-70. Available at: https://www.jstor.org/stable/4615733 (Accessed: "
+    + ACCESSED
+    + ").",
+)
 add(
     "Lundberg2017",
     "Lundberg",

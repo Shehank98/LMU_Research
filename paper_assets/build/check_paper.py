@@ -114,8 +114,14 @@ LITERATURE = [
     "94.68",
 ]  # values stated in the cited papers (Cheng 2015 91.28; Deepak 98; Rehman 98.69)
 DERIVED = {
-    "0.92": "95.62 - 94.70", "1.84": "92.50 - 90.66", "2.7": "1 - 0.9731 (no member correct)", "0.90": "training accuracy bound",
-    "0.87": "first CNN run training accuracy", "21": "336 / 1600", "0.0001": "fine-tuning learning rate", "224": "input size",
+    "0.92": "95.62 - 94.70",
+    "1.84": "92.50 - 90.66",
+    "2.7": "1 - 0.9731 (no member correct)",
+    "0.90": "training accuracy bound",
+    "0.87": "first CNN run training accuracy",
+    "21": "336 / 1600",
+    "0.0001": "fine-tuning learning rate",
+    "224": "input size",
     "5.70": "98.20 - 92.50",
     "7.44": "89.69 - 82.25",
     "2.06": "92.50 - 90.44",
@@ -135,6 +141,9 @@ DERIVED = {
     "0.8": "quantile",
     "0.9": "split",
     "65,536": "256 x 256 pixels",
+    "1,447": "90.44% of 1,600 test images",
+    "2.00": "(56 - 24) / 1,600 McNemar worked example",
+    "1.96": "z for a 95% interval",
 }
 for x in OLD_PDF + LITERATURE + list(DERIVED):
     add_num(x)

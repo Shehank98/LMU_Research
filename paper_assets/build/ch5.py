@@ -279,6 +279,50 @@ def ch5():
             "errors much better, with an AUROC of <<st.confidence_auroc>>. EAA-IoU is therefore a genuine but secondary uncertainty signal. It "
             "may add information when shown alongside confidence, but it should not replace it."
         ),
+        P(
+            "{tab:eaa_bands} turns the score into numbers that are easier to act on: how many test images fall into each agreement band, "
+            "how often the ensemble is wrong inside each band, and what share of all errors each band contains. For the baseline, the "
+            "alert band (below 0.10) holds <<band.baseline.0.images>> images (<<band.baseline.0.images_pct>>% of the test set) and "
+            "<<band.baseline.0.errors>> of the <<band.baseline.err>> errors (<<band.baseline.0.share_of_errors_pct>>%). Its error rate of "
+            "<<band.baseline.0.error_rate_pct>>% is much higher than the <<band.baseline.2.error_rate_pct>>% of the strong band, but an alert "
+            "that fires for half of all images is of little practical use. For the improved models the picture changes: the alert band "
+            "is small (<<band.improved.0.images>> images, <<band.improved.0.images_pct>>%), and its error rate of "
+            "<<band.improved.0.error_rate_pct>>% is almost six times the overall rate of <<band.improved.rate>>%. However, it contains only "
+            "<<band.improved.0.errors>> of the <<band.improved.err>> errors; <<band.improved.2.errors>> errors "
+            "(<<band.improved.2.share_of_errors_pct>>%) occur on images where the networks agree strongly. Low agreement therefore marks a "
+            "small, high-risk group of images, but high agreement does not guarantee a correct answer."
+        ),
+        TAB(
+            "eaa_bands",
+            "Test images and ensemble errors by EAA-IoU band (all 1,600 test images, majority vote)",
+            [
+                "Configuration",
+                "EAA-IoU band",
+                "Images",
+                "Share of test set (%)",
+                "Errors",
+                "Error rate in band (%)",
+                "Share of all errors (%)",
+            ],
+            [
+                [
+                    cfg,
+                    lab,
+                    f"<<band.{c}.{i}.images>>",
+                    f"<<band.{c}.{i}.images_pct>>",
+                    f"<<band.{c}.{i}.errors>>",
+                    f"<<band.{c}.{i}.error_rate_pct>>",
+                    f"<<band.{c}.{i}.share_of_errors_pct>>",
+                ]
+                for c, cfg in [("baseline", "Baseline"), ("improved", "Improved")]
+                for i, lab in enumerate(
+                    ["Below 0.10 (alert)", "0.10 to 0.20 (moderate)", "0.20 or above (strong)"]
+                )
+            ],
+            widths=[2.4, 3.6, 1.6, 2.2, 1.6, 2.4, 2.4],
+            font=8.5,
+            note="Error rate in band = errors ÷ images in the band. The overall error rate is <<band.baseline.rate>>% for the baseline and <<band.improved.rate>>% for the improved configuration. A worked example of the score is given in {fig:eaa_ex}.",
+        ),
         FIG(
             "eaa",
             "paper_assets/figures/fig_eaa_iou.png",

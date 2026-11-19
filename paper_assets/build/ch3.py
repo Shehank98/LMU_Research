@@ -65,7 +65,7 @@ L_FT = """def build_transfer(kind, size=IMG_SIZE):
     return Model(inp, out, name=kind)
 
 # train.py: two-stage schedule
-history = fit(model, train, val, C.HEAD_EPOCHS, 1e-3, history, 'head')        # new head only
+history = fit(model, train, val, C.HEAD_EPOCHS, 1e-3, history, 'head')  # new head only
 unfreeze_top(model, C.UNFREEZE_FROM[kind])                                      # e.g. 'mixed7'
 history = fit(model, train, val, C.FINETUNE_EPOCHS, 1e-4, history, 'finetune')"""
 
@@ -320,7 +320,7 @@ def ch3():
             widths=[3.4, 6.0, 6.0],
             font=8.5,
         ),
-        CODE("crop", "Head cropping used by the improved configuration (src/data.py)", L_CROP),
+        CODE("crop", "Head cropping used by the improved configuration", L_CROP),
         H(2, "3.7 Models"),
         H(3, "3.7.1 Custom CNN"),
         P(
@@ -334,8 +334,13 @@ def ch3():
             width=6.2,
         ),
         CODE("base", "Baseline CNN and frozen pretrained backbone", L_BASE),
-        FIG("cnn_imp", "paper_assets/figures/fig_arch_cnn_improved.png", "Architecture of the improved custom CNN", width=6.2),
-        CODE("cnn2", "Improved CNN (src/models.py)", L_CNN2),
+        FIG(
+            "cnn_imp",
+            "paper_assets/figures/fig_arch_cnn_improved.png",
+            "Architecture of the improved custom CNN",
+            width=6.2,
+        ),
+        CODE("cnn2", "Improved CNN", L_CNN2),
         H(3, "3.7.2 InceptionV3 and Xception"),
         P(
             "Both pretrained networks were loaded with ImageNet weights (Szegedy et al., 2016; Chollet, 2017). In the baseline the backbone was "
@@ -345,7 +350,7 @@ def ch3():
         ),
         CODE(
             "ft",
-            "Pretrained network with a new head and two-stage fine-tuning (src/models.py and src/train.py)",
+            "Pretrained network with a new head and two-stage fine-tuning",
             L_FT,
         ),
         H(3, "3.7.3 Classical classifiers"),
@@ -355,7 +360,7 @@ def ch3():
             "were also trained on 65,536 raw greyscale pixels. In the improved configuration the features are the 256 values of the dense layer of "
             "each fine-tuned network ({lst:classical}). Within each feature source the three classifiers are combined by soft voting."
         ),
-        CODE("classical", "Classical classifiers on deep features (src/classical.py)", L_CLASSICAL),
+        CODE("classical", "Classical classifiers on deep features", L_CLASSICAL),
         H(3, "3.7.4 Six-predictor ensemble"),
         P(
             "The final ensemble ({fig:ens}) combines six probability vectors: the CNN, InceptionV3 and Xception classifiers and the three soft-voting "
@@ -368,13 +373,13 @@ def ch3():
             "The six-predictor hybrid ensemble",
             width=6.2,
         ),
-        CODE("vote", "Majority and confidence-weighted voting (src/ensemble.py)", L_VOTE),
+        CODE("vote", "Majority and confidence-weighted voting", L_VOTE),
         H(2, "3.8 Hardware, software and reproducibility"),
         P(
             "The baseline was trained in Google Colab on an NVIDIA T4 GPU, and the improved configuration on a 4-core CPU with 15 GB of memory, both "
             "with TensorFlow 2.21.0, Keras 3.13.2 and scikit-learn 1.6.1 (Abadi et al., 2016; Pedregosa et al., 2011). Seeds were fixed to 42. Every "
             "result was written as data: one row per model in a results table, a classification report and confusion matrix per model, per-epoch "
-            "training histories and per-image predictions. The code is organised as a small package (src/) with one module per step, and the "
+            "training histories and per-image predictions. The code is organised as a small package with one module per step, and the "
             "analysis scripts are listed in Appendix F."
         ),
         H(2, "3.9 Evaluation protocol and statistical analysis"),
@@ -386,10 +391,127 @@ def ch3():
             "evaluated on the same images were compared with the exact McNemar test (McNemar, 1947), which Dietterich (1998) recommends for "
             "comparing two classifiers on one test set, with Holm correction across the planned comparisons."
         ),
+        H(3, "3.9.1 How to read the performance measures"),
+        P(
+            "The results tables in Chapters 4 and 6 use the same columns: accuracy, macro precision, macro recall, macro F1 and a Wilson 95% "
+            "confidence interval. {tab:measures} explains each one and gives an example from the custom CNN of the baseline configuration "
+            "(first row of {tab:deep}). Accuracy is given in per cent, and precision, recall and F1 as proportions between 0 and 1."
+        ),
+        TAB(
+            "measures",
+            "What each column of the results tables shows, with an example from the baseline custom CNN",
+            ["Measure", "What it shows", "How it is calculated", "Example (baseline CNN)"],
+            [
+                [
+                    "Accuracy (%)",
+                    "The share of all test images that were classified correctly.",
+                    "Correct predictions ÷ all test images × 100.",
+                    "1,447 of 1,600 images correct = <<acc.CNN_standalone>>%.",
+                ],
+                [
+                    "Precision (one class)",
+                    "When the model says “glioma”, how often it is right. Low precision means many false alarms.",
+                    "True positives ÷ (true positives + false positives).",
+                    "Glioma precision <<precision.CNN_standalone.glioma>>%: almost every glioma prediction was a real glioma.",
+                ],
+                [
+                    "Recall (one class)",
+                    "Of all images that really are glioma, how many the model found. Low recall means missed tumours.",
+                    "True positives ÷ (true positives + false negatives).",
+                    "Glioma recall <<recall.CNN_standalone.glioma>>%: about one glioma in four was missed.",
+                ],
+                [
+                    "F1 (one class)",
+                    "One number that is high only when precision and recall are both high.",
+                    "2 × precision × recall ÷ (precision + recall).",
+                    "Glioma F1 <<f1c.CNN_standalone.glioma>>, pulled down by the low recall.",
+                ],
+                [
+                    "Macro precision, macro recall, macro F1",
+                    "The average over the four classes, each class counting equally, so a weak class pulls the value down.",
+                    "Mean of the four per-class values.",
+                    "<<prec.CNN_standalone>>, <<rec.CNN_standalone>> and <<f1.CNN_standalone>>.",
+                ],
+                [
+                    "Wilson 95% CI (%)",
+                    "The range in which the model’s true accuracy on similar images probably lies. A narrow range means a precise "
+                    "estimate; heavily overlapping ranges mean two models may not really differ.",
+                    "Wilson score interval for a proportion with n = 1,600 and z = 1.96 (Wilson, 1927).",
+                    "<<st.wilson_ci.CNN_standalone>>: the true accuracy is probably between these two values.",
+                ],
+            ],
+            widths=[3.0, 5.0, 4.2, 4.2],
+            font=8.5,
+        ),
+        P(
+            "Three points help when reading these numbers. First, every class has 400 test images, so macro recall is the same as accuracy "
+            "(for the CNN, <<rec.CNN_standalone>> and <<acc.CNN_standalone>>%), and the macro values mainly add information through precision "
+            "and F1. Second, the per-class values matter more clinically than the averages: the CNN’s glioma precision is high but its glioma "
+            "recall is low, which means that its typical mistake is to miss a glioma, not to raise a false alarm. Third, an interval is "
+            "needed because 1,600 images are a sample. The Wilson interval is used rather than the simpler normal approximation because it "
+            "stays reliable when accuracy is close to 100% (Brown, Cai and DasGupta, 2001)."
+        ),
+        H(3, "3.9.2 How to read the McNemar comparison"),
+        P(
+            "Two models can have different accuracy by chance. Because all models were tested on the same 1,600 images, the fairest test "
+            "looks only at the images on which the two models disagree. {tab:mcnemar_cols} explains the columns of the McNemar tables "
+            "({tab:mcnemar}; {tab:imp_mc} uses the same counts, labelled “first right only” and “second right only”)."
+        ),
+        TAB(
+            "mcnemar_cols",
+            "Columns of the McNemar tables, with the comparison of the majority vote (A) and the CNN (B) as an example",
+            ["Column", "Meaning", "Example"],
+            [
+                [
+                    "Model A, Model B",
+                    "The two models being compared on the same test images.",
+                    "A = six-model majority vote, B = custom CNN.",
+                ],
+                [
+                    "n01 (A right, B wrong)",
+                    "Number of images that model A classifies correctly and model B gets wrong.",
+                    "<<mc.FINAL_majority.CNN.n01>> images.",
+                ],
+                [
+                    "n10 (A wrong, B right)",
+                    "Number of images that model B classifies correctly and model A gets wrong.",
+                    "<<mc.FINAL_majority.CNN.n10>> images.",
+                ],
+                [
+                    "p (exact)",
+                    "How likely a split at least this uneven would be if the two models were equally good. Images that both models get right "
+                    "(or both get wrong) are ignored because they say nothing about which model is better.",
+                    "Exact binomial test on the <<mc.FINAL_majority.CNN.n01>> + <<mc.FINAL_majority.CNN.n10>> disagreements: "
+                    "p = <<mc.FINAL_majority.CNN.p>>.",
+                ],
+                [
+                    "p (Holm)",
+                    "The same p-value corrected for running ten comparisons, so that the chance of at least one false “significant” "
+                    "result stays at 5%. A value below 0.05 counts as significant.",
+                    "p = <<mc.FINAL_majority.CNN.ph>>: still significant.",
+                ],
+            ],
+            widths=[3.4, 8.0, 5.0],
+            font=8.5,
+        ),
+        P(
+            "In the example, the two models disagree on <<mc.FINAL_majority.CNN.n01>> + <<mc.FINAL_majority.CNN.n10>> images. If they were "
+            "equally good, these disagreements would split roughly evenly. The observed split of <<mc.FINAL_majority.CNN.n01>> to "
+            "<<mc.FINAL_majority.CNN.n10>> is very unlikely under that assumption, so the majority vote is genuinely better than the CNN. The "
+            "difference between n01 and n10, divided by the number of test images, is also the difference in accuracy between the two models "
+            "(here 2.00 percentage points in the ensemble pipeline, {tab:boot}). By contrast, Xception and InceptionV3 split "
+            "<<mc.Xception.InceptionV3.n01>> to <<mc.Xception.InceptionV3.n10>>, which could easily happen by chance (Holm p = "
+            "<<mc.Xception.InceptionV3.ph>>), so neither can be said to be better. The Holm method (Holm, 1979) sorts the ten p-values from "
+            "smallest to largest and multiplies them by 10, 9, 8 and so on, which is less strict than multiplying them all by 10 (Bonferroni) "
+            "but still controls false positives."
+        ),
         H(2, "3.10 Explainability methodology"),
         P(
             "{fig:xaipipe} summarises the explainability pipeline. Explanations were computed for the class predicted by the six-model majority vote, "
-            "so they show what supported the ensemble decision."
+            "so they show what supported the ensemble decision. Six explanation methods were used, and the "
+            "explanations were then tested with four checks; each has its own subsection below. Each method is described below by the question it "
+            "answers, how it is computed, the settings used and how its map should be read. Examples of every method on the same test images "
+            "are shown in Chapter 5 ({fig:xai_xcp} and {fig:xai_cnn})."
         ),
         FIG(
             "xaipipe",
@@ -397,37 +519,177 @@ def ch3():
             "Explainability pipeline: methods (left) and how they are evaluated (right)",
             width=6.2,
         ),
-        B(
-            [
-                "Grad-CAM, Grad-CAM++ and HiResCAM (Selvaraju et al., 2017; Chattopadhay et al., 2018; Draelos and Carin, 2020) were computed from the "
-                "pre-softmax class score at the last spatial layer of each network ({lst:gradcam}). For InceptionV3 and Xception, which end in global "
-                "average pooling, Grad-CAM and HiResCAM are mathematically equivalent; for the baseline CNN, which ends in Flatten and Dense layers, they differ.",
-                "Occlusion (Zeiler and Fergus, 2014): a 32 × 32 black patch slid with a stride of 16 pixels; the map is the drop in class probability.",
-                "LIME (Ribeiro, Singh and Guestrin, 2016): quick-shift super-pixels, 600 perturbed samples for the CNN and 400 for Xception, hidden super-pixels set to black.",
-                "SHAP (Lundberg and Lee, 2017): the gradient explainer (expected gradients) on the CNN with 50 background images, and the exact tree explainer on the Random Forest that classifies CNN features.",
-            ]
-        ),
         P(
             "Example images were chosen for each class: the correctly classified test image with the highest ensemble confidence, and a confidently "
             "misclassified image from the class’s most frequent error. No-tumour images were never misclassified by the baseline ensemble, so its "
             "error example is the most frequent miss into that class, a glioma predicted as no tumour. Quantitative evaluation used a stratified "
-            "sample of 160 test images (30 per class plus 40 misclassified images, seed 42) and four checks:"
+            "sample of 160 test images (30 per class plus 40 misclassified images, seed 42)."
+        ),
+        H(3, "3.10.1 Grad-CAM"),
+        P(
+            "**Question answered:** which regions of the image raised the score of the predicted class? Grad-CAM (Selvaraju et al., 2017) "
+            "uses the last convolutional layer, where each feature map still has a spatial layout. It measures how much the class score "
+            "changes when each feature map changes (the gradient), averages this gradient over the map to obtain one weight per feature map, "
+            "adds the feature maps together using these weights, and keeps only the positive part. The result is a coarse grid (for example "
+            "7 × 7 cells for Xception at 224 pixels) that is enlarged to the image size and scaled to the range 0 to 1."
+        ),
+        P(
+            "**Settings:** the pre-softmax class score was used, at the last spatial layer of each network (conv2d_7 or last_conv for the "
+            "CNN, mixed10 for InceptionV3 and block14_sepconv2_act for Xception); the code is in {lst:gradcam}. **How to read it:** red areas "
+            "supported the predicted class most, blue areas hardly at all. Because the grid is coarse, the map shows the approximate region, "
+            "not the exact tumour border."
+        ),
+        CODE("gradcam", "Grad-CAM and HiResCAM as implemented for the analysis", L_GRADCAM),
+        H(3, "3.10.2 Grad-CAM++"),
+        P(
+            "**Question answered:** the same as Grad-CAM, but with better coverage when several regions, or a small region, support the "
+            "class. Grad-CAM++ (Chattopadhay et al., 2018) replaces the simple average of the gradients with a weighted average that uses "
+            "higher-order gradient terms, so that every location that raises the score contributes, not only the strongest one "
+            "({lst:gpp} in Appendix B). **Settings:** same layers and class as Grad-CAM. **How to read it:** as Grad-CAM. If the two maps "
+            "look very different, the explanation depends on how the gradients are combined and should be trusted less."
+        ),
+        H(3, "3.10.3 HiResCAM"),
+        P(
+            "**Question answered:** which locations actually produced the class score? HiResCAM (Draelos and Carin, 2020) multiplies each "
+            "gradient by its feature map value at every location before adding them up, instead of averaging the gradients first. For "
+            "networks that end in global average pooling (InceptionV3, Xception and the improved CNN) this gives exactly the same map as "
+            "Grad-CAM. For the baseline CNN, which ends in Flatten and Dense layers, the two differ, and HiResCAM is the one that follows "
+            "the model’s computation. **How to read it:** as Grad-CAM; differences between the two maps for the baseline CNN show where "
+            "averaging the gradients hides spatial detail."
+        ),
+        H(3, "3.10.4 Occlusion"),
+        P(
+            "**Question answered:** if part of the image is hidden, does the prediction change? Occlusion (Zeiler and Fergus, 2014) uses no "
+            "gradients. A 32 × 32 black patch is moved over the image in steps of 16 pixels (169 positions at 224 pixels, 225 at 256), and at "
+            "each position the drop in the probability of the predicted class is recorded. **How to read it:** bright areas are regions the "
+            "model needs; hiding them lowers its confidence. An almost empty map means that no single patch matters, which happens when the "
+            "model relies on large or repeated cues. The method is slow because it needs one prediction per patch position."
+        ),
+        H(3, "3.10.5 LIME"),
+        P(
+            "**Question answered:** which image segments, switched on or off, best explain the prediction? LIME (Ribeiro, Singh and Guestrin, "
+            "2016) splits the image into super-pixels (small regions of similar intensity, found with the quick-shift algorithm), creates "
+            "many copies of the image with random super-pixels hidden, records the model’s probability for each copy, and fits a simple "
+            "linear model that predicts this probability from which super-pixels were visible. The weights of this linear model form the "
+            "map. **Settings:** 600 perturbed copies for the CNN and 400 for Xception (fewer because Xception is slower), hidden "
+            "super-pixels set to black ({lst:lime} in Appendix B). **How to read it:** highlighted super-pixels support the class. Because "
+            "super-pixels follow image edges, LIME maps can include the skull or background when those regions help the model."
+        ),
+        H(3, "3.10.6 SHAP"),
+        P(
+            "**Question answered:** how much did each input contribute, positively or negatively, compared with a reference? SHAP "
+            "(Lundberg and Lee, 2017) is based on Shapley values from game theory: each input receives a share of the difference between the "
+            "model’s output for this image and its average output, and the shares add up exactly to that difference. Two versions were "
+            "used ({lst:shap} in Appendix B). For the CNN, the gradient explainer (expected gradients) with 50 background images gives a "
+            "value for each pixel. For the Random Forest that classifies CNN features, the exact tree explainer gives a value for each of the "
+            "256 features. **How to read it:** positive values push the prediction towards the class and negative values push it away; for "
+            "the Random Forest, a few features with large values mean that the decision relies on a small part of the CNN’s representation "
+            "(Section 5.10)."
+        ),
+        H(3, "3.10.7 Faithfulness check: deletion and insertion"),
+        P(
+            "A map can look convincing and still not reflect what the model uses. Deletion and insertion curves (Petsiuk, Das and Saenko, "
+            "2018) test this ({lst:di} in Appendix B). For deletion, pixels are removed (set to black) in order of importance, in 20 steps of "
+            "5% of the image, and the probability of the predicted class is recorded after each step. If the map is faithful, the probability "
+            "falls quickly and the area under the curve (deletion AUC) is small. For insertion, the process is reversed: starting from a "
+            "blurred copy, the most important pixels are revealed first, and a faithful map gives a quick rise and a large insertion AUC. "
+            "Each method is compared with a random map; a method is useful only if it does clearly better than random."
+        ),
+        H(3, "3.10.8 Sanity check: model-parameter randomisation"),
+        P(
+            "Some saliency methods produce similar maps even for a network that has learnt nothing, because they mostly follow image edges. "
+            "The cascading randomisation test (Adebayo et al., 2018) checks this ({lst:sanity} in Appendix B). The weights of the network "
+            "are replaced with random values one layer at a time, from the output layer downwards, and after each step the new map is "
+            "compared with the original using the Spearman rank correlation and the structural similarity index (SSIM) on 40 images. A "
+            "method passes if the similarity falls towards zero as more layers are randomised, which shows that the map depends on what the "
+            "model learnt."
+        ),
+        H(3, "3.10.9 Cross-model agreement: the EAA-IoU score"),
+        P(
+            "The Ensemble Attention Agreement score (EAA-IoU) asks a different question: do the three deep networks look at the same part of "
+            "the image? It needs no tumour outlines drawn by a radiologist, so it can be computed for every image, including new ones in "
+            "the web demonstrator. It is calculated in five steps ({lst:eaa} in Appendix B):"
         ),
         NL(
             [
-                "Faithfulness: deletion and insertion curves (Petsiuk, Das and Saenko, 2018). Pixels were removed (set to black) or revealed (on a blurred "
-                "copy) in order of saliency in 20 steps, and the area under the class-probability curve was computed and compared with a random map.",
-                "Sanity check: cascading model-parameter randomisation (Adebayo et al., 2018). Layers were re-initialised from the top down, and the "
-                "Spearman rank correlation and structural similarity (SSIM) between the original and randomised maps were measured on 40 images.",
-                "Cross-model consistency: the Ensemble Attention Agreement score (EAA-IoU). The maps of the three networks are binarised at 0.5, the "
-                "intersection over union of each pair is computed and the three values are averaged. It was computed for all 1,600 test images and "
-                "is complemented by the Spearman correlation between maps and the IoU of their top-20% regions.",
-                "Shortcut check: the share of Grad-CAM mass that falls outside the head (found by thresholding) or in a 12-pixel outer rim covering "
-                "the skull and image edge, compared with the share of image area those regions occupy. Three further experiments tested the cause "
-                "(Section 5.6).",
+                "Compute the Grad-CAM map of the CNN, Xception and InceptionV3 for the class predicted by the ensemble, each scaled to 0 to 1.",
+                "Turn each map into a mask by keeping the pixels with a value of 0.5 or more (the region the model considers important).",
+                "For each of the three pairs of models, count the pixels inside both masks (the intersection) and inside at least one mask "
+                "(the union).",
+                "Divide intersection by union to obtain the pair’s IoU, a number between 0 (no overlap) and 1 (identical regions).",
+                "Average the three pair IoUs. This average is the EAA-IoU of the image.",
             ]
         ),
-        CODE("gradcam", "Grad-CAM and HiResCAM as implemented for the analysis", L_GRADCAM),
+        P(
+            "{fig:eaa_ex} and {tab:eaa_ex} work through three real test images with the improved models. In image A (a glioma, correctly "
+            "classified) all three masks cover the upper brain and the lesion, the pair IoUs are <<wex.0.p0.iou>>, <<wex.0.p1.iou>> and "
+            "<<wex.0.p2.iou>>, and the EAA-IoU is <<wex.0.eaa>>, which counts as strong agreement. In image B (a pituitary tumour, also "
+            "correct) the two pretrained networks agree (IoU <<wex.1.p2.iou>>), but the CNN highlights the skull edges, so its pairs score "
+            "almost zero and the EAA-IoU drops to <<wex.1.eaa>>. In image C (a glioma that the ensemble called no tumour with only "
+            "<<wex.2.conf>>% confidence) every pair has an IoU below 0.05, the EAA-IoU is <<wex.2.eaa>>, and the image would be flagged for "
+            "review. Image B also shows a weakness of the score: one model looking elsewhere is enough to lower the agreement, even when the "
+            "prediction is correct."
+        ),
+        TAB(
+            "eaa_ex",
+            "The numbers behind the EAA-IoU worked example",
+            ["Quantity", "A. High agreement", "B. Moderate agreement", "C. Low agreement"],
+            [
+                ["True class", "<<wex.0.true>>", "<<wex.1.true>>", "<<wex.2.true>>"],
+                [
+                    "Ensemble prediction",
+                    "<<wex.0.pred>> (correct)",
+                    "<<wex.1.pred>> (correct)",
+                    "<<wex.2.pred>> (wrong)",
+                ],
+                ["Ensemble confidence (%)", "<<wex.0.conf>>", "<<wex.1.conf>>", "<<wex.2.conf>>"],
+                [
+                    "Mask size, CNN / Xception / InceptionV3 (% of image)",
+                    "<<wex.0.area.CNN>> / <<wex.0.area.Xception>> / <<wex.0.area.InceptionV3>>",
+                    "<<wex.1.area.CNN>> / <<wex.1.area.Xception>> / <<wex.1.area.InceptionV3>>",
+                    "<<wex.2.area.CNN>> / <<wex.2.area.Xception>> / <<wex.2.area.InceptionV3>>",
+                ],
+            ]
+            + [
+                [f"{pair}: intersection / union (pixels) = IoU"]
+                + [
+                    f"<<wex.{k}.p{i}.inter>> / <<wex.{k}.p{i}.union>> = <<wex.{k}.p{i}.iou>>"
+                    for k in range(3)
+                ]
+                for i, pair in enumerate(["CNN vs Xception", "CNN vs InceptionV3", "Xception vs InceptionV3"])
+            ]
+            + [
+                ["EAA-IoU (mean of the three IoUs)", "<<wex.0.eaa>>", "<<wex.1.eaa>>", "<<wex.2.eaa>>"],
+                [
+                    "Agreement band and action",
+                    "Strong (0.20 or above): no alert",
+                    "Moderate (0.10 to 0.20): no alert",
+                    "Below 0.10: alert, radiologist review",
+                ],
+            ],
+            widths=[4.6, 3.9, 3.9, 3.9],
+            font=8.5,
+        ),
+        FIG(
+            "eaa_ex",
+            "paper_assets/figures_improved/fig_eaa_worked_example.png",
+            "EAA-IoU step by step for three test images (improved models). For each image, top row: input and Grad-CAM of each network, "
+            "with the 0.5 mask outlined in white; bottom row: overlap of each pair of masks and the resulting IoU",
+            width=4.8,
+        ),
+        P(
+            "The score was computed for all 1,600 test images in both configurations. The planned bands (alert below 0.40, strong agreement "
+            "from 0.65) were replaced by bands taken from the observed distribution (alert below 0.10, strong from 0.20); Section 5.8 explains "
+            "why and reports how errors are distributed across the bands."
+        ),
+        H(3, "3.10.10 Shortcut check"),
+        P(
+            "The last check asks whether the models look at the brain at all. The head was found by thresholding the image, and a 12-pixel "
+            "outer rim was defined to cover the skull and the image edge. For each Grad-CAM map, the share of its total value (its mass) "
+            "that falls outside the head or in the rim was compared with the share of the image area these regions occupy. A model that "
+            "ignored position would put about the same share of its attention there as the area they cover; a model that focuses on the "
+            "brain would put much less. Three further experiments tested the cause of any excess attention (Section 5.7)."
+        ),
         H(2, "3.11 Reliability, validity and generalisability"),
         P(
             "Reliability is supported by fixed seeds, a single code base per configuration and logging of all results as data; the saved models "

@@ -12,7 +12,7 @@ def ch1():
         P(
             "Magnetic resonance imaging (MRI) is the main imaging test for suspected brain tumours, and the tumour type strongly influences "
             "treatment and prognosis (Louis et al., 2021). Gliomas, meningiomas and pituitary tumours differ in location, appearance and "
-            "behaviour, but on a single two-dimensional slice their appearance can overlap, and visual reporting is time-consuming and varies "
+            "behavior, but on a single two-dimensional slice their appearance can overlap, and visual reporting is time-consuming and varies "
             "between readers (Tripathi and Bag, 2019). Computer-aided classification is therefore attractive as a fast and consistent second "
             "reader (Topol, 2019)."
         ),

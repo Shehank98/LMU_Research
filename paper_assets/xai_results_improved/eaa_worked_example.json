@@ -1,0 +1,116 @@
+{
+  "threshold": 0.5,
+  "examples": [
+    {
+      "idx": 149,
+      "title": "High agreement",
+      "file": "glioma/Te-gl_233.jpg",
+      "true": "Glioma",
+      "pred": "Glioma",
+      "correct": true,
+      "ensemble_confidence_pct": 99.96,
+      "mask_area_pct": {
+        "CNN": 27.58,
+        "Xception": 31.62,
+        "InceptionV3": 26.43
+      },
+      "pairs": [
+        {
+          "pair": "CNN / Xception",
+          "intersection_px": 9400,
+          "union_px": 20301,
+          "iou": 0.463
+        },
+        {
+          "pair": "CNN / InceptionV3",
+          "intersection_px": 7642,
+          "union_px": 19459,
+          "iou": 0.3927
+        },
+        {
+          "pair": "Xception / InceptionV3",
+          "intersection_px": 11890,
+          "union_px": 17238,
+          "iou": 0.6898
+        }
+      ],
+      "eaa_iou": 0.5152,
+      "eaa_iou_logged": 0.5152,
+      "band": "strong (0.20 or above)"
+    },
+    {
+      "idx": 1209,
+      "title": "Moderate agreement",
+      "file": "pituitary/Te-pi_107.jpg",
+      "true": "Pituitary",
+      "pred": "Pituitary",
+      "correct": true,
+      "ensemble_confidence_pct": 99.05,
+      "mask_area_pct": {
+        "CNN": 8.03,
+        "Xception": 22.89,
+        "InceptionV3": 29.32
+      },
+      "pairs": [
+        {
+          "pair": "CNN / Xception",
+          "intersection_px": 0,
+          "union_px": 15512,
+          "iou": 0.0
+        },
+        {
+          "pair": "CNN / InceptionV3",
+          "intersection_px": 876,
+          "union_px": 17863,
+          "iou": 0.049
+        },
+        {
+          "pair": "Xception / InceptionV3",
+          "intersection_px": 7848,
+          "union_px": 18347,
+          "iou": 0.4278
+        }
+      ],
+      "eaa_iou": 0.1589,
+      "eaa_iou_logged": 0.1589,
+      "band": "moderate (0.10 to 0.20)"
+    },
+    {
+      "idx": 235,
+      "title": "Low agreement (flagged)",
+      "file": "glioma/Te-gl_310.jpg",
+      "true": "Glioma",
+      "pred": "No tumour",
+      "correct": false,
+      "ensemble_confidence_pct": 50.67,
+      "mask_area_pct": {
+        "CNN": 2.65,
+        "Xception": 31.73,
+        "InceptionV3": 29.8
+      },
+      "pairs": [
+        {
+          "pair": "CNN / Xception",
+          "intersection_px": 0,
+          "union_px": 17251,
+          "iou": 0.0
+        },
+        {
+          "pair": "CNN / InceptionV3",
+          "intersection_px": 439,
+          "union_px": 15844,
+          "iou": 0.0277
+        },
+        {
+          "pair": "Xception / InceptionV3",
+          "intersection_px": 1291,
+          "union_px": 29583,
+          "iou": 0.0436
+        }
+      ],
+      "eaa_iou": 0.0238,
+      "eaa_iou_logged": 0.0238,
+      "band": "alert (below 0.10)"
+    }
+  ]
+}

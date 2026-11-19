@@ -170,10 +170,43 @@ def load():
             else:
                 V[prefix + k] = str(v)
 
-    for f in ["xai_quantitative.json", "eaa_iou_summary.json", "shortcut_investigation.json", "shap_rf.json", "method_agreement_examples.json"]:
+    for f in [
+        "xai_quantitative.json",
+        "eaa_iou_summary.json",
+        "shortcut_investigation.json",
+        "shap_rf.json",
+        "method_agreement_examples.json",
+    ]:
         p = os.path.join(IRES, f)
         if os.path.exists(p):
             iflat("imp." + f.split(".")[0] + ".", j(p))
+    # EAA-IoU worked example (three test images) and images / errors per EAA-IoU band
+    p = os.path.join(IRES, "eaa_worked_example.json")
+    if os.path.exists(p):
+        for k, ex in enumerate(j(p)["examples"]):
+            w = f"wex.{k}."
+            V[w + "idx"] = str(ex["idx"])
+            V[w + "true"] = ex["true"]
+            V[w + "pred"] = ex["pred"]
+            V[w + "conf"] = f"{ex['ensemble_confidence_pct']:.2f}"
+            V[w + "eaa"] = f"{ex['eaa_iou']:.3f}"
+            V[w + "eaa4"] = f"{ex['eaa_iou']:.4f}"
+            for n, a in ex["mask_area_pct"].items():
+                V[w + "area." + n] = f"{a:.1f}"
+            for i, pr in enumerate(ex["pairs"]):
+                V[w + f"p{i}.inter"] = f"{pr['intersection_px']:,}"
+                V[w + f"p{i}.union"] = f"{pr['union_px']:,}"
+                V[w + f"p{i}.iou"] = f"{pr['iou']:.3f}"
+    p = os.path.join(IRES, "eaa_bands.json")
+    if os.path.exists(p):
+        for cfg, d in j(p).items():
+            V[f"band.{cfg}.err"] = str(d["n_errors"])
+            V[f"band.{cfg}.rate"] = f"{d['overall_error_rate_pct']:.2f}"
+            for i, b in enumerate(d["bands"]):
+                for k in ["images", "errors"]:
+                    V[f"band.{cfg}.{i}.{k}"] = f"{b[k]:,}"
+                for k in ["images_pct", "error_rate_pct", "share_of_errors_pct"]:
+                    V[f"band.{cfg}.{i}.{k}"] = f"{b[k]:.2f}"
     p = os.path.join(IRES, "eaa_iou_summary.json")
     if os.path.exists(p) and "mann_whitney_p_value" in j(p):
         V["imp.eaa.p"] = fmt_p(j(p)["mann_whitney_p_value"])
@@ -202,7 +235,13 @@ def load():
         import numpy as np
 
         d = pd.read_csv(pp)
-        votes = np.stack([d[c] for c in d.columns if c.startswith("pred_") and c not in ("pred_majority", "pred_confidence_weighted")])
+        votes = np.stack(
+            [
+                d[c]
+                for c in d.columns
+                if c.startswith("pred_") and c not in ("pred_majority", "pred_confidence_weighted")
+            ]
+        )
         V["ioracle.none_correct_pct"] = f"{100 * (~(votes == d.true.values).any(0)).mean():.2f}"
     h = os.path.join(ROOT, "runs", "v2", "history")
     if os.path.isdir(h):

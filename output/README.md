@@ -21,7 +21,7 @@
 ## Where things come from
 * Baseline: `final_code_set_2026-10-22/` (Colab), results in `metrics/`, `confusion/`, `history/`.
 * Improved: `src/` (run `src/run_all.sh`), results in `runs/v2/`.
-* Analysis and figures: `paper_assets/scripts/` (set `MODEL_SET=improved` for the improved models).
+* Analysis and figures: `paper_assets/scripts/` (set `MODEL_SET=improved` for the improved models). The EAA-IoU worked example (Figure 8, Table 8) and the band table in Section 5.8 come from `18_eaa_worked_example.py`.
 * Report build and checks: `paper_assets/build/build_paper.py`, `paper_assets/build/check_paper.py`.
 * Issues found in the code and how they were fixed: `CODE_REVIEW.md`.
 

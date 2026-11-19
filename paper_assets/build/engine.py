@@ -310,7 +310,37 @@ class Renderer:
         self._list(items, new, "List Bullet")
 
     def _num(self, items, new):
-        self._list(items, new, "List Number")
+        """Numbered list that restarts at 1 (a new w:num pointing at the List Number definition)."""
+        from docx.oxml import OxmlElement
+        from docx.oxml.ns import qn
+
+        style_num = self.doc.styles["List Number"].element.pPr.numPr.numId.val
+        numbering = self.doc.part.numbering_part.element
+        abstract = next(
+            n.find(qn("w:abstractNumId")).get(qn("w:val"))
+            for n in numbering.findall(qn("w:num"))
+            if n.get(qn("w:numId")) == str(style_num)
+        )
+        new_id = max(int(n.get(qn("w:numId"))) for n in numbering.findall(qn("w:num"))) + 1
+        num = OxmlElement("w:num")
+        num.set(qn("w:numId"), str(new_id))
+        a = OxmlElement("w:abstractNumId")
+        a.set(qn("w:val"), abstract)
+        num.append(a)
+        o = OxmlElement("w:lvlOverride")
+        o.set(qn("w:ilvl"), "0")
+        so = OxmlElement("w:startOverride")
+        so.set(qn("w:val"), "1")
+        o.append(so)
+        num.append(o)
+        numbering.append(num)
+        for it in items:
+            p = self.doc.add_paragraph(style="List Number")
+            p.paragraph_format.space_after = Pt(3)
+            numPr = p._p.get_or_add_pPr().get_or_add_numPr()
+            numPr.get_or_add_ilvl().val = 0
+            numPr.get_or_add_numId().val = new_id
+            add_runs(p, self.resolve(it), highlight=new and self.hl)
 
     def _fig(self, key, path, caption, new, width):
         self.figpaths[key] = path
