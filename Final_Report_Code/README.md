@@ -53,9 +53,13 @@ Run in this order (needs the dataset and the trained models, see "How to run"):
 
 | Path | What it does |
 |---|---|
-| `backend/main.py` | FastAPI server: `/health`, `/api/models/status`, `/api/predict`, `/api/results`; also serves the built React site |
+| `backend/main.py` | FastAPI server: `/health`, `/api/models/status`, `/api/predict`, `/api/results`, `/api/patients`; also serves the built React site |
 | `backend/xai_engine.py` | Six-predictor confidence-weighted prediction, Grad-CAM, consensus map, EAA-IoU, alert below 0.10 |
 | `backend/model_loader.py` | Downloads and loads the nine model files from Hugging Face in the background |
+| `backend/analysis.py` | One full analysis of an image (used by the Diagnose page and by patient scans) |
+| `backend/patients.py` | Patient records API: list, profile with scan history, new patient, new scan (analysed and saved), radiologist review |
+| `backend/demo_patients/` | Five fictitious demonstration patients with Sinhala names; their scans are public test images analysed by the trained models (`seed_demo_patients.py`) |
+| `frontend/src/pages/Patients.jsx`, `PatientDetail.jsx` | Patients list and patient record (profile, scan history, saved analyses, review form, new-scan upload) |
 | `frontend/src/pages/Diagnose.jsx` | Upload page: prediction, confidence, EAA-IoU, alert, heatmaps, per-model votes |
 | `frontend/src/pages/Results.jsx` | Results page: all configurations, EAA-IoU summary, thresholds, dataset |
 | `Dockerfile`, `railway.toml` | Two-stage build (React with Node, then Python) and Railway deployment |

@@ -2,6 +2,8 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import Header from './components/Header'
 import Diagnose from './pages/Diagnose'
 import Results from './pages/Results'
+import Patients from './pages/Patients'
+import PatientDetail from './pages/PatientDetail'
 
 export default function App() {
   return (
@@ -10,6 +12,8 @@ export default function App() {
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6">
         <Routes>
           <Route path="/" element={<Diagnose />} />
+          <Route path="/patients" element={<Patients />} />
+          <Route path="/patients/:id" element={<PatientDetail />} />
           <Route path="/results" element={<Results />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

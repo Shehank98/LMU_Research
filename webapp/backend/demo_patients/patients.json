@@ -1,0 +1,1404 @@
+{
+ "demo": true,
+ "note": "Fictitious demonstration patients. MRI slices from the public Kaggle test set.",
+ "patients": [
+  {
+   "id": "P-0001",
+   "name": "Nimal Perera",
+   "name_si": "නිමල් පෙරේරා",
+   "sex": "Male",
+   "dob": "1972-03-14",
+   "phone": "077 451 2286",
+   "city": "Colombo 05",
+   "blood_group": "O+",
+   "allergies": "None known",
+   "referring_clinician": "Dr. Ruwan Fernando (Neurologist)",
+   "history": "Progressive headaches for three months and one generalised seizure in May 2026. No previous neurological illness. Started on levetiracetam.",
+   "scans": [
+    {
+     "id": "P-0001-S1",
+     "date": "2026-06-12",
+     "study": "MRI brain, contrast-enhanced",
+     "notes": "Initial scan after seizure.",
+     "source_image": "Testing/glioma/Te-gl_246.jpg",
+     "result": {
+      "final_class": "Glioma",
+      "final_class_idx": 0,
+      "confidence": 0.9169168088597897,
+      "confidence_level": "high",
+      "class_names": [
+       "Glioma",
+       "Meningioma",
+       "No Tumor",
+       "Pituitary"
+      ],
+      "class_probabilities": [
+       0.9169168088597897,
+       0.0817874317306545,
+       0.0012079615360663003,
+       8.779787348960562e-05
+      ],
+      "per_model": [
+       {
+        "name": "CNN",
+        "family": "Deep model",
+        "predicted_class": "Glioma",
+        "confidence": 0.7257047295570374,
+        "probabilities": [
+         0.7257047295570374,
+         0.2742892801761627,
+         1.1069789707107702e-06,
+         4.889659066975582e-06
+        ]
+       },
+       {
+        "name": "InceptionV3",
+        "family": "Deep model",
+        "predicted_class": "Glioma",
+        "confidence": 0.9566234350204468,
+        "probabilities": [
+         0.9566234350204468,
+         0.0399133637547493,
+         0.0034374981187283993,
+         2.5677696612547152e-05
+        ]
+       },
+       {
+        "name": "Xception",
+        "family": "Deep model",
+        "predicted_class": "Glioma",
+        "confidence": 0.9220972061157227,
+        "probabilities": [
+         0.9220972061157227,
+         0.07371059060096741,
+         0.003737270599231124,
+         0.0004548988654278219
+        ]
+       },
+       {
+        "name": "CNN + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Glioma",
+        "confidence": 0.9093525348571783,
+        "probabilities": [
+         0.9093525348571783,
+         0.09058279600092782,
+         3.0822460944481346e-05,
+         3.384668094944855e-05
+        ]
+       },
+       {
+        "name": "InceptionV3 + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Glioma",
+        "confidence": 0.9998480436409883,
+        "probabilities": [
+         0.9998480436409883,
+         0.00012337905183794234,
+         2.472562975374098e-05,
+         3.851677419996766e-06
+        ]
+       },
+       {
+        "name": "Xception + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Glioma",
+        "confidence": 0.9878748555020059,
+        "probabilities": [
+         0.9878748555020059,
+         0.01210517647625363,
+         1.6345364920272402e-05,
+         3.622656820122476e-06
+        ]
+       }
+      ],
+      "xai": {
+       "pairwise_iou": [
+        {
+         "pair": "CNN vs Xception",
+         "iou": 0.029187396351575457
+        },
+        {
+         "pair": "CNN vs InceptionV3",
+         "iou": 0.029387659524645827
+        },
+        {
+         "pair": "Xception vs InceptionV3",
+         "iou": 0.7900308568715879
+        }
+       ],
+       "eaa_iou": 0.28286863758260306,
+       "agreement_level": "high",
+       "alert": false,
+       "thresholds": {
+        "high": 0.2,
+        "low": 0.1
+       },
+       "original": "/patient-files/P-0001-S1/original.png",
+       "heatmaps": [
+        {
+         "name": "CNN",
+         "image": "/patient-files/P-0001-S1/cnn.png"
+        },
+        {
+         "name": "Xception",
+         "image": "/patient-files/P-0001-S1/xception.png"
+        },
+        {
+         "name": "InceptionV3",
+         "image": "/patient-files/P-0001-S1/inceptionv3.png"
+        }
+       ],
+       "consensus": "/patient-files/P-0001-S1/consensus.png"
+      },
+      "models_used": 6,
+      "models_missing": []
+     },
+     "review": {
+      "status": "confirmed",
+      "radiologist": "Dr. Sanjeewa Gunawardena (Consultant Radiologist)",
+      "final_diagnosis": "Glioma",
+      "note": "Enhancing intra-axial lesion consistent with glioma. Referred to neurosurgery.",
+      "date": "2026-06-13"
+     }
+    },
+    {
+     "id": "P-0001-S2",
+     "date": "2026-09-03",
+     "study": "MRI brain, follow-up",
+     "notes": "Follow-up after biopsy.",
+     "source_image": "Testing/glioma/Te-gl_9.jpg",
+     "result": {
+      "final_class": "Glioma",
+      "final_class_idx": 0,
+      "confidence": 0.9997051704836117,
+      "confidence_level": "high",
+      "class_names": [
+       "Glioma",
+       "Meningioma",
+       "No Tumor",
+       "Pituitary"
+      ],
+      "class_probabilities": [
+       0.9997051704836117,
+       7.063486551110842e-05,
+       0.0001608026679774534,
+       6.339198289967032e-05
+      ],
+      "per_model": [
+       {
+        "name": "CNN",
+        "family": "Deep model",
+        "predicted_class": "Glioma",
+        "confidence": 1.0,
+        "probabilities": [
+         1.0,
+         2.581065396134452e-11,
+         1.1903719621595431e-17,
+         1.87012401774841e-20
+        ]
+       },
+       {
+        "name": "InceptionV3",
+        "family": "Deep model",
+        "predicted_class": "Glioma",
+        "confidence": 0.9998809099197388,
+        "probabilities": [
+         0.9998809099197388,
+         3.7953002902213484e-05,
+         6.419615965569392e-05,
+         1.6879748727660626e-05
+        ]
+       },
+       {
+        "name": "Xception",
+        "family": "Deep model",
+        "predicted_class": "Glioma",
+        "confidence": 0.9996792078018188,
+        "probabilities": [
+         0.9996792078018188,
+         8.781342330621555e-05,
+         0.00011257523146923631,
+         0.00012042618618579581
+        ]
+       },
+       {
+        "name": "CNN + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Glioma",
+        "confidence": 0.9999928695872251,
+        "probabilities": [
+         0.9999928695872251,
+         3.3100875818216333e-08,
+         1.5786390886256676e-06,
+         5.518672810546541e-06
+        ]
+       },
+       {
+        "name": "InceptionV3 + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Glioma",
+        "confidence": 0.9997607115862147,
+        "probabilities": [
+         0.9997607115862147,
+         1.2581602278987766e-05,
+         0.0001692262469530513,
+         5.748056455321608e-05
+        ]
+       },
+       {
+        "name": "Xception + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Glioma",
+        "confidence": 0.9989172855176394,
+        "probabilities": [
+         0.9989172855176394,
+         0.0002854280351732921,
+         0.0006172397245071367,
+         0.0001800467226801872
+        ]
+       }
+      ],
+      "xai": {
+       "pairwise_iou": [
+        {
+         "pair": "CNN vs Xception",
+         "iou": 0.0029638714293014463
+        },
+        {
+         "pair": "CNN vs InceptionV3",
+         "iou": 0.0020649250864387247
+        },
+        {
+         "pair": "Xception vs InceptionV3",
+         "iou": 0.7817200495487524
+        }
+       ],
+       "eaa_iou": 0.2622496153548309,
+       "agreement_level": "high",
+       "alert": false,
+       "thresholds": {
+        "high": 0.2,
+        "low": 0.1
+       },
+       "original": "/patient-files/P-0001-S2/original.png",
+       "heatmaps": [
+        {
+         "name": "CNN",
+         "image": "/patient-files/P-0001-S2/cnn.png"
+        },
+        {
+         "name": "Xception",
+         "image": "/patient-files/P-0001-S2/xception.png"
+        },
+        {
+         "name": "InceptionV3",
+         "image": "/patient-files/P-0001-S2/inceptionv3.png"
+        }
+       ],
+       "consensus": "/patient-files/P-0001-S2/consensus.png"
+      },
+      "models_used": 6,
+      "models_missing": []
+     },
+     "review": {
+      "status": "confirmed",
+      "radiologist": "Dr. Sanjeewa Gunawardena (Consultant Radiologist)",
+      "final_diagnosis": "Glioma",
+      "note": "Lesion persists. Continue oncology follow-up.",
+      "date": "2026-09-04"
+     }
+    }
+   ]
+  },
+  {
+   "id": "P-0002",
+   "name": "Kumari Jayasinghe",
+   "name_si": "කුමාරි ජයසිංහ",
+   "sex": "Female",
+   "dob": "1980-07-22",
+   "phone": "071 338 9047",
+   "city": "Kandy",
+   "blood_group": "A+",
+   "allergies": "Penicillin",
+   "referring_clinician": "Dr. Nadeesha Herath (General Physician)",
+   "history": "Frontal headaches and occasional blurred vision. Hypertension, well controlled.",
+   "scans": [
+    {
+     "id": "P-0002-S1",
+     "date": "2026-05-20",
+     "study": "MRI brain, contrast-enhanced",
+     "notes": "Referred for persistent headaches.",
+     "source_image": "Testing/meningioma/Te-me_58.jpg",
+     "result": {
+      "final_class": "Meningioma",
+      "final_class_idx": 1,
+      "confidence": 0.9932731086036999,
+      "confidence_level": "high",
+      "class_names": [
+       "Glioma",
+       "Meningioma",
+       "No Tumor",
+       "Pituitary"
+      ],
+      "class_probabilities": [
+       0.004404709644102327,
+       0.9932731086036999,
+       0.0011013801185994828,
+       0.001220801633598196
+      ],
+      "per_model": [
+       {
+        "name": "CNN",
+        "family": "Deep model",
+        "predicted_class": "Meningioma",
+        "confidence": 0.9999874830245972,
+        "probabilities": [
+         3.954679414164275e-06,
+         0.9999874830245972,
+         8.577862899983302e-06,
+         4.60421145653811e-10
+        ]
+       },
+       {
+        "name": "InceptionV3",
+        "family": "Deep model",
+        "predicted_class": "Meningioma",
+        "confidence": 0.9951437711715698,
+        "probabilities": [
+         0.0025401893071830273,
+         0.9951437711715698,
+         0.00011222105968045071,
+         0.002203826792538166
+        ]
+       },
+       {
+        "name": "Xception",
+        "family": "Deep model",
+        "predicted_class": "Meningioma",
+        "confidence": 0.9969593286514282,
+        "probabilities": [
+         0.0015195355517789721,
+         0.9969593286514282,
+         0.00128759047947824,
+         0.00023357612371910363
+        ]
+       },
+       {
+        "name": "CNN + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Meningioma",
+        "confidence": 0.9924811034796027,
+        "probabilities": [
+         0.00746872629445201,
+         0.9924811034796027,
+         4.6823647256341584e-05,
+         3.3465786889921793e-06
+        ]
+       },
+       {
+        "name": "InceptionV3 + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Meningioma",
+        "confidence": 0.9898000342216506,
+        "probabilities": [
+         0.007276380488091146,
+         0.9898000342216506,
+         0.0008743222428634306,
+         0.0020492630473947712
+        ]
+       },
+       {
+        "name": "Xception + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Meningioma",
+        "confidence": 0.9852669858669728,
+        "probabilities": [
+         0.007619471786679168,
+         0.9852669858669728,
+         0.004278745480175765,
+         0.0028347968661721636
+        ]
+       }
+      ],
+      "xai": {
+       "pairwise_iou": [
+        {
+         "pair": "CNN vs Xception",
+         "iou": 0.0
+        },
+        {
+         "pair": "CNN vs InceptionV3",
+         "iou": 0.00029282576866764275
+        },
+        {
+         "pair": "Xception vs InceptionV3",
+         "iou": 0.7317951025130149
+        }
+       ],
+       "eaa_iou": 0.24402930942722753,
+       "agreement_level": "high",
+       "alert": false,
+       "thresholds": {
+        "high": 0.2,
+        "low": 0.1
+       },
+       "original": "/patient-files/P-0002-S1/original.png",
+       "heatmaps": [
+        {
+         "name": "CNN",
+         "image": "/patient-files/P-0002-S1/cnn.png"
+        },
+        {
+         "name": "Xception",
+         "image": "/patient-files/P-0002-S1/xception.png"
+        },
+        {
+         "name": "InceptionV3",
+         "image": "/patient-files/P-0002-S1/inceptionv3.png"
+        }
+       ],
+       "consensus": "/patient-files/P-0002-S1/consensus.png"
+      },
+      "models_used": 6,
+      "models_missing": []
+     },
+     "review": {
+      "status": "confirmed",
+      "radiologist": "Dr. Sanjeewa Gunawardena (Consultant Radiologist)",
+      "final_diagnosis": "Meningioma",
+      "note": "Well-defined extra-axial mass, typical of meningioma.",
+      "date": "2026-05-21"
+     }
+    },
+    {
+     "id": "P-0002-S2",
+     "date": "2026-10-08",
+     "study": "MRI brain, follow-up",
+     "notes": "Six-month surveillance scan.",
+     "source_image": "Testing/meningioma/Te-me_294.jpg",
+     "result": {
+      "final_class": "Meningioma",
+      "final_class_idx": 1,
+      "confidence": 0.9043279784409779,
+      "confidence_level": "high",
+      "class_names": [
+       "Glioma",
+       "Meningioma",
+       "No Tumor",
+       "Pituitary"
+      ],
+      "class_probabilities": [
+       0.01825495270963221,
+       0.9043279784409779,
+       0.012093309796099879,
+       0.06532375905329
+      ],
+      "per_model": [
+       {
+        "name": "CNN",
+        "family": "Deep model",
+        "predicted_class": "Meningioma",
+        "confidence": 0.999988317489624,
+        "probabilities": [
+         3.3691936351942786e-08,
+         0.999988317489624,
+         3.0369701562449336e-06,
+         8.567503755330108e-06
+        ]
+       },
+       {
+        "name": "InceptionV3",
+        "family": "Deep model",
+        "predicted_class": "Meningioma",
+        "confidence": 0.9354088306427002,
+        "probabilities": [
+         0.017923811450600624,
+         0.9354088306427002,
+         0.04626600071787834,
+         0.000401331897592172
+        ]
+       },
+       {
+        "name": "Xception",
+        "family": "Deep model",
+        "predicted_class": "Meningioma",
+        "confidence": 0.9710172414779663,
+        "probabilities": [
+         0.0008947660098783672,
+         0.9710172414779663,
+         0.026044774800539017,
+         0.002043264452368021
+        ]
+       },
+       {
+        "name": "CNN + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Meningioma",
+        "confidence": 0.9766661204634257,
+        "probabilities": [
+         0.02333349460099426,
+         0.9766661204634257,
+         2.8639199498976906e-07,
+         9.854358517793427e-08
+        ]
+       },
+       {
+        "name": "InceptionV3 + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Meningioma",
+        "confidence": 0.5763419717248547,
+        "probabilities": [
+         0.034094634796040094,
+         0.5763419717248547,
+         0.00020256317966035875,
+         0.3893608302994449
+        ]
+       },
+       {
+        "name": "Xception + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Meningioma",
+        "confidence": 0.966545368142703,
+        "probabilities": [
+         0.03328297529039633,
+         0.966545368142703,
+         4.319643949391946e-05,
+         0.00012846012740666158
+        ]
+       }
+      ],
+      "xai": {
+       "pairwise_iou": [
+        {
+         "pair": "CNN vs Xception",
+         "iou": 0.014701024116286753
+        },
+        {
+         "pair": "CNN vs InceptionV3",
+         "iou": 0.019329896907216496
+        },
+        {
+         "pair": "Xception vs InceptionV3",
+         "iou": 0.6572721396250808
+        }
+       ],
+       "eaa_iou": 0.23043435354952801,
+       "agreement_level": "high",
+       "alert": false,
+       "thresholds": {
+        "high": 0.2,
+        "low": 0.1
+       },
+       "original": "/patient-files/P-0002-S2/original.png",
+       "heatmaps": [
+        {
+         "name": "CNN",
+         "image": "/patient-files/P-0002-S2/cnn.png"
+        },
+        {
+         "name": "Xception",
+         "image": "/patient-files/P-0002-S2/xception.png"
+        },
+        {
+         "name": "InceptionV3",
+         "image": "/patient-files/P-0002-S2/inceptionv3.png"
+        }
+       ],
+       "consensus": "/patient-files/P-0002-S2/consensus.png"
+      },
+      "models_used": 6,
+      "models_missing": []
+     },
+     "review": {
+      "status": "confirmed",
+      "radiologist": "Dr. Sanjeewa Gunawardena (Consultant Radiologist)",
+      "final_diagnosis": "Meningioma",
+      "note": "No significant change in size. Continue surveillance.",
+      "date": "2026-10-09"
+     }
+    }
+   ]
+  },
+  {
+   "id": "P-0003",
+   "name": "Sunil Bandara",
+   "name_si": "සුනිල් බණ්ඩාර",
+   "sex": "Male",
+   "dob": "1965-11-02",
+   "phone": "076 902 1153",
+   "city": "Galle",
+   "blood_group": "B+",
+   "allergies": "None known",
+   "referring_clinician": "Dr. Chathura Silva (Endocrinologist)",
+   "history": "Reduced peripheral vision and raised prolactin on blood tests. Type 2 diabetes.",
+   "scans": [
+    {
+     "id": "P-0003-S1",
+     "date": "2026-07-15",
+     "study": "MRI pituitary, contrast-enhanced",
+     "notes": "Investigation of visual field loss.",
+     "source_image": "Testing/pituitary/Te-pi_74.jpg",
+     "result": {
+      "final_class": "Pituitary",
+      "final_class_idx": 3,
+      "confidence": 0.9958852783200197,
+      "confidence_level": "high",
+      "class_names": [
+       "Glioma",
+       "Meningioma",
+       "No Tumor",
+       "Pituitary"
+      ],
+      "class_probabilities": [
+       3.17624962469421e-05,
+       0.0039103511865078485,
+       0.00017260799722552977,
+       0.9958852783200197
+      ],
+      "per_model": [
+       {
+        "name": "CNN",
+        "family": "Deep model",
+        "predicted_class": "Pituitary",
+        "confidence": 1.0,
+        "probabilities": [
+         4.7055776972431546e-14,
+         1.0744520828609438e-09,
+         1.783088537932187e-10,
+         1.0
+        ]
+       },
+       {
+        "name": "InceptionV3",
+        "family": "Deep model",
+        "predicted_class": "Pituitary",
+        "confidence": 0.9933589100837708,
+        "probabilities": [
+         7.325797196244821e-05,
+         0.006445946171879768,
+         0.00012188006803626195,
+         0.9933589100837708
+        ]
+       },
+       {
+        "name": "Xception",
+        "family": "Deep model",
+        "predicted_class": "Pituitary",
+        "confidence": 0.9926689863204956,
+        "probabilities": [
+         0.00010333399404771626,
+         0.006320025306195021,
+         0.0009075835114344954,
+         0.9926689863204956
+        ]
+       },
+       {
+        "name": "CNN + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Pituitary",
+        "confidence": 0.9999999629957587,
+        "probabilities": [
+         8.277105895146759e-09,
+         1.790346467761801e-08,
+         1.0823670670293396e-08,
+         0.9999999629957587
+        ]
+       },
+       {
+        "name": "InceptionV3 + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Pituitary",
+        "confidence": 0.9926172883011185,
+        "probabilities": [
+         1.3918484431327888e-05,
+         0.007362687514074606,
+         6.105700375639807e-06,
+         0.9926172883011185
+        ]
+       },
+       {
+        "name": "Xception + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Pituitary",
+        "confidence": 0.9966664472095229,
+        "probabilities": [
+         5.624749487804339e-08,
+         0.0033334288544557464,
+         6.768852653161419e-08,
+         0.9966664472095229
+        ]
+       }
+      ],
+      "xai": {
+       "pairwise_iou": [
+        {
+         "pair": "CNN vs Xception",
+         "iou": 0.0
+        },
+        {
+         "pair": "CNN vs InceptionV3",
+         "iou": 0.00012794677414195696
+        },
+        {
+         "pair": "Xception vs InceptionV3",
+         "iou": 0.37773171453953214
+        }
+       ],
+       "eaa_iou": 0.12595322043789137,
+       "agreement_level": "moderate",
+       "alert": false,
+       "thresholds": {
+        "high": 0.2,
+        "low": 0.1
+       },
+       "original": "/patient-files/P-0003-S1/original.png",
+       "heatmaps": [
+        {
+         "name": "CNN",
+         "image": "/patient-files/P-0003-S1/cnn.png"
+        },
+        {
+         "name": "Xception",
+         "image": "/patient-files/P-0003-S1/xception.png"
+        },
+        {
+         "name": "InceptionV3",
+         "image": "/patient-files/P-0003-S1/inceptionv3.png"
+        }
+       ],
+       "consensus": "/patient-files/P-0003-S1/consensus.png"
+      },
+      "models_used": 6,
+      "models_missing": []
+     },
+     "review": {
+      "status": "confirmed",
+      "radiologist": "Dr. Sanjeewa Gunawardena (Consultant Radiologist)",
+      "final_diagnosis": "Pituitary tumour",
+      "note": "Sellar mass consistent with pituitary adenoma.",
+      "date": "2026-07-16"
+     }
+    },
+    {
+     "id": "P-0003-S2",
+     "date": "2026-10-30",
+     "study": "MRI pituitary, follow-up",
+     "notes": "Review after three months of medical treatment.",
+     "source_image": "Testing/pituitary/Te-pi_111.jpg",
+     "result": {
+      "final_class": "Pituitary",
+      "final_class_idx": 3,
+      "confidence": 0.9899229426812279,
+      "confidence_level": "high",
+      "class_names": [
+       "Glioma",
+       "Meningioma",
+       "No Tumor",
+       "Pituitary"
+      ],
+      "class_probabilities": [
+       0.001595226637132311,
+       0.0057236994402491016,
+       0.002758131241390678,
+       0.9899229426812279
+      ],
+      "per_model": [
+       {
+        "name": "CNN",
+        "family": "Deep model",
+        "predicted_class": "Pituitary",
+        "confidence": 0.9999985694885254,
+        "probabilities": [
+         1.3770242048849468e-06,
+         8.854117994339106e-10,
+         5.0808052209916355e-11,
+         0.9999985694885254
+        ]
+       },
+       {
+        "name": "InceptionV3",
+        "family": "Deep model",
+        "predicted_class": "Pituitary",
+        "confidence": 0.9537006616592407,
+        "probabilities": [
+         0.006204578094184399,
+         0.024073921144008636,
+         0.016020845621824265,
+         0.9537006616592407
+        ]
+       },
+       {
+        "name": "Xception",
+        "family": "Deep model",
+        "predicted_class": "Pituitary",
+        "confidence": 0.9925066828727722,
+        "probabilities": [
+         0.0033648828975856304,
+         0.003600932192057371,
+         0.0005275363801047206,
+         0.9925066828727722
+        ]
+       },
+       {
+        "name": "CNN + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Pituitary",
+        "confidence": 0.993332153767899,
+        "probabilities": [
+         3.7934280164163815e-07,
+         0.006667222049617187,
+         2.4483968219931974e-07,
+         0.993332153767899
+        ]
+       },
+       {
+        "name": "InceptionV3 + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Pituitary",
+        "confidence": 0.9999997186592399,
+        "probabilities": [
+         9.68310876547627e-08,
+         7.834196584065652e-08,
+         1.061677067448877e-07,
+         0.9999997186592399
+        ]
+       },
+       {
+        "name": "Xception + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Pituitary",
+        "confidence": 0.9999998580682119,
+        "probabilities": [
+         4.561428261796067e-08,
+         4.196152789528772e-08,
+         5.435597754261723e-08,
+         0.9999998580682119
+        ]
+       }
+      ],
+      "xai": {
+       "pairwise_iou": [
+        {
+         "pair": "CNN vs Xception",
+         "iou": 0.0063003663003663
+        },
+        {
+         "pair": "CNN vs InceptionV3",
+         "iou": 0.00939996866677111
+        },
+        {
+         "pair": "Xception vs InceptionV3",
+         "iou": 0.40178127883045917
+        }
+       ],
+       "eaa_iou": 0.1391605379325322,
+       "agreement_level": "moderate",
+       "alert": false,
+       "thresholds": {
+        "high": 0.2,
+        "low": 0.1
+       },
+       "original": "/patient-files/P-0003-S2/original.png",
+       "heatmaps": [
+        {
+         "name": "CNN",
+         "image": "/patient-files/P-0003-S2/cnn.png"
+        },
+        {
+         "name": "Xception",
+         "image": "/patient-files/P-0003-S2/xception.png"
+        },
+        {
+         "name": "InceptionV3",
+         "image": "/patient-files/P-0003-S2/inceptionv3.png"
+        }
+       ],
+       "consensus": "/patient-files/P-0003-S2/consensus.png"
+      },
+      "models_used": 6,
+      "models_missing": []
+     },
+     "review": {
+      "status": "confirmed",
+      "radiologist": "Dr. Sanjeewa Gunawardena (Consultant Radiologist)",
+      "final_diagnosis": "Pituitary tumour",
+      "note": "Mass still present. Endocrine review arranged.",
+      "date": "2026-10-31"
+     }
+    }
+   ]
+  },
+  {
+   "id": "P-0004",
+   "name": "Dilani Wickramasinghe",
+   "name_si": "දිලානි වික්‍රමසිංහ",
+   "sex": "Female",
+   "dob": "1993-01-30",
+   "phone": "070 614 7720",
+   "city": "Kurunegala",
+   "blood_group": "AB+",
+   "allergies": "None known",
+   "referring_clinician": "Dr. Ruwan Fernando (Neurologist)",
+   "history": "Recurrent migraine with aura. Normal neurological examination. Scan requested to exclude a structural cause.",
+   "scans": [
+    {
+     "id": "P-0004-S1",
+     "date": "2026-08-22",
+     "study": "MRI brain, non-contrast",
+     "notes": "Exclude structural cause of migraine.",
+     "source_image": "Testing/notumor/Te-no_65.jpg",
+     "result": {
+      "final_class": "No Tumor",
+      "final_class_idx": 2,
+      "confidence": 0.9998406504212155,
+      "confidence_level": "high",
+      "class_names": [
+       "Glioma",
+       "Meningioma",
+       "No Tumor",
+       "Pituitary"
+      ],
+      "class_probabilities": [
+       1.04258143564173e-05,
+       0.00010834897260278969,
+       0.9998406504212155,
+       4.0574791825276844e-05
+      ],
+      "per_model": [
+       {
+        "name": "CNN",
+        "family": "Deep model",
+        "predicted_class": "No Tumor",
+        "confidence": 1.0,
+        "probabilities": [
+         6.598883381068838e-18,
+         5.297611238574973e-10,
+         1.0,
+         3.452440780304014e-17
+        ]
+       },
+       {
+        "name": "InceptionV3",
+        "family": "Deep model",
+        "predicted_class": "No Tumor",
+        "confidence": 0.9999607801437378,
+        "probabilities": [
+         5.2838422561762854e-06,
+         2.755113018793054e-05,
+         0.9999607801437378,
+         6.408538865798619e-06
+        ]
+       },
+       {
+        "name": "Xception",
+        "family": "Deep model",
+        "predicted_class": "No Tumor",
+        "confidence": 0.9999808073043823,
+        "probabilities": [
+         5.423858624453715e-07,
+         1.8336266293772496e-05,
+         0.9999808073043823,
+         2.9052762329229154e-07
+        ]
+       },
+       {
+        "name": "CNN + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "No Tumor",
+        "confidence": 0.9999940077247925,
+        "probabilities": [
+         4.73485193436313e-10,
+         7.833330933240566e-10,
+         0.9999940077247925,
+         5.9910183891347685e-06
+        ]
+       },
+       {
+        "name": "InceptionV3 + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "No Tumor",
+        "confidence": 0.9991415067866689,
+        "probabilities": [
+         5.6710659621277966e-05,
+         0.0006041772099082016,
+         0.9991415067866689,
+         0.0001976053438016184
+        ]
+       },
+       {
+        "name": "Xception + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "No Tumor",
+        "confidence": 0.9999668012365756,
+        "probabilities": [
+         1.75249203787114e-08,
+         2.7916205098521217e-08,
+         0.9999668012365756,
+         3.3153322298925815e-05
+        ]
+       }
+      ],
+      "xai": {
+       "pairwise_iou": [
+        {
+         "pair": "CNN vs Xception",
+         "iou": 0.004942111629514429
+        },
+        {
+         "pair": "CNN vs InceptionV3",
+         "iou": 0.005719535324798483
+        },
+        {
+         "pair": "Xception vs InceptionV3",
+         "iou": 0.6628856624319419
+        }
+       ],
+       "eaa_iou": 0.2245157697954183,
+       "agreement_level": "high",
+       "alert": false,
+       "thresholds": {
+        "high": 0.2,
+        "low": 0.1
+       },
+       "original": "/patient-files/P-0004-S1/original.png",
+       "heatmaps": [
+        {
+         "name": "CNN",
+         "image": "/patient-files/P-0004-S1/cnn.png"
+        },
+        {
+         "name": "Xception",
+         "image": "/patient-files/P-0004-S1/xception.png"
+        },
+        {
+         "name": "InceptionV3",
+         "image": "/patient-files/P-0004-S1/inceptionv3.png"
+        }
+       ],
+       "consensus": "/patient-files/P-0004-S1/consensus.png"
+      },
+      "models_used": 6,
+      "models_missing": []
+     },
+     "review": {
+      "status": "confirmed",
+      "radiologist": "Dr. Sanjeewa Gunawardena (Consultant Radiologist)",
+      "final_diagnosis": "No tumour",
+      "note": "Normal study. No mass lesion.",
+      "date": "2026-08-23"
+     }
+    }
+   ]
+  },
+  {
+   "id": "P-0005",
+   "name": "Chaminda Rathnayake",
+   "name_si": "චමින්ද රත්නායක",
+   "sex": "Male",
+   "dob": "1968-05-09",
+   "phone": "072 287 5531",
+   "city": "Matara",
+   "blood_group": "O-",
+   "allergies": "Sulfonamides",
+   "referring_clinician": "Dr. Nadeesha Herath (General Physician)",
+   "history": "New weakness of the right arm and word-finding difficulty over four weeks. Previous scan in March 2026 was normal.",
+   "scans": [
+    {
+     "id": "P-0005-S1",
+     "date": "2026-03-10",
+     "study": "MRI brain, non-contrast",
+     "notes": "Scan for dizziness.",
+     "source_image": "Testing/notumor/Te-no_330.jpg",
+     "result": {
+      "final_class": "No Tumor",
+      "final_class_idx": 2,
+      "confidence": 0.9935929900473082,
+      "confidence_level": "high",
+      "class_names": [
+       "Glioma",
+       "Meningioma",
+       "No Tumor",
+       "Pituitary"
+      ],
+      "class_probabilities": [
+       0.0015354910303406832,
+       0.004344079455182227,
+       0.9935929900473082,
+       0.0005274394671689723
+      ],
+      "per_model": [
+       {
+        "name": "CNN",
+        "family": "Deep model",
+        "predicted_class": "No Tumor",
+        "confidence": 1.0,
+        "probabilities": [
+         2.7304631728781007e-22,
+         1.5335721581521966e-10,
+         1.0,
+         1.354255457775011e-10
+        ]
+       },
+       {
+        "name": "InceptionV3",
+        "family": "Deep model",
+        "predicted_class": "No Tumor",
+        "confidence": 0.9975484013557434,
+        "probabilities": [
+         0.00047872637514956295,
+         0.0019462484633550048,
+         0.9975484013557434,
+         2.660591599124018e-05
+        ]
+       },
+       {
+        "name": "Xception",
+        "family": "Deep model",
+        "predicted_class": "No Tumor",
+        "confidence": 0.9748573899269104,
+        "probabilities": [
+         0.008672626689076424,
+         0.013653337024152279,
+         0.9748573899269104,
+         0.0028165774419903755
+        ]
+       },
+       {
+        "name": "CNN + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "No Tumor",
+        "confidence": 0.9966321354724466,
+        "probabilities": [
+         1.1339810015742695e-08,
+         0.003333355226886955,
+         0.9966321354724466,
+         3.4497960856545166e-05
+        ]
+       },
+       {
+        "name": "InceptionV3 + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "No Tumor",
+        "confidence": 0.9925271438689803,
+        "probabilities": [
+         6.158028073444779e-05,
+         0.007131534367740818,
+         0.9925271438689803,
+         0.00027974148254443135
+        ]
+       },
+       {
+        "name": "Xception + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "No Tumor",
+        "confidence": 0.9999927836952467,
+        "probabilities": [
+         1.3644247308002086e-09,
+         1.1197563280783358e-09,
+         0.9999927836952467,
+         7.213820572240321e-06
+        ]
+       }
+      ],
+      "xai": {
+       "pairwise_iou": [
+        {
+         "pair": "CNN vs Xception",
+         "iou": 0.0
+        },
+        {
+         "pair": "CNN vs InceptionV3",
+         "iou": 0.0
+        },
+        {
+         "pair": "Xception vs InceptionV3",
+         "iou": 0.7949390526153371
+        }
+       ],
+       "eaa_iou": 0.26497968420511236,
+       "agreement_level": "high",
+       "alert": false,
+       "thresholds": {
+        "high": 0.2,
+        "low": 0.1
+       },
+       "original": "/patient-files/P-0005-S1/original.png",
+       "heatmaps": [
+        {
+         "name": "CNN",
+         "image": "/patient-files/P-0005-S1/cnn.png"
+        },
+        {
+         "name": "Xception",
+         "image": "/patient-files/P-0005-S1/xception.png"
+        },
+        {
+         "name": "InceptionV3",
+         "image": "/patient-files/P-0005-S1/inceptionv3.png"
+        }
+       ],
+       "consensus": "/patient-files/P-0005-S1/consensus.png"
+      },
+      "models_used": 6,
+      "models_missing": []
+     },
+     "review": {
+      "status": "confirmed",
+      "radiologist": "Dr. Sanjeewa Gunawardena (Consultant Radiologist)",
+      "final_diagnosis": "No tumour",
+      "note": "Normal study.",
+      "date": "2026-03-11"
+     }
+    },
+    {
+     "id": "P-0005-S2",
+     "date": "2026-11-18",
+     "study": "MRI brain, contrast-enhanced",
+     "notes": "Urgent scan for new focal weakness.",
+     "source_image": "Testing/glioma/Te-gl_1.jpg",
+     "result": {
+      "final_class": "Meningioma",
+      "final_class_idx": 1,
+      "confidence": 0.45736581734634546,
+      "confidence_level": "low",
+      "class_names": [
+       "Glioma",
+       "Meningioma",
+       "No Tumor",
+       "Pituitary"
+      ],
+      "class_probabilities": [
+       0.22049871013168892,
+       0.45736581734634546,
+       0.2475749529255044,
+       0.07456051959646125
+      ],
+      "per_model": [
+       {
+        "name": "CNN",
+        "family": "Deep model",
+        "predicted_class": "Meningioma",
+        "confidence": 0.9748874306678772,
+        "probabilities": [
+         8.207634333463887e-13,
+         0.9748874306678772,
+         0.025112515315413475,
+         8.389685972852445e-13
+        ]
+       },
+       {
+        "name": "InceptionV3",
+        "family": "Deep model",
+        "predicted_class": "No Tumor",
+        "confidence": 0.5200737118721008,
+        "probabilities": [
+         0.13692986965179443,
+         0.05877883732318878,
+         0.5200737118721008,
+         0.28421762585639954
+        ]
+       },
+       {
+        "name": "Xception",
+        "family": "Deep model",
+        "predicted_class": "Meningioma",
+        "confidence": 0.4131790101528168,
+        "probabilities": [
+         0.1768912971019745,
+         0.4131790101528168,
+         0.26748189330101013,
+         0.14244775474071503
+        ]
+       },
+       {
+        "name": "CNN + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Meningioma",
+        "confidence": 0.9112724345085242,
+        "probabilities": [
+         0.00045020415943807787,
+         0.9112724345085242,
+         0.081546853968533,
+         0.006730507363504686
+        ]
+       },
+       {
+        "name": "InceptionV3 + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "Glioma",
+        "confidence": 0.8560231428906944,
+        "probabilities": [
+         0.8560231428906944,
+         0.02536069833278072,
+         0.11372299632184253,
+         0.004893162454682313
+        ]
+       },
+       {
+        "name": "Xception + Ensemble",
+        "family": "Feature ensemble",
+        "predicted_class": "No Tumor",
+        "confidence": 0.47751173340135294,
+        "probabilities": [
+         0.15269773507516263,
+         0.3607164683882476,
+         0.47751173340135294,
+         0.009074063135236794
+        ]
+       }
+      ],
+      "xai": {
+       "pairwise_iou": [
+        {
+         "pair": "CNN vs Xception",
+         "iou": 0.0
+        },
+        {
+         "pair": "CNN vs InceptionV3",
+         "iou": 0.011254019292604502
+        },
+        {
+         "pair": "Xception vs InceptionV3",
+         "iou": 0.0
+        }
+       ],
+       "eaa_iou": 0.0037513397642015005,
+       "agreement_level": "low",
+       "alert": true,
+       "thresholds": {
+        "high": 0.2,
+        "low": 0.1
+       },
+       "original": "/patient-files/P-0005-S2/original.png",
+       "heatmaps": [
+        {
+         "name": "CNN",
+         "image": "/patient-files/P-0005-S2/cnn.png"
+        },
+        {
+         "name": "Xception",
+         "image": "/patient-files/P-0005-S2/xception.png"
+        },
+        {
+         "name": "InceptionV3",
+         "image": "/patient-files/P-0005-S2/inceptionv3.png"
+        }
+       ],
+       "consensus": "/patient-files/P-0005-S2/consensus.png"
+      },
+      "models_used": 6,
+      "models_missing": []
+     },
+     "review": {
+      "status": "pending",
+      "radiologist": null,
+      "final_diagnosis": null,
+      "note": null,
+      "date": null
+     }
+    }
+   ]
+  }
+ ]
+}

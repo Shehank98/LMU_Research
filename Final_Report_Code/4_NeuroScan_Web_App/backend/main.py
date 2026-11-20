@@ -24,6 +24,8 @@ from model_loader import (
 )
 from research_data import DATASET, MODEL_ACCURACY
 from xai_engine import CLASS_NAMES, EAA_HIGH, EAA_LOW, explain, predict_all
+import patients
+from analysis import analyse
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
@@ -96,44 +98,20 @@ async def predict(file: UploadFile = File(...)):
     except Exception:
         raise HTTPException(400, "The file could not be read as an image.")
 
-    models, extractors, missing = get_models()
-    if not any(v is not None for v in models.values()):
-        raise HTTPException(503, f"No models are loaded yet. Check that {HF_REPO_ID} has a models/ folder.")
-
-    final, confidence, per_model, fused = predict_all(image, models, extractors)
-    xai = explain(image, models, final, per_model)
-    level = "high" if confidence >= 0.70 else "moderate" if confidence >= 0.50 else "low"
-
-    return {
-        "final_class": CLASS_NAMES[final],
-        "final_class_idx": final,
-        "confidence": confidence,
-        "confidence_level": level,
-        "class_names": CLASS_NAMES,
-        "class_probabilities": [float(p) for p in fused],
-        "per_model": [
-            {
-                "name": name,
-                "family": fam,
-                "predicted_class": CLASS_NAMES[int(p.argmax())],
-                "confidence": float(p.max()),
-                "probabilities": [float(v) for v in p],
-            }
-            for name, fam, p in per_model
-        ],
-        "xai": {
-            "original": _b64(image.resize((256, 256))),
-            "heatmaps": [{"name": n, "image": _b64(img)} for n, img in xai["maps"].items()],
-            "consensus": _b64(xai["consensus"]),
-            "pairwise_iou": xai["pairwise_iou"],
-            "eaa_iou": xai["eaa_iou"],
-            "agreement_level": xai["agreement_level"],
-            "alert": xai["alert"],
-            "thresholds": {"high": EAA_HIGH, "low": EAA_LOW},
-        },
-        "models_used": len(per_model),
-        "models_missing": missing,
+    response, original, maps, consensus = analyse(image)
+    b64 = {
+        "original": _b64(original),
+        "heatmaps": [{"name": n, "image": _b64(img)} for n, img in maps.items()],
+        "consensus": _b64(consensus),
     }
+    response["xai"].update(b64)
+    return response
+
+
+# ── Patient records (demo profiles and scan history) ─────────────────────────
+patients.register_scan_upload(analyse)
+app.include_router(patients.router)
+patients.mount_files(app)
 
 
 # ── Results from the latest Colab run (on Hugging Face) ──────────────────────
